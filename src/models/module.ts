@@ -6,25 +6,25 @@
  */
 
 interface Module {
-  url: string;
+  url: string
 }
 
 export interface NpmModule extends Module {
-  license: string;
-  githubUrl: string;
+  license: string
+  githubUrl: string
 }
 
 export interface GithubModule extends Module {
-  closedIssues: number;
-  totalIssues: number;
-  monthlyCommits: number;
-  anualCommits: number;
-  topContributorWeight: number;
-  totalContributorWeight: number;
-  license: string;
+  closedIssues: number
+  totalIssues: number
+  monthlyCommits: number
+  anualCommits: number
+  topContributorWeight: number
+  totalContributorWeight: number
+  license: string
 }
 
 export interface SourceCode extends Module {
-  readmeLines: number;
-  codeLines: number;
+  readmeLines: number
+  codeLines: number
 }
