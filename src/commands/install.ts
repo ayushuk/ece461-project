@@ -1,26 +1,42 @@
 import { Command } from "@oclif/core";
 import { exec } from "child_process";
+import logger from "../logging";
+
+// import and configure dotenv
+require("dotenv").config();
 
 export default class Install extends Command {
   static description = "Install dependecies";
 
   async run(): Promise<void> {
-    const installProcess = exec('npm install 2> /dev/null', (error, stdout, stderr) => {
+    const installProcess = exec("npm install", (error, stdout, stderr) => {
       if (error) {
-        this.error(`Dependency installation failed: ${error.message}`);
-      } else {
-        const numberOfDependencies = exec('npm ls --depth=0 --parseable | wc -l | xargs -I {}', (num) => {
-          this.log(`${num === null ? 0 : num} dependencies installed...`);
-        });
+        logger.debug(stderr);
 
-        numberOfDependencies.stderr?.on('data', (data) => {
+        return -1;
+      } else {
+        if (process.env.LOG_LEVEL === "1") {
+          logger.info(stdout);
+        }
+        const numberOfDependencies = exec(
+          "npm ls --depth=0 --parseable | wc -l | xargs -I {}",
+          (num) => {
+            this.log(`${num === null ? 0 : num} dependencies installed...`);
+          }
+        );
+
+        numberOfDependencies.stderr?.on("data", (data) => {
           this.error(`stderr: ${data}`);
         });
+
+        return 0;
       }
     });
 
-    installProcess.stderr?.on('data', (data) => {
-      this.log(`stderr: ${data}`);
+    installProcess.stderr?.on("data", (data) => {
+      if (process.env.LOG_LEVEL === "2") {
+        logger.debug(`${data}`);
+      }
     });
   }
 }
