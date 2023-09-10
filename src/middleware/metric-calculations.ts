@@ -3,7 +3,7 @@ import { normalize } from "./helper-functions";
 
 
 //Bus Factor Calculations
-function calculateBusFactor(data: string) { // assume this is going to be Github URL
+export function calculateBusFactor(data: string) { // assume this is going to be Github URL
     //object variables
     var crit_num_commits = 0; //set to value in object
     var total_num_commits = 0; //set to value in object
@@ -12,15 +12,15 @@ function calculateBusFactor(data: string) { // assume this is going to be Github
 
     //variable weights
     var commit_weight = 0.5;
-    var pull_request_weight = 0.2;
+    var pull_request_weight = 0.5;
 
     //calculate bus factor score
-    var crit_bus_factor = (crit_num_commits * commit_weight) + (crit_issues_resolved * issue_weight) + (crit_pull_requests * pull_request_weight);
-    var crit_bus_factor_vals:number[] = [crit_num_commits, crit_issues_resolved, crit_pull_requests];
+    var crit_bus_factor = (crit_num_commits * commit_weight) + (crit_pull_requests * pull_request_weight);
+    var crit_bus_factor_vals:number[] = [crit_num_commits, crit_pull_requests];
     crit_bus_factor = normalize(crit_bus_factor_vals, crit_bus_factor);
 
-    var total_bus_factor = (total_num_commits * commit_weight) + (total_issues_resolved * issue_weight) + (total_pull_requests * pull_request_weight);
-    var total_bus_factor_vals:number[] = [total_num_commits, total_issues_resolved, total_pull_requests];
+    var total_bus_factor = (total_num_commits * commit_weight) + (total_pull_requests * pull_request_weight);
+    var total_bus_factor_vals:number[] = [total_num_commits, total_pull_requests];
     total_bus_factor = normalize(total_bus_factor_vals, total_bus_factor);
     
     var bus_factor_score = crit_bus_factor / total_bus_factor;
@@ -29,7 +29,7 @@ function calculateBusFactor(data: string) { // assume this is going to be Github
 }
 
 //Correctness Calculations
-function calculateCorrectness(data: object) { // this is going to be Github URL
+ export function calculateCorrectness(data: string) { // this is going to be Github URL
     var closed_issues = 0; //set to value in object
     var open_issues = 0; //set to value in object
 
@@ -39,7 +39,7 @@ function calculateCorrectness(data: object) { // this is going to be Github URL
 }
 
 //Ramp-up Time Calculations
-function calculateRampUpTime(data: object) { // this is going to be Github URL
+export function calculateRampUpTime(data: string) { // this is going to be Github URL
     var lines_readme = 0; //set to value in object
     var lines_code = 0; //set to value in object
 
@@ -49,7 +49,7 @@ function calculateRampUpTime(data: object) { // this is going to be Github URL
 }
 
 //Responsiveness Calculations
-function calculateResponsiveness(data: object) { // this is going to be Github URL
+export function calculateResponsiveness(data: string) { // this is going to be Github URL
     var mothnly_commits = 0; //set to value in object
     var annual_commits = 0;  //set to value in object
 
@@ -60,7 +60,7 @@ function calculateResponsiveness(data: object) { // this is going to be Github U
 }
 
 //License Compliance Calculations
-function calculateLicenseCompliance(data: object) { // this is going to be Github URL
+export function calculateLicenseCompliance(data: string) { // this is going to be Github URL
     var license = "license"; // set to value in object
     var valid_license = "temp"
     var license_compliance_score = 0;
@@ -73,7 +73,7 @@ function calculateLicenseCompliance(data: object) { // this is going to be Githu
 }
 
 //NetScore Calculations
-function calculateNetScore(data: object) { // this is going to be Github URL
+export function calculateNetScore(data: string) { // this is going to be Github URL
     //calculate scores
     var bus_factor = calculateBusFactor(data);
     var correctness = calculateCorrectness(data);
