@@ -21,6 +21,7 @@
     "@oclif/plugin-help": "^5",
 <<<<<<< HEAD
     "@oclif/plugin-plugins": "^3.3.0",
+<<<<<<< Updated upstream
 =======
     "@oclif/plugin-plugins": "^3.4.2",
     "@types/jest": "^29.5.4",
@@ -33,6 +34,12 @@
     "@babel/preset-env": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
     "@oclif/test": "^2.4.7",
+=======
+    "@oclif/test": "^2.4.7",
+    "eslint-config-airbnb": "^19.0.4"
+  },
+  "devDependencies": {
+>>>>>>> Stashed changes
     "@types/chai": "^4",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.18.50",
@@ -52,10 +59,14 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-unicorn": "^48.0.1",
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
     "jest": "^29.7.0",
 >>>>>>> origin/rest-client
+=======
+    "jest": "^29.7.0",
+>>>>>>> Stashed changes
     "mocha": "^9",
     "nyc": "^15.1.0",
     "oclif": "^3.14.0",
@@ -86,7 +97,7 @@
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "npm run lint",
     "prepack": "npm run build && oclif manifest && oclif readme",
-    "test": "nyc mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "nyc mocha --forbid-only \"check/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
   "engines": {
