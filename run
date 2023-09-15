@@ -19,50 +19,61 @@ if (args[0] === 'install') {
     console.log(`${numDependencies} dependencies installed...`)
   })
 } else if (fs.existsSync(args[0])) {
-  const rl = readline.createInterface({
-    input: fs.createReadStream(args[0]),
-    output: process.stdout,
-    terminal: false,
-  })
-  rl.on('line', (url) => {
-    const Metrics = {
-      URL: url,
-      netScore: 0,
-      rampUp: 0,
-      correctness: 0,
-      busFactor: 0,
-      respMaintain: 0,
-      license: 0,
-    }
+  if (fs.existsSync('node_modules')) {
+    const rl = readline.createInterface({
+      input: fs.createReadStream(args[0]),
+      output: process.stdout,
+      terminal: false,
+    })
+    rl.on('line', (url) => {
+      const Metrics = {
+        URL: url,
+        netScore: 0,
+        rampUp: 0,
+        correctness: 0,
+        busFactor: 0,
+        respMaintain: 0,
+        license: 0,
+      }
 
-    console.log(`{"URL": "${url}", "NET SCORE":${Metrics.netScore}, "RAMP_UP_SCORE":${Metrics.rampUp},
-    "CORRECTNESS_SCORE":${Metrics.correctness}, "BUS_FACTOR_SCORE":${Metrics.busFactor},
-    "RESPONSIVE_MAINTAINER_SCORE":${Metrics.respMaintain}, "LICENSE_SCORE":${Metrics.license}}`)
-  })
-} else if (args[0] === 'test') {
-  exec('npm test', (error, stdout) => {
-    const passRegex = /(\d+) passing/
-    const failRegex = /(\d+) failing/
-    const passMatch = passRegex.exec(stdout)
-    const failMatch = failRegex.exec(stdout)
-    const passTests = passMatch ? Number.parseInt(passMatch[1], 10) : 0
-    const failTests = failMatch ? Number.parseInt(failMatch[1], 10) : 0
-    const totalTests = passTests + failTests
-    const covRegex =
-      /All files\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})/
-    const covMatch = covRegex.exec(stdout)
-    const coverage = covMatch ? Number.parseFloat(covMatch[4], 10) : 0
-
-    console.log(`Total: ${totalTests}`)
-    console.log(`Passed: ${passTests}`)
-    console.log(`Coverage: ${coverage}%`)
+      console.log(`{"URL": "${url}", "NET SCORE":${Metrics.netScore}, "RAMP_UP_SCORE":${Metrics.rampUp},
+      "CORRECTNESS_SCORE":${Metrics.correctness}, "BUS_FACTOR_SCORE":${Metrics.busFactor},
+      "RESPONSIVE_MAINTAINER_SCORE":${Metrics.respMaintain}, "LICENSE_SCORE":${Metrics.license}}`)
+    })
+  } else {
     console.log(
-      `${passTests}/${totalTests} test cases passed. ${coverage}% line coverage achieved.`,
+      'Dependencies not yet installed. Please run the following command:\n./run install',
     )
-  })
+  }
+} else if (args[0] === 'test') {
+  if (fs.existsSync('node_modules')) {
+    exec('npm test', (error, stdout) => {
+      const passRegex = /(\d+) passing/
+      const failRegex = /(\d+) failing/
+      const passMatch = passRegex.exec(stdout)
+      const failMatch = failRegex.exec(stdout)
+      const passTests = passMatch ? Number.parseInt(passMatch[1], 10) : 0
+      const failTests = failMatch ? Number.parseInt(failMatch[1], 10) : 0
+      const totalTests = passTests + failTests
+      const covRegex =
+        /All files\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})/
+      const covMatch = covRegex.exec(stdout)
+      const coverage = covMatch ? Number.parseFloat(covMatch[4], 10) : 0
+
+      console.log(`Total: ${totalTests}`)
+      console.log(`Passed: ${passTests}`)
+      console.log(`Coverage: ${coverage}%`)
+      console.log(
+        `${passTests}/${totalTests} test cases passed. ${coverage}% line coverage achieved.`,
+      )
+    })
+  } else {
+    console.log(
+      'Dependencies not yet installed. Please run the following command:\n./run install',
+    )
+  }
 } else {
-  oclif
-    .run()
-    .then(require('@oclif/core/flush'))
-    .catch(require('@oclif/core/handle'))
+  console.log(
+    'Please enter a valid run command.\n./run install\n./run URL_file\n./run test',
+  )
 }

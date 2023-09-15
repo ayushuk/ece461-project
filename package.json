@@ -19,35 +19,21 @@
   "dependencies": {
     "@oclif/core": "^2",
     "@oclif/plugin-help": "^5",
-<<<<<<< HEAD
-    "@oclif/plugin-plugins": "^3.3.0",
-<<<<<<< Updated upstream
-=======
     "@oclif/plugin-plugins": "^3.4.2",
+    "@oclif/test": "^2.4.7",
     "@types/jest": "^29.5.4",
     "axios": "^1.5.0",
     "dotenv": "^16.3.1",
->>>>>>> origin/rest-client
     "eslint-config-airbnb": "^19.0.4"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
-    "@oclif/test": "^2.4.7",
-=======
-    "@oclif/test": "^2.4.7",
-    "eslint-config-airbnb": "^19.0.4"
-  },
-  "devDependencies": {
->>>>>>> Stashed changes
     "@types/chai": "^4",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.18.50",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
-<<<<<<< HEAD
-=======
     "babel-jest": "^29.7.0",
->>>>>>> origin/rest-client
     "chai": "^4",
     "eslint": "^8.49.0",
     "eslint-config-oclif": "^4",
@@ -59,14 +45,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-unicorn": "^48.0.1",
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
     "jest": "^29.7.0",
->>>>>>> origin/rest-client
-=======
-    "jest": "^29.7.0",
->>>>>>> Stashed changes
     "mocha": "^9",
     "nyc": "^15.1.0",
     "oclif": "^3.14.0",

@@ -12,10 +12,6 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     'import/prefer-default-export': 'off',
-<<<<<<< HEAD
-  },
-  plugins: ['prettier'],
-=======
     'import/extensions': [
       'error',
       'ignorePackages',
@@ -35,5 +31,4 @@ module.exports = {
       },
     },
   },
->>>>>>> origin/rest-client
 }

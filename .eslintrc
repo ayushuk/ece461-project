@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "extends": ["oclif", "oclif-typescript"],
-=======
   "extends": ["oclif", "oclif-typescript", "prettier"],
->>>>>>> origin/rest-client
   "rules": {
     "arrow-parens": "off",
     "indent": "off",
