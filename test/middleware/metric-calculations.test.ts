@@ -9,7 +9,7 @@ import {
 
 describe('calculateBusFactor', () => {
   // Test case 1: Testing a random number values greater than 0
-  test('should return 0.605 when crit commits is 10/30 and crit prs is 5/8', () => {
+  it('should return 0.605 when crit commits is 10/30 and crit prs is 5/8', () => {
     const data: BusFactorData = {
       criticalContrubitorCommits: 10,
       totalCommits: 30,
@@ -23,7 +23,7 @@ describe('calculateBusFactor', () => {
   })
 
   // Test case 2: Testing when only one contrinbuter commits
-  test('should return 0 when crit commits is 30/30 and crit prs is 8/8', () => {
+  it('should return 0 when crit commits is 30/30 and crit prs is 8/8', () => {
     const data: BusFactorData = {
       criticalContrubitorCommits: 30,
       totalCommits: 30,
@@ -37,7 +37,7 @@ describe('calculateBusFactor', () => {
   })
 
   // Test case 3: Testing when only crit has no PRs
-  test('should return 0.737 when crit commits is 10/30 and crit prs is 0/8', () => {
+  it('should return 0.737 when crit commits is 10/30 and crit prs is 0/8', () => {
     const data: BusFactorData = {
       criticalContrubitorCommits: 10,
       totalCommits: 30,
@@ -53,7 +53,7 @@ describe('calculateBusFactor', () => {
 
 describe('calculateCorrectness', () => {
   // Test case 1: Testing a random number values greater than 0
-  test('should return 0.5 when closed issues is 10 and open issues is 10', () => {
+  it('should return 0.5 when closed issues is 10 and open issues is 10', () => {
     const data: CorrectnessData = {
       closedIssues: 10,
       openIssues: 10,
@@ -65,7 +65,7 @@ describe('calculateCorrectness', () => {
   })
 
   // Test case 2: Testing when only closed issues
-  test('should return 1 when closed issues is 10 and open issues is 0', () => {
+  it('should return 1 when closed issues is 10 and open issues is 0', () => {
     const data: CorrectnessData = {
       closedIssues: 10,
       openIssues: 0,
@@ -77,7 +77,7 @@ describe('calculateCorrectness', () => {
   })
 
   // Test case 3: Testing when only open issues
-  test('should return 0 when closed issues is 0 and open issues is 10', () => {
+  it('should return 0 when closed issues is 0 and open issues is 10', () => {
     const data: CorrectnessData = {
       closedIssues: 0,
       openIssues: 10,
