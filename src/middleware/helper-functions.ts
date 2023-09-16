@@ -2,6 +2,10 @@ import * as fs from 'fs'
 //import * as nodegit from 'nodegit'
 import * as url from 'url'
 
+export function round(value: number, decimals: number) {
+  return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals)
+}
+
 export function normalize(values: number[], total: number) {
   var max = Math.max(...values)
   var min = Math.min(...values)

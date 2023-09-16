@@ -1,6 +1,6 @@
 // funciton imports
 import {BusFactorData, CorrectnessData} from '@/models/middleware-inputs'
-//import {normalize, getLinesOfCode, cloneRepo} from './helper-functions'
+import {round} from './helper-functions'
 
 // Bus Factor Calculations
 export function calculateBusFactor(data: BusFactorData) {
@@ -19,14 +19,17 @@ export function calculateBusFactor(data: BusFactorData) {
   const prWeight = 0.5
 
   // calculate bus factor score
-  let critBusFactor =
+  const critBusFactor =
     criticalContrubitorCommits * commitWeight +
     criticalContributorPullRequests * prWeight
 
-  let totalBusFactor =
+  const totalBusFactor =
     totalCommits * commitWeight + totalPullRequests * prWeight
 
   let busFactorScore = 1 - critBusFactor / totalBusFactor
+
+  // round to 3 decimal places
+  busFactorScore = round(busFactorScore, 3)
 
   return busFactorScore
 }
@@ -36,7 +39,7 @@ export function calculateCorrectness(data: CorrectnessData) {
   // this is going to be Github URL
   const {closedIssues, openIssues} = data
 
-  let correctnessScore = closedIssues / (closedIssues + openIssues)
+  const correctnessScore = closedIssues / (closedIssues + openIssues)
 
   return correctnessScore
 }
@@ -47,7 +50,7 @@ export function calculateRampUpTime(data: string) {
   var linesReadme = 0 //set to value in object
   var linesCode = 0 //set to value in object
 
-  let rampUpTime = linesReadme / linesCode
+  const rampUpTime = linesReadme / linesCode
 
   return rampUpTime
 }
@@ -58,7 +61,7 @@ export function calculateResponsiveness(data: string) {
   var monthlyCommits = 0 //set to value in object
   var annualCommits = 0 //set to value in object
 
-  let responsivenessScore = monthlyCommits / annualCommits
+  const responsivenessScore = monthlyCommits / annualCommits
 
   return responsivenessScore
 }
