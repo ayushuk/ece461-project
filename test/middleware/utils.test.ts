@@ -8,7 +8,7 @@ describe('round', () => {
 
   // Test case 2: Round up 7 decimal places
   test('should return 768.98 given 768.983', () => {
-    expect(round(768.983987254, 7)).toBe(768.9839873)
+    expect(round(768.983_987_254, 7)).toBe(768.983_987_3)
   })
 
   // Test case 2: Round negative number

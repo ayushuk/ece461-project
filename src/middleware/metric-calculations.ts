@@ -1,5 +1,5 @@
 // funciton imports
-import {BusFactorData, CorrectnessData} from '@/models/middleware-inputs'
+import {BusFactorData, CorrectnessData} from '../models/middleware-inputs'
 import {round} from './utils'
 
 // Bus Factor Calculations
@@ -44,41 +44,41 @@ export function calculateCorrectness(data: CorrectnessData) {
   return correctnessScore
 }
 
-// Ramp-up Time Calculations
-export function calculateRampUpTime(data: string) {
-  // this is going to be Github URL
-  var linesReadme = 0 //set to value in object
-  var linesCode = 0 //set to value in object
+// // Ramp-up Time Calculations
+// export function calculateRampUpTime(data: string) {
+//   // this is going to be Github URL
+//   var linesReadme = 0 // set to value in object
+//   var linesCode = 0 // set to value in object
 
-  const rampUpTime = linesReadme / linesCode
+//   const rampUpTime = linesReadme / linesCode
 
-  return rampUpTime
-}
+//   return rampUpTime
+// }
 
-// Responsiveness Calculations
-export function calculateResponsiveness(data: string) {
-  // this is going to be Github URL
-  var monthlyCommits = 0 //set to value in object
-  var annualCommits = 0 //set to value in object
+// // Responsiveness Calculations
+// export function calculateResponsiveness(data: string) {
+//   // this is going to be Github URL
+//   var monthlyCommits = 0 // set to value in object
+//   var annualCommits = 0 // set to value in object
 
-  const responsivenessScore = monthlyCommits / annualCommits
+//   const responsivenessScore = monthlyCommits / annualCommits
 
-  return responsivenessScore
-}
+//   return responsivenessScore
+// }
 
 // License Compliance Calculations
-export function calculateLicenseCompliance(data: string) {
-  // this is going to be Github URL
-  var license = 'license' // set to value in object
-  var validLicense = 'temp'
-  var licenseCompliantScore = 0
+// export function calculateLicenseCompliance(data: string) {
+//   // this is going to be Github URL
+//   var license = 'license' // set to value in object
+//   var validLicense = 'temp'
+//   var licenseCompliantScore = 0
 
-  if (license == validLicense) {
-    licenseCompliantScore = 1
-  }
+//   if (license == validLicense) {
+//     licenseCompliantScore = 1
+//   }
 
-  return licenseCompliantScore
-}
+//   return licenseCompliantScore
+// }
 
 // NetScore Calculations
 // export function calculateNetScore(data: string) {

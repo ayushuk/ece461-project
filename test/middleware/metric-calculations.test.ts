@@ -1,14 +1,10 @@
 import {
   calculateBusFactor,
   calculateCorrectness,
-  calculateRampUpTime,
-  calculateResponsiveness,
-  calculateLicenseCompliance,
 } from '../../src/middleware/metric-calculations'
 import {
   BusFactorData,
   CorrectnessData,
-  ResponsesivenessData,
 } from '../../src/models/middleware-inputs'
 
 describe('calculateBusFactor', () => {
