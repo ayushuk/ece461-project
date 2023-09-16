@@ -1,21 +1,20 @@
-const {createLogger, format, transports} = require("winston");
-const { combine, timestamp, json, prettyPrint } = format;
+import {createLogger, format, transports} from 'winston'
+import * as dotenv from 'dotenv'
 
-require("dotenv").config();
-console.log(`Hello: ${process.env.LOG_FILE}`)
+const {combine, timestamp, json, prettyPrint} = format
+dotenv.config()
 
 const logger = createLogger({
   format: combine(timestamp(), json(), prettyPrint()),
   transports: [
     new transports.File({
       filename: `${process.env.LOG_FILE}`,
-      level: `${process.env.LOG_LEVEL}`
+      level: `${process.env.LOG_LEVEL}`,
     }),
   ],
-});
+})
 
-export default logger;
-
+export default logger
 
 /*
 // Usage: winston allows you to define a level property on each transport which specifies the maximum level of messages that a transport should log.
@@ -29,4 +28,3 @@ if (process.env.LOG_LEVEL != 0) {
 }
 
 */
-
