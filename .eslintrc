@@ -4,9 +4,6 @@
     "arrow-parens": "off",
     "indent": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      { "argsIgnorePattern": "^_" }
-    ] // add a underscore to remove the ignore unused variables error
+    "@typescript-eslint/no-unused-vars": ["error", {"argsIgnorePattern": "^_"}] // add a underscore to remove the ignore unused variables error
   }
 }
