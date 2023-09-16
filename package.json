@@ -20,7 +20,7 @@
     "@oclif/core": "^2",
     "@oclif/plugin-help": "^5",
     "eslint-config-airbnb": "^19.0.4",
-    "@oclif/plugin-plugins": "^3.4.2"
+    "@oclif/plugin-plugins": "^3.7.0"
   },
   "devDependencies": {
     "@oclif/test": "^2.4.7",
