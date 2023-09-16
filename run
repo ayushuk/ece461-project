@@ -2,6 +2,7 @@
 
 const {exec} = require('child_process')
 const fs = require('fs')
+const l = require('winston')
 const readline = require('readline')
 
 const args = process.argv.slice(2)
@@ -10,13 +11,14 @@ if (args[0] === 'install') {
   exec('npm install', (error, stdout) => {
     if (error) {
       console.error(`Error installing dependencies: ${error}`)
-      return
+      process.exit(1)
     }
 
     const regex = /added (\d+) package/g
     const match = regex.exec(stdout)
     const numDependencies = match ? Number.parseInt(match[1], 10) : 0
     console.log(`${numDependencies} dependencies installed...`)
+    process.exit(0)
   })
 } else if (fs.existsSync(args[0])) {
   if (fs.existsSync('node_modules')) {
@@ -40,10 +42,12 @@ if (args[0] === 'install') {
       "CORRECTNESS_SCORE":${Metrics.correctness}, "BUS_FACTOR_SCORE":${Metrics.busFactor},
       "RESPONSIVE_MAINTAINER_SCORE":${Metrics.respMaintain}, "LICENSE_SCORE":${Metrics.license}}`)
     })
+    process.exit(0)
   } else {
     console.log(
       'Dependencies not yet installed. Please run the following command:\n./run install',
     )
+    process.exit(1)
   }
 } else if (args[0] === 'test') {
   if (fs.existsSync('node_modules')) {
@@ -67,13 +71,16 @@ if (args[0] === 'install') {
         `${passTests}/${totalTests} test cases passed. ${coverage}% line coverage achieved.`,
       )
     })
+    process.exit(0)
   } else {
     console.log(
       'Dependencies not yet installed. Please run the following command:\n./run install',
     )
+    process.exit(1)
   }
 } else {
   console.log(
     'Please enter a valid run command.\n./run install\n./run URL_file\n./run test',
   )
+  process.exit(1)
 }
