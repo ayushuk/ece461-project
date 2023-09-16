@@ -80,28 +80,28 @@ export function calculateLicenseCompliance(data: string) {
   return licenseCompliantScore
 }
 
-NetScore Calculations
-export function calculateNetScore(data: string) {
-  // this is going to be Github URL
-  // calculate scores
-  var busFactor = calculateBusFactor(data)
-  var correctness = calculateCorrectness(data)
-  var rampUpTime = calculateRampUpTime(data)
-  var responsiveness = calculateResponsiveness(data)
-  var licenseCompliance = calculateLicenseCompliance(data)
+// NetScore Calculations
+// export function calculateNetScore(data: string) {
+//   // this is going to be Github URL
+//   // calculate scores
+//   var busFactor = calculateBusFactor(data)
+//   var correctness = calculateCorrectness(data)
+//   var rampUpTime = calculateRampUpTime(data)
+//   var responsiveness = calculateResponsiveness(data)
+//   var licenseCompliance = calculateLicenseCompliance(data)
 
-  // Score weights
-  var busFactorWeight = 0.4
-  var correctnessWeight = 0.15
-  var rampUpTimeWeight = 0.15
-  var responsivenessWeight = 0.3
+//   // Score weights
+//   var busFactorWeight = 0.4
+//   var correctnessWeight = 0.15
+//   var rampUpTimeWeight = 0.15
+//   var responsivenessWeight = 0.3
 
-  var net_score =
-    licenseCompliance *
-    (busFactor * busFactorWeight +
-      correctness * correctnessWeight +
-      rampUpTime * rampUpTimeWeight +
-      responsiveness * responsivenessWeight)
+//   var net_score =
+//     licenseCompliance *
+//     (busFactor * busFactorWeight +
+//       correctness * correctnessWeight +
+//       rampUpTime * rampUpTimeWeight +
+//       responsiveness * responsivenessWeight)
 
-  return net_score
-}
+//   return net_score
+// }
