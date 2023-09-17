@@ -8,12 +8,12 @@ import {
   calculateResponsiveness,
   calculateLicenseCompliance,
   calculateNetScore, 
-} from '../../src/fill-models';
+} from '../src/fill-models';
 
 const mockBusFactor = jest.fn<() => number>() as jest.Mock<number>;
 
 jest.mock('../../src/fill-models', () => ({
-  calculateBusFactor: jest.fn((value: string)),
+  calculateBusFactor: jest.fn(),
   calculateCorrectness: jest.fn(),
   calculateRampUpTime: jest.fn(),
   calculateResponsiveness: jest.fn(),
