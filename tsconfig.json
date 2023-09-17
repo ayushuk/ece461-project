@@ -8,10 +8,13 @@
     "strict": true,
     "target": "es2019",
     "composite": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"]
-    }
   },
-  "include": ["src/**/*", ".eslintrc.js"]
+  "include": [
+    "src/**/*",
+    ".eslintrc.js"
+  ],
+  "baseUrl": "./src",
+  "paths": {
+    "@/*": ["*"]
+  }
 }
