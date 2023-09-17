@@ -1,10 +1,12 @@
 // funciton imports
 import {BusFactorData, CorrectnessData} from '../models/middleware-inputs'
 import {round} from './utils'
+import 
 
 // Bus Factor Calculations
-export function calculateBusFactor(data: BusFactorData) {
-  // assume this is going to be Github URL
+export function calculateBusFactor(url: string) {
+  
+
 
   // get data from object
   const {
@@ -44,64 +46,64 @@ export function calculateCorrectness(data: CorrectnessData) {
   return correctnessScore
 }
 
-// Ramp-up Time Calculations
-export function calculateRampUpTime(data: string) {
-  // this is going to be Github URL
-  const linesReadme = 0 // set to value in object
-  const linesCode = 0 // set to value in object
+// // Ramp-up Time Calculations
+// export function calculateRampUpTime(data: string) {
+//   // this is going to be Github URL
+//   const linesReadme = 0 // set to value in object
+//   const linesCode = 0 // set to value in object
 
-  const rampUpTime = linesReadme / linesCode
+//   const rampUpTime = linesReadme / linesCode
 
-  return rampUpTime
-}
+//   return rampUpTime
+// }
 
-// Responsiveness Calculations
-export function calculateResponsiveness(data: string) {
-  // this is going to be Github URL
-  const monthlyCommits = 0 // set to value in object
-  const annualCommits = 0 // set to value in object
+// // Responsiveness Calculations
+// export function calculateResponsiveness(data: string) {
+//   // this is going to be Github URL
+//   const monthlyCommits = 0 // set to value in object
+//   const annualCommits = 0 // set to value in object
 
-  const responsivenessScore = monthlyCommits / annualCommits
+//   const responsivenessScore = monthlyCommits / annualCommits
 
-  return responsivenessScore
-}
+//   return responsivenessScore
+// }
 
-// License Compliance Calculations
-export function calculateLicenseCompliance(data: string) {
-  // this is going to be Github URL
-  const license = 'license' // set to value in object
-  const validLicense = 'temp'
-  const licenseCompliantScore = 0
+// // License Compliance Calculations
+// export function calculateLicenseCompliance(data: string) {
+//   // this is going to be Github URL
+//   const license = 'license' // set to value in object
+//   const validLicense = 'temp'
+//   const licenseCompliantScore = 0
 
-  // if (license === validLicense) {
-  //   licenseCompliantScore = 1
-  // }
+//   // if (license === validLicense) {
+//   //   licenseCompliantScore = 1
+//   // }
 
-  return licenseCompliantScore
-}
+//   return licenseCompliantScore
+// }
 
-// NetScore Calculations
-export function calculateNetScore(data: string) {
-  // this is going to be Github URL
-  // calculate scores
-  const busFactor = 0 // calculateBusFactor(data)
-  const correctness = 0 // calculateCorrectness(data)
-  const rampUpTime = calculateRampUpTime(data)
-  const responsiveness = calculateResponsiveness(data)
-  const licenseCompliance = calculateLicenseCompliance(data)
+// // NetScore Calculations
+// export function calculateNetScore(data: string) {
+//   // this is going to be Github URL
+//   // calculate scores
+//   const busFactor = 0 // calculateBusFactor(data)
+//   const correctness = 0 // calculateCorrectness(data)
+//   const rampUpTime = calculateRampUpTime(data)
+//   const responsiveness = calculateResponsiveness(data)
+//   const licenseCompliance = calculateLicenseCompliance(data)
 
-  // Score weights
-  const busFactorWeight = 0.4
-  const correctnessWeight = 0.15
-  const rampUpTimeWeight = 0.15
-  const responsivenessWeight = 0.3
+//   // Score weights
+//   const busFactorWeight = 0.4
+//   const correctnessWeight = 0.15
+//   const rampUpTimeWeight = 0.15
+//   const responsivenessWeight = 0.3
 
-  const netScore =
-    licenseCompliance *
-    (busFactor * busFactorWeight +
-      correctness * correctnessWeight +
-      rampUpTime * rampUpTimeWeight +
-      responsiveness * responsivenessWeight)
+//   const netScore =
+//     licenseCompliance *
+//     (busFactor * busFactorWeight +
+//       correctness * correctnessWeight +
+//       rampUpTime * rampUpTimeWeight +
+//       responsiveness * responsivenessWeight)
 
-  return netScore
-}
+//   return netScore
+// }

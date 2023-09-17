@@ -1,4 +1,7 @@
-import {round} from '../../src/middleware/utils'
+import {parse} from 'path'
+import * as utils from '../../src/middleware/utils'
+import {round, parseGHRepoName, cloneRepo} from '../../src/middleware/utils'
+import * as nodegit from 'nodegit'
 
 describe('round', () => {
   // Test case 1: Round down 2 decimal places
@@ -16,3 +19,14 @@ describe('round', () => {
     expect(round(-5.129, 2)).toBe(-5.13)
   })
 })
+
+describe('parseGHRepoName', () => {
+  // Test case 1: Test valid github URL with https://
+  it('should return "test-repo" given https://github.com/test/test-repo', () => {
+    expect(parseGHRepoName('https://github.com/ayushuk/ece461-project')).toBe(
+      'ece461-project',
+    )
+  })
+})
+
+describe('cloneRepo', () => {})
