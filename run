@@ -1,86 +1,31 @@
-#!/usr/bin/env node
+#!/usr/bin/env bash
 
-const {exec} = require('child_process')
-const fs = require('fs')
-const l = require('winston')
-const readline = require('readline')
+if [ $0 != "./run" ]
+then
+  echo "Please run this script with ./run"
+fi
 
-const args = process.argv.slice(2)
-
-if (args[0] === 'install') {
-  exec('npm install', (error, stdout) => {
-    if (error) {
-      console.error(`Error installing dependencies: ${error}`)
-      process.exit(1)
-    }
-
-    const regex = /added (\d+) package/g
-    const match = regex.exec(stdout)
-    const numDependencies = match ? Number.parseInt(match[1], 10) : 0
-    console.log(`${numDependencies} dependencies installed...`)
-    process.exit(0)
-  })
-} else if (fs.existsSync(args[0])) {
-  if (fs.existsSync('node_modules')) {
-    const rl = readline.createInterface({
-      input: fs.createReadStream(args[0]),
-      output: process.stdout,
-      terminal: false,
-    })
-    rl.on('line', (url) => {
-      const Metrics = {
-        URL: url,
-        netScore: 0,
-        rampUp: 0,
-        correctness: 0,
-        busFactor: 0,
-        respMaintain: 0,
-        license: 0,
-      }
-
-      console.log(`{"URL": "${url}", "NET SCORE":${Metrics.netScore}, "RAMP_UP_SCORE":${Metrics.rampUp},
-      "CORRECTNESS_SCORE":${Metrics.correctness}, "BUS_FACTOR_SCORE":${Metrics.busFactor},
-      "RESPONSIVE_MAINTAINER_SCORE":${Metrics.respMaintain}, "LICENSE_SCORE":${Metrics.license}}`)
-    })
-    process.exit(0)
-  } else {
-    console.log(
-      'Dependencies not yet installed. Please run the following command:\n./run install',
-    )
-    process.exit(1)
-  }
-} else if (args[0] === 'test') {
-  if (fs.existsSync('node_modules')) {
-    exec('npm test', (error, stdout) => {
-      const passRegex = /(\d+) passing/
-      const failRegex = /(\d+) failing/
-      const passMatch = passRegex.exec(stdout)
-      const failMatch = failRegex.exec(stdout)
-      const passTests = passMatch ? Number.parseInt(passMatch[1], 10) : 0
-      const failTests = failMatch ? Number.parseInt(failMatch[1], 10) : 0
-      const totalTests = passTests + failTests
-      const covRegex =
-        /All files\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})/
-      const covMatch = covRegex.exec(stdout)
-      const coverage = covMatch ? Number.parseFloat(covMatch[4], 10) : 0
-
-      console.log(`Total: ${totalTests}`)
-      console.log(`Passed: ${passTests}`)
-      console.log(`Coverage: ${coverage}%`)
-      console.log(
-        `${passTests}/${totalTests} test cases passed. ${coverage}% line coverage achieved.`,
-      )
-    })
-    process.exit(0)
-  } else {
-    console.log(
-      'Dependencies not yet installed. Please run the following command:\n./run install',
-    )
-    process.exit(1)
-  }
-} else {
-  console.log(
-    'Please enter a valid run command.\n./run install\n./run URL_file\n./run test',
-  )
-  process.exit(1)
-}
+if [ $1 == "install" ]
+then
+  if ! npm install --silent; then
+    echo "Error installing dependencies"
+    echo $"no" > "./check_install"
+    exit 1
+  else
+    ./bin/dev install
+  fi
+  echo $"yes" > "./check_install"
+else
+  name=$(<"./check_install") 
+  if [ name == 1 ]
+  then
+  echo "Please run this script with ./run install"
+  else
+    if [ $1 == "test" ]
+    then
+      ./bin/dev test
+    else
+      ./bin/dev checkUrl $1
+    fi
+  fi
+fi
