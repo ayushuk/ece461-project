@@ -122,3 +122,48 @@ describe('test getLicense', () => {
 })
 
 // TODO: test get license compliance (need mocks)
+
+describe('test getMonthlyCommitCount', () => {
+  it('get monthly commit count successfully', async () => {
+    const data = {
+      all: [2, 4, 6, 8], // 20 commits in total
+    }
+    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
+    const result = await ghService.getMonthlyCommitCount('')
+    expect(result).toStrictEqual(20)
+  })
+  it('get monthly commit count failure', async () => {
+    mockedAxios.get.mockRejectedValue(new Error('error'))
+    const result = await ghService.getMonthlyCommitCount('')
+    expect(result).toStrictEqual(-1)
+  })
+})
+
+describe('test getAnualCommitCount', () => {
+  it('get anual commit count successfully', async () => {
+    const data = [
+      {
+        total: 2,
+      },
+      {
+        total: 4,
+      },
+      {
+        total: 6,
+      },
+      {
+        total: 8,
+      },
+    ]
+    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
+    const result = await ghService.getAnualCommitCount('')
+    expect(result).toStrictEqual(20)
+  })
+  it('get anual commit count failure', async () => {
+    mockedAxios.get.mockRejectedValue(new Error('error'))
+    const result = await ghService.getAnualCommitCount('')
+    expect(result).toStrictEqual(-1)
+  })
+})
+
+// TODO: test get responsiveness data (need mocks)

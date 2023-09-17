@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as dotenv from 'dotenv'
-import {BusFactorData, CorrectnessData} from '../models/middleware-inputs'
+import {BusFactorData, CorrectnessData, ResponsesivenessData} from '../models/middleware-inputs'
 
 dotenv.config() // load enviroment variables
 
@@ -224,4 +224,93 @@ export function getLiscenseComplianceData(repoUrl: string): number {
     liscense = data
   })
   return liscense === 'lpgl-2.1' ? 1 : 0
+}
+
+/**
+ * Gets the number of commits made in the past month.
+ *
+ * @param repoUrl  Github repository url
+ * @returns The number of commits in the last 4 weeks
+ */
+export async function getMonthlyCommitCount(repoUrl: string): Promise<number> {
+  const instance = axios.create({
+    baseURL: 'https://api.github.com/repos',
+    timeout: 1000,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+    },
+  }) // create axios instance
+
+  const repoOwner = repoUrl.split('/')[3]
+  const repoName = repoUrl.split('/')[4]
+  try {
+    const response = await instance.get(
+      `${repoOwner}/${repoName}/stats/participation`,
+    )
+    let count = 0
+    for (let i = 0; i < 4; i += 1) {
+      count += response.data.all.pop()
+    }
+
+    return count
+  } catch {
+    return -1
+  }
+}
+
+/**
+ * Gets the number of commits made in the past year.
+ *
+ * @param repoUrl Github repository url
+ * @returns The number of commits in the last year.
+ */
+export async function getAnualCommitCount(repoUrl: string): Promise<number> {
+  const instance = axios.create({
+    baseURL: 'https://api.github.com/repos',
+    timeout: 1000,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+    },
+  }) // create axios instance
+
+  const repoOwner = repoUrl.split('/')[3]
+  const repoName = repoUrl.split('/')[4]
+  try {
+    const response = await instance.get(
+      `${repoOwner}/${repoName}/stats/commit_activity`,
+    )
+    let count = 0
+    for (let i = 0; i < response.data.length; i += 1) {
+      count += response.data[i].total
+    }
+
+    return count
+  } catch {
+    return -1
+  }
+}
+
+/**
+ * Gets the data required to calculate the responsiveness.
+ * 
+ * @param repoUrl Github repository url
+ * @returns The data required to calculate the responsiveness.
+ */
+export function getResponsivenessData(repoUrl: string): ResponsesivenessData {
+  let monthlyCommitCount: number = -1
+  let anualCommitCount: number = -1
+
+  getMonthlyCommitCount(repoUrl).then((data: number) => {
+    monthlyCommitCount = data
+  })
+  getAnualCommitCount(repoUrl).then((data: number) => {
+    anualCommitCount = data
+  })
+
+  return <ResponsesivenessData>{
+    monthlyCommitCount,
+    anualCommitCount,
+  }
 }
