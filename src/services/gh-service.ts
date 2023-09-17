@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as dotenv from 'dotenv'
-import {BusFactorData} from '../models/middleware-inputs'
+import {BusFactorData, CorrectnessData} from '../models/middleware-inputs'
 
 dotenv.config() // load enviroment variables
 
@@ -15,7 +15,7 @@ dotenv.config() // load enviroment variables
  *          contributor and the total contributions across the top 10 contributors
  *          If there is an error, returns ['', -1, -1].
  */
-export function getCommitData(
+export async function getCommitData(
   repoUrl: string,
 ): Promise<readonly [string, number, number]> {
   const instance = axios.create({
@@ -29,21 +29,20 @@ export function getCommitData(
 
   const repoOwner = repoUrl.split('/')[3]
   const repoName = repoUrl.split('/')[4]
-  return instance
-    .get(`${repoOwner}/${repoName}/contributors`)
-    .then((response) => {
-      const {login} = response.data[0]
-      const {contributions} = response.data[0]
+  try {
+    const response = await instance.get(`${repoOwner}/${repoName}/contributors`)
+    const {login} = response.data[0]
+    const {contributions} = response.data[0]
 
-      // get the total contribution acorss top 10 contributors
-      let totalContributions: number = 0
-      for (let i = 0; i < response.data.length; i += 1) {
-        totalContributions += response.data[i].contributions
-      }
-
-      return [login, contributions, totalContributions] as const
-    })
-    .catch(() => ['', -1, -1])
+    // get the total contribution acorss top 10 contributors
+    let totalContributions: number = 0
+    for (let i = 0; i < response.data.length; i += 1) {
+      totalContributions += response.data[i].contributions
+    }
+    return [login, contributions, totalContributions] as const
+  } catch {
+    return ['', -1, -1]
+  }
 }
 
 /**
@@ -57,7 +56,7 @@ export function getCommitData(
  * @returns The number of pull requests made by the critical contributor and the total number of pull requests.
  *          If there is an error, returns [-1, -1].
  */
-export function getPullRequestData(
+export async function getPullRequestData(
   repoUrl: string,
   critUser: string,
 ): Promise<readonly [number, number]> {
@@ -72,23 +71,25 @@ export function getPullRequestData(
 
   const repoOwner = repoUrl.split('/')[3]
   const repoName = repoUrl.split('/')[4]
-  return instance
-    .get(`${repoOwner}/${repoName}/search/issues`, {
-      params: {state: 'all', per_page: 100}, // eslint-disable-line camelcase
-    })
-    .then((response) => {
-      let critUserPullRequests: number = 0
-      const totalPullRequests: number = response.data.length
+  try {
+    const response = await instance.get(
+      `${repoOwner}/${repoName}/search/issues`,
+      {
+        params: {state: 'all', per_page: 100}, // eslint-disable-line camelcase
+      },
+    )
+    let critUserPullRequests: number = 0
+    const totalPullRequests: number = response.data.length
 
-      for (let i = 0; i < totalPullRequests; i += 1) {
-        if (response.data[i].user.login === critUser) {
-          critUserPullRequests += 1
-        }
+    for (let i = 0; i < totalPullRequests; i += 1) {
+      if (response.data[i].user.login === critUser) {
+        critUserPullRequests += 1
       }
-
-      return [critUserPullRequests, totalPullRequests] as const
-    })
-    .catch(() => [-1, -1] as const)
+    }
+    return [critUserPullRequests, totalPullRequests] as const
+  } catch {
+    return [-1, -1] as const
+  }
 }
 
 /**
@@ -119,5 +120,62 @@ export function getBusFactorData(repoUrl: string): BusFactorData {
     totalCommits,
     criticalContributorPullRequests,
     totalPullRequests,
+  }
+}
+
+/**
+ * Gets the number of issues in a given state.
+ *
+ * // TODO handle failure logging
+ *
+ * @param repoUrl Gihub repository url
+ * @param state State of the issue
+ * @returns The number of issues in the state.
+ */
+export async function getIssues(
+  repoUrl: string,
+  state: 'open' | 'closed',
+): Promise<number> {
+  const instance = axios.create({
+    baseURL: 'https://api.github.com/repos/',
+    timeout: 1000,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+    },
+  }) // create axios instance
+
+  const repoOwner = repoUrl.split('/')[3]
+  const repoName = repoUrl.split('/')[4]
+  try {
+    const response = await instance.get(`${repoOwner}/${repoName}/issues`, {
+      params: {state: state, per_page: 100}, // eslint-disable-line camelcase
+    })
+    return response.data.length
+  } catch {
+    return -1
+  }
+}
+
+/**
+ * Gets the data required to calculate the correctness.
+ * 
+ * @param repoUrl Github repository url
+ * @returns The data required to calculate the correctness.
+ */
+export function getCorrectnessData(repoUrl: string): CorrectnessData {
+  let closedIssues: number = -1
+  let openIssues: number = -1
+
+  getIssues(repoUrl, 'closed').then((data: number) => {
+    closedIssues = data
+  })
+  getIssues(repoUrl, 'open').then((data: number) => {
+    openIssues = data
+  })
+
+  return <CorrectnessData>{
+    closedIssues,
+    openIssues,
   }
 }

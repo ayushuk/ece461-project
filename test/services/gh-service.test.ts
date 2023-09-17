@@ -85,3 +85,19 @@ describe('test getPullReqestData', () => {
 //   })
 //   it('get bus factor data failure', () => {})
 // })
+
+describe('test getIssues', () => {
+  it('get issues successfully', async () => {
+    const data = [{}, {}, {}]
+    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
+    const result = await ghService.getIssues('', 'open')
+    expect(result).toStrictEqual(3)
+  })
+  it('get issues failure', async () => {
+    mockedAxios.get.mockRejectedValue(new Error('error'))
+    const result = await ghService.getIssues('', 'open')
+    expect(result).toStrictEqual(-1)
+  })
+})
+
+// test get correctness data
