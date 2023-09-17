@@ -5,7 +5,7 @@ import {
   calculateResponsiveness,
   calculateLicenseCompliance,
   calculateNetScore,
-} from './metric-calculations'
+} from './middleware/metric-calculations'
 import {Urlmetrics} from './url-models'
 
 export function assignMetrics(data: string): Urlmetrics {
