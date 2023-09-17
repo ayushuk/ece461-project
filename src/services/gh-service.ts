@@ -39,6 +39,7 @@ export async function getCommitData(
     for (let i = 0; i < response.data.length; i += 1) {
       totalContributions += response.data[i].contributions
     }
+
     return [login, contributions, totalContributions] as const
   } catch {
     return ['', -1, -1]
@@ -78,15 +79,16 @@ export async function getPullRequestData(
         params: {state: 'all', per_page: 100}, // eslint-disable-line camelcase
       },
     )
-    let critUserPullRequests: number = 0
-    const totalPullRequests: number = response.data.length
+    let crituserpullrequests: number = 0
+    const totalpullrequests: number = response.data.length
 
-    for (let i = 0; i < totalPullRequests; i += 1) {
+    for (let i = 0; i < totalpullrequests; i += 1) {
       if (response.data[i].user.login === critUser) {
-        critUserPullRequests += 1
+        crituserpullrequests += 1
       }
     }
-    return [critUserPullRequests, totalPullRequests] as const
+
+    return [crituserpullrequests, totalpullrequests] as const
   } catch {
     return [-1, -1] as const
   }
@@ -149,7 +151,7 @@ export async function getIssues(
   const repoName = repoUrl.split('/')[4]
   try {
     const response = await instance.get(`${repoOwner}/${repoName}/issues`, {
-      params: {state: state, per_page: 100}, // eslint-disable-line camelcase
+      params: {state, per_page: 100}, // eslint-disable-line camelcase
     })
     return response.data.length
   } catch {
@@ -159,7 +161,7 @@ export async function getIssues(
 
 /**
  * Gets the data required to calculate the correctness.
- * 
+ *
  * @param repoUrl Github repository url
  * @returns The data required to calculate the correctness.
  */
@@ -178,4 +180,48 @@ export function getCorrectnessData(repoUrl: string): CorrectnessData {
     closedIssues,
     openIssues,
   }
+}
+
+/**
+ * Gets the license of the repository.
+ *
+ * TODO: handle failure logging
+ *
+ * @param repoUrl Github repository url
+ * @returns The license of the repository.
+ */
+export async function getLicense(repoUrl: string): Promise<string> {
+  const instance = axios.create({
+    baseURL: 'https://api.github.com/repos',
+    timeout: 1000,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+    },
+  }) // create axios instance
+
+  const repoOwner = repoUrl.split('/')[3]
+  const repoName = repoUrl.split('/')[4]
+  try {
+    const response = await instance.get(`${repoOwner}/${repoName}/license`)
+    return response.data.license.key
+  } catch {
+    return ''
+  }
+}
+
+/**
+ * Determines if the repository is compliant with the lgpl-2.1 license.
+ *
+ * TODO: add other compatiable licenses
+ *
+ * @param repoUrl Github repository url
+ * @returns 1 if the repository is compliant with the lgpl-2.1 license, 0 otherwise.
+ */
+export function getLiscenseComplianceData(repoUrl: string): number {
+  let liscense: string = ''
+  getLicense(repoUrl).then((data: string) => {
+    liscense = data
+  })
+  return liscense === 'lpgl-2.1' ? 1 : 0
 }

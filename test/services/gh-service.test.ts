@@ -65,6 +65,7 @@ describe('test getPullReqestData', () => {
   })
 })
 
+// TODO: test get bus factor data (need mocks)
 // describe('test getBusFactorData', () => {
 //   it('get bus factor data successfully', () => {
 //     const mockGetCommitData = jest.spyOn(ghService, 'getCommitData')
@@ -100,4 +101,24 @@ describe('test getIssues', () => {
   })
 })
 
-// test get correctness data
+// TODO: test get correctness data (need mocks)
+
+describe('test getLicense', () => {
+  it('get license successfully', async () => {
+    const data = {
+      license: {
+        key: 'test license',
+      },
+    }
+    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
+    const result = await ghService.getLicense('')
+    expect(result).toStrictEqual('test license')
+  })
+  it('get license failure', async () => {
+    mockedAxios.get.mockRejectedValue(new Error('error'))
+    const result = await ghService.getLicense('')
+    expect(result).toStrictEqual('')
+  })
+})
+
+// TODO: test get license compliance (need mocks)
