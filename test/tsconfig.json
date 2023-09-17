@@ -3,5 +3,9 @@
   "compilerOptions": {
     "noEmit": true
   },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
   "references": [{"path": ".."}]
 }

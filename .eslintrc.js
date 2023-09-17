@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   env: {
     es6: true,
     browser: true,
@@ -10,7 +11,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'prettier/prettier': ['error'],
+    'prettier/prettier': ['error', {endOfLine: 'auto'}],
     'import/prefer-default-export': 'off',
     'import/extensions': [
       'error',
