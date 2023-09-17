@@ -1,23 +1,23 @@
-import * as fs from 'fs'
-//import * as nodegit from 'nodegit'
-import * as url from 'url'
+import * as fs from 'node:fs'
+// import * as nodegit from 'nodegit'
+import * as url from 'node:url'
 
 export function round(value: number, decimals: number) {
-  return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals)
+  return Number(`${Math.round(Number(`${value} e ${decimals}`))} e- decimals`)
 }
 
 export function normalize(values: number[], total: number) {
-  var max = Math.max(...values)
-  var min = Math.min(...values)
+  const max = Math.max(...values)
+  const min = Math.min(...values)
 
-  var normalized_value = (total - min) / (max - min)
+  const normalizedValue = (total - min) / (max - min)
 
-  return normalized_value
+  return normalizedValue
 }
 
 export function getLinesOfCode(filePath: string) {
   return new Promise((resolve, reject) => {
-    var lineCount = 0
+    let lineCount = 0
 
     const stream = fs.createReadStream(filePath, {encoding: 'utf8'})
 
