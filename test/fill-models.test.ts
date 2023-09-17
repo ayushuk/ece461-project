@@ -12,14 +12,14 @@ import {
 
 const mockBusFactor = jest.fn<() => number>() as jest.Mock<number>;
 
-// jest.mock('../../src/fill-models', () => ({
-//   calculateBusFactor: jest.fn((value: string)),
-//   calculateCorrectness: jest.fn(),
-//   calculateRampUpTime: jest.fn(),
-//   calculateResponsiveness: jest.fn(),
-//   calculateLicenseCompliance: jest.fn(),
-//   calculateNetScore: jest.fn()
-// }))
+jest.mock('../../src/fill-models', () => ({
+  calculateBusFactor: jest.fn((value: string)),
+  calculateCorrectness: jest.fn(),
+  calculateRampUpTime: jest.fn(),
+  calculateResponsiveness: jest.fn(),
+  calculateLicenseCompliance: jest.fn(),
+  calculateNetScore: jest.fn()
+}))
 
 describe('fill-models', () => {
   test
