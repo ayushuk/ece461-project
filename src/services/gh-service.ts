@@ -1,6 +1,10 @@
 import axios from 'axios'
 import * as dotenv from 'dotenv'
-import {BusFactorData, CorrectnessData, ResponsesivenessData} from '../models/middleware-inputs'
+import {
+  BusFactorData,
+  CorrectnessData,
+  ResponsesivenessData,
+} from '../models/middleware-inputs'
 
 dotenv.config() // load enviroment variables
 
@@ -294,7 +298,7 @@ export async function getAnualCommitCount(repoUrl: string): Promise<number> {
 
 /**
  * Gets the data required to calculate the responsiveness.
- * 
+ *
  * @param repoUrl Github repository url
  * @returns The data required to calculate the responsiveness.
  */
