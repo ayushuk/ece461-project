@@ -1,7 +1,6 @@
-import {parse} from 'path'
-import * as utils from '../../src/middleware/utils'
-import {round, parseGHRepoName, cloneRepo} from '../../src/middleware/utils'
-import * as nodegit from 'nodegit'
+// import {parse} from 'path'
+// import * as utils from '../../src/middleware/utils'
+import {round, parseGHRepoName} from '../../src/middleware/utils'
 
 describe('round', () => {
   // Test case 1: Round down 2 decimal places
@@ -28,5 +27,3 @@ describe('parseGHRepoName', () => {
     )
   })
 })
-
-describe('cloneRepo', () => {})

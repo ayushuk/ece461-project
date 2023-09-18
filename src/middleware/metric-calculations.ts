@@ -1,14 +1,17 @@
 // funciton imports
-import {BusFactorData, CorrectnessData} from '../models/middleware-inputs'
 import {round} from './utils'
-import 
+import {
+  getBusFactorData,
+  getCorrectnessData,
+  getResponsivenessData,
+} from '../services/gh-service'
 
 // Bus Factor Calculations
 export function calculateBusFactor(url: string) {
-  
+  // get data using ./services/gh-service.ts
+  const data = getBusFactorData(url)
 
-
-  // get data from object
+  // get data from returned object
   const {
     criticalContrubitorCommits,
     totalCommits,
@@ -37,11 +40,18 @@ export function calculateBusFactor(url: string) {
 }
 
 // Correctness Calculations
-export function calculateCorrectness(data: CorrectnessData) {
-  // this is going to be Github URL
+export function calculateCorrectness(url: string) {
+  // get data using ./services/gh-service.ts
+  const data = getCorrectnessData(url)
+
+  // get data from returned object
   const {closedIssues, openIssues} = data
 
-  const correctnessScore = closedIssues / (closedIssues + openIssues)
+  // calculate correctness score
+  let correctnessScore = closedIssues / (closedIssues + openIssues)
+
+  // round to 3 decimal places
+  correctnessScore = round(correctnessScore, 3)
 
   return correctnessScore
 }
@@ -57,16 +67,25 @@ export function calculateCorrectness(data: CorrectnessData) {
 //   return rampUpTime
 // }
 
-// // Responsiveness Calculations
-// export function calculateResponsiveness(data: string) {
-//   // this is going to be Github URL
-//   const monthlyCommits = 0 // set to value in object
-//   const annualCommits = 0 // set to value in object
+// Responsiveness Calculations
+export function calculateResponsiveness(url: string) {
+  // get data using ./services/gh-service.ts
+  const data = getResponsivenessData(url)
 
-//   const responsivenessScore = monthlyCommits / annualCommits
+  const {monthlyCommitCount, annualCommitCount} = data
 
-//   return responsivenessScore
-// }
+  // calculate responsiveness score
+  if (annualCommitCount === 0) {
+    return 0
+  }
+
+  let responsivenessScore = monthlyCommitCount / annualCommitCount
+
+  // round to 3 decimal places
+  responsivenessScore = round(responsivenessScore, 3)
+
+  return responsivenessScore
+}
 
 // // License Compliance Calculations
 // export function calculateLicenseCompliance(data: string) {

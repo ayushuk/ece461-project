@@ -1,5 +1,4 @@
 import * as fs from 'node:fs'
-import * as nodegit from 'nodegit'
 import * as url from 'node:url'
 
 export function round(value: number, decimals: number): number {
@@ -47,24 +46,24 @@ export function parseGHRepoName(repoUrl: string): string | null {
   return null // Not a valid GitHub repository URL
 }
 
-export async function cloneRepo(GhUrl: string) {
-  let repositoryUrl = GhUrl
-  const repoName = parseGHRepoName(repositoryUrl)
-  repositoryUrl = GhUrl + '.git'
-  console.log(repositoryUrl)
-  console.log(repoName)
-  const localPath = ``
-  // ./cloned-repos/${repoName}
+// export async function cloneRepo(GhUrl: string) {
+//   let repositoryUrl = GhUrl
+//   const repoName = parseGHRepoName(repositoryUrl)
+//   repositoryUrl = GhUrl + '.git'
+//   console.log(repositoryUrl)
+//   console.log(repoName)
+//   const localPath = ``
+//   // ./cloned-repos/${repoName}
 
-  try {
-    // Clone the repository
-    await nodegit.Clone(repositoryUrl, localPath)
-    console.log('Cloned')
-  } catch (error) {
-    //error = null
-    console.error('Error', error)
-    return error
-  }
+//   try {
+//     // Clone the repository
+//     await nodegit.Clone(repositoryUrl, localPath)
+//     console.log('Cloned')
+//   } catch (error) {
+//     //error = null
+//     console.error('Error', error)
+//     return error
+//   }
 
-  return localPath
-}
+//   return localPath
+// }
