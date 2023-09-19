@@ -2,6 +2,7 @@
 import fs from 'node:fs'
 import {readFileAsync, Install} from '../../src/commands/install'
 import logger from '../../src/logger'
+import { log } from 'node:console'
 
 describe('readFileAsync', () => {
   it('should read a file successfully', async () => {
@@ -38,9 +39,8 @@ describe('run', () => {
     await command
 
     const logCalls = consoleLogMock.mock.calls
-    console.log("1. " + consoleLogMock)
-    console.log("2. " +consoleLogMock.mock)
-    console.log("3. " + consoleLogMock.mock.calls)
+    console.log(logCalls[0])
+    console.log(logCalls[1])
     const expectedLogCalls = 'dependencies installed...'
 
     // Assert on the mock
