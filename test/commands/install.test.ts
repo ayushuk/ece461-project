@@ -31,20 +31,21 @@ describe('readFileAsync', () => {
 describe('run', () => {
   it('should successfully run the install command', async () => {
     // Mock console.log
-    const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
+    const consoleLogMock = jest.spyOn(console, 'log').mockImplementation()
 
     // Call the async run() function
-    const command = Install.run(['install']);
-    await command;
+    const command = Install.run(['install'])
+    await command
 
-    const logCalls = consoleLogMock.mock.calls[1];
+    const logCalls = consoleLogMock.mock.calls[1]
+    console.log(consoleLogMock.mock.calls)
     const expectedLogCalls = 'dependencies installed...'
 
     // Assert on the mock
-    expect(logCalls).toContain(expectedLogCalls);
+    expect(logCalls).toContain(expectedLogCalls)
 
     // Restore the original console.log
-    consoleLogMock.mockRestore();
+    consoleLogMock.mockRestore()
   })
 
   // it('should handle errors when reading the file', () => {
