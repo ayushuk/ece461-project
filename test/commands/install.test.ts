@@ -38,7 +38,7 @@ describe('run', () => {
     const command = Install.run(['install'])
     await command
 
-    const logCalls = consoleLogMock.mock.calls
+    const logCalls = consoleLogMock.mock.calls[1]
       .map((args) => args.join(' ')) // Convert arguments to a single string
       .join('\n') // Convert to a single string with newlines
     console.log(logCalls)
