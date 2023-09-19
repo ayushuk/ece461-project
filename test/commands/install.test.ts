@@ -37,8 +37,8 @@ describe('run', () => {
     const command = Install.run(['install'])
     await command
 
-    const logCalls = consoleLogMock.mock.calls[1]
-    console.log(consoleLogMock.mock.calls)
+    const logCalls = consoleLogMock.mock.calls
+    // console.log(consoleLogMock.mock.calls)
     const expectedLogCalls = 'dependencies installed...'
 
     // Assert on the mock
