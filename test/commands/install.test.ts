@@ -28,7 +28,7 @@ describe('readFileAsync', () => {
     const result = JSON.parse(await readFileAsync(packagePath))
 
     // Assertions
-    expect(result).toMatch(fileContent)
+    expect(result).toEqual(fileContent)
 
     // Clean up: Delete the temporary file
     fs.unlink(packagePath, (err) => {
@@ -61,7 +61,7 @@ describe('readFileAsync', () => {
 })
 
 describe('run', () => {
-  it('should successfully run the install command', () => {
+  it('should successfully run the install command', async () => {
     const packagePath = 'test-package.json'
     const fileContent = JSON.stringify({dependencies: {test: '1.0.0'}})
 
@@ -70,7 +70,7 @@ describe('run', () => {
       if (err) throw err
     })
 
-    const result = test.stdout().command(['install'])
+    const result = await test.stdout().command(['install'])
 
     // Assertions
     expect(result.stdout).to.contain('dependencies installed...')
