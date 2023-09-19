@@ -43,7 +43,7 @@ export class Install extends Command {
         this.error(`Error reading file: ${error.message}`)
       }
 
-      throw error
+      // throw error
     }
   }
 }

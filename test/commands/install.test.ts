@@ -1,8 +1,6 @@
-'use strict'
-import {expect, test} from '@oclif/test'
+// import {expect, test} from '@oclif/test'
 import fs from 'node:fs'
-import sinon from 'sinon'
-import {readFileAsync} from '../../src/commands/install'
+import {readFileAsync, Install} from '../../src/commands/install'
 import logger from '../../src/logger'
 
 describe('readFileAsync', () => {
@@ -18,7 +16,7 @@ describe('readFileAsync', () => {
     const result = JSON.parse(await readFileAsync(packagePath))
 
     // Assertions
-    expect(result).to.equal(fileContent)
+    expect(result).toEqual(fileContent)
 
     // Clean up: Delete the temporary file
     fs.unlink(packagePath, (err) => {
@@ -38,7 +36,7 @@ describe('readFileAsync', () => {
       readFileAsync(nonExistentFilePath)
     } catch (error_) {
       error = error_
-      expect(error).to.exist
+      await expect(readFileAsync(nonExistentFilePath)).rejects.toThrowErrorMatchingSnapshot();
     }
 
     // Assertions
@@ -52,23 +50,20 @@ describe('readFileAsync', () => {
 
 describe('run', () => {
   it('should successfully run the install command', async () => {
-    const packagePath = 'test-package.json'
-    const fileContent = JSON.stringify({dependencies: {test: '1.0.0'}})
+    const mockLog = jest.spyOn(process.stdout, 'write')
 
-    // Create a temporary package.json file for testing
-    fs.writeFile(packagePath, fileContent, (err) => {
-      if (err) throw err
-    })
+    // Run your CLI command
+    Install.run()
 
-    const result = await test.stdout().command(['install'])
+    // Assert that the run method was called
+    expect(Install.run()).toHaveBeenCalledWith(['install'])
 
-    // Assertions
-    expect(result.stdout).to.contain('dependencies installed...')
+    // Assert that the log function was called with the expected message
+    expect(mockLog).toHaveBeenCalledWith('dependencies installed...\n')
+    expect(mockLog).toHaveBeenCalledTimes(1) // Ensure it was called once
 
-    // Clean up: Delete the temporary file
-    fs.unlink(packagePath, (err) => {
-      if (err) throw err
-    })
+    // Clean up
+    mockLog.mockRestore() // Restore the original log function
   })
 
   // it('should handle errors when reading the file', () => {
