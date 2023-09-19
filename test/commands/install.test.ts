@@ -4,8 +4,17 @@ import sinon from 'sinon'
 import {readFileAsync} from '../../src/commands/install'
 import logger from '../../src/logger'
 
+// describe('test', () => {
+//   test
+//     .stdout()
+//     .command(['test'])
+//     .it('runs hello', (ctx) => {
+//       expect(ctx.stdout).to.contain('hello world')
+//     })
+// })
+
 describe('readFileAsync', () => {
-  it('should read a file successfully', async () => {
+  it('should read a file successfully', () => {
     // Create a temporary package.json file for testing
     const packagePath = 'test-package.json'
     const fileContent = JSON.stringify({dependencies: {test: '1.0.0'}})
@@ -14,7 +23,7 @@ describe('readFileAsync', () => {
     })
 
     // Call the readFileAsync function
-    const result = await readFileAsync(packagePath)
+    const result = readFileAsync(packagePath)
 
     // Assertions
     expect(result).to.equal(fileContent)
@@ -26,7 +35,7 @@ describe('readFileAsync', () => {
     //delete file
   })
 
-  it('should log an error if file reading fails', async () => {
+  it('should log an error if file reading fails', () => {
     // Create a stub for the logger's error method
     const loggerStub = sinon.stub(logger, 'error')
 
@@ -34,7 +43,7 @@ describe('readFileAsync', () => {
     const nonExistentFilePath = 'non-existent-file.json'
     let error: any
     try {
-      await readFileAsync(nonExistentFilePath)
+      readFileAsync(nonExistentFilePath)
     } catch (error_) {
       error = error_
     }
@@ -50,7 +59,7 @@ describe('readFileAsync', () => {
 })
 
 describe('run', () => {
-  it('should successfully run the install command', async () => {
+  it('should successfully run the install command', () => {
     const packagePath = 'test-package.json'
     const fileContent = JSON.stringify({dependencies: {test: '1.0.0'}})
 
@@ -70,7 +79,7 @@ describe('run', () => {
     })
   })
 
-  it('should handle errors when reading the file', async () => {
+  it('should handle errors when reading the file', () => {
     // Create a stub for the logger's error method
     const loggerStub = sinon.stub(logger, 'error')
 
@@ -85,7 +94,7 @@ describe('run', () => {
     loggerStub.restore()
   })
 
-  it('should handle errors when parsing package.json', async () => {
+  it('should handle errors when parsing package.json', () => {
     // Create a temporary package.json file with invalid JSON for testing
     const packagePath = 'test-package.json'
     const fileContent = 'invalid-json'
