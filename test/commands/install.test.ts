@@ -31,14 +31,23 @@ describe('readFileAsync', () => {
 describe('run', () => {
   it('should successfully run the install command', async () => {
     // Mock console.log
+    const packageJsonContent = fs.readFileSync('./package.json', 'utf-8');
+    const packageJson = JSON.parse(packageJsonContent);
+    const expectedNumDependencies = Object.keys(packageJson.dependencies).length;
+
     const consoleLogMock = jest.spyOn(console, 'log').mockImplementation();
 
     // Call the async run() function
     const command = Install.run(['install']);
     await command;
 
+    const logCalls = consoleLogMock.mock.calls;
+    const numDependenciesInstalled = logCalls.filter(call =>
+      call[0].includes('dependencies installed...')
+    ).length;
+
     // Assert on the mock
-    expect(consoleLogMock).toHaveBeenCalledWith('dependencies installed...');
+    expect(numDependenciesInstalled).toBe(expectedNumDependencies);
 
     // Restore the original console.log
     consoleLogMock.mockRestore();
