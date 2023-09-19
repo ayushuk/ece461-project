@@ -5,16 +5,6 @@ import sinon from 'sinon'
 import {readFileAsync} from '../../src/commands/install'
 import logger from '../../src/logger'
 
-// jest.fn('fs')
-// describe('test', () => {
-//   test
-//     .stdout()
-//     .command(['test'])
-//     .it('runs hello', (ctx) => {
-//       expect(ctx.stdout).to.contain('hello world')
-//     })
-// })
-
 describe('readFileAsync', () => {
   it('should read a file successfully', async () => {
     // Create a temporary package.json file for testing
@@ -28,7 +18,7 @@ describe('readFileAsync', () => {
     const result = JSON.parse(await readFileAsync(packagePath))
 
     // Assertions
-    expect(result).toEqual(fileContent)
+    expect(result).to.equal(fileContent)
 
     // Clean up: Delete the temporary file
     fs.unlink(packagePath, (err) => {
