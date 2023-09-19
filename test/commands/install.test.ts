@@ -1,4 +1,4 @@
-// import {expect, test} from '@oclif/test'
+import {expect, test} from '@oclif/test'
 import fs from 'node:fs'
 import sinon from 'sinon'
 import {readFileAsync} from '../../src/commands/install'
@@ -23,7 +23,7 @@ describe('readFileAsync', () => {
     })
 
     // Call the readFileAsync function
-    const result = readFileAsync(packagePath)
+    const result = JSON.parse(await readFileAsync(packagePath))
 
     // Assertions
     expect(result).to.equal(fileContent)
