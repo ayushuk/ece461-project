@@ -26,7 +26,7 @@ describe('readFileAsync', () => {
     const result = JSON.parse(await readFileAsync(packagePath))
 
     // Assertions
-    expect(result).to.equal(fileContent)
+    expect(result).toEqual(fileContent)
 
     // Clean up: Delete the temporary file
     fs.unlink(packagePath, (err) => {
