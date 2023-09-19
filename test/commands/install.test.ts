@@ -55,9 +55,6 @@ describe('run', () => {
     // Run your CLI command
     Install.run()
 
-    // Assert that the run method was called
-    expect(Install.run()).toHaveBeenCalledWith(['install'])
-
     // Assert that the log function was called with the expected message
     expect(mockLog).toHaveBeenCalledWith('dependencies installed...\n')
     expect(mockLog).toHaveBeenCalledTimes(1) // Ensure it was called once
