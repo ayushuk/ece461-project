@@ -1,4 +1,4 @@
-import {expect, test} from '@oclif/test'
+// import {expect, test} from '@oclif/test'
 import fs from 'node:fs'
 import sinon from 'sinon'
 import {readFileAsync} from '../../src/commands/install'
@@ -14,7 +14,7 @@ import logger from '../../src/logger'
 // })
 
 describe('readFileAsync', () => {
-  it('should read a file successfully', () => {
+  it('should read a file successfully', async () => {
     // Create a temporary package.json file for testing
     const packagePath = 'test-package.json'
     const fileContent = JSON.stringify({dependencies: {test: '1.0.0'}})
