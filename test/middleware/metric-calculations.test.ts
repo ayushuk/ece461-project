@@ -1,8 +1,4 @@
-import {
-  calculateBusFactor,
-  calculateCorrectness,
-  calculateResponsiveness,
-} from '../../src/middleware/metric-calculations'
+import * as metrics from '../../src/middleware/metric-calculations'
 import * as ghservices from '../../src/services/gh-service'
 import * as utils from '../../src/middleware/utils'
 
@@ -24,7 +20,7 @@ describe('calculateBusFactor', () => {
 
     // Call calculateBusFactor
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateBusFactor(testUrl)
+    const result = metrics.calculateBusFactor(testUrl)
 
     // Assertions
     expect(getBusFactorDataMock).toHaveBeenCalledWith(testUrl)
@@ -32,10 +28,6 @@ describe('calculateBusFactor', () => {
 
     // Expect result to be 0.605 based on the formula
     expect(result).toBe(0.605)
-
-    // restore original functions
-    getBusFactorDataMock.mockRestore()
-    roundMock.mockRestore()
   })
 
   // Test case 2: Testing when only one contrinbuter commits
@@ -54,7 +46,7 @@ describe('calculateBusFactor', () => {
 
     // Call calculateBusFactor
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateBusFactor(testUrl)
+    const result = metrics.calculateBusFactor(testUrl)
 
     // Assertions
     expect(getBusFactorDataMock).toHaveBeenCalledWith(testUrl)
@@ -62,10 +54,6 @@ describe('calculateBusFactor', () => {
 
     // Expect result to be 0.605 based on the formula
     expect(result).toBe(0)
-
-    // restore original functions
-    getBusFactorDataMock.mockRestore()
-    roundMock.mockRestore()
   })
 
   // Test case 3: Testing when only crit has no PRs
@@ -84,7 +72,7 @@ describe('calculateBusFactor', () => {
 
     // Call calculateBusFactor
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateBusFactor(testUrl)
+    const result = metrics.calculateBusFactor(testUrl)
 
     // Assertions
     expect(getBusFactorDataMock).toHaveBeenCalledWith(testUrl)
@@ -92,10 +80,6 @@ describe('calculateBusFactor', () => {
 
     // Expect result to be 0.605 based on the formula
     expect(result).toBe(0.737)
-
-    // restore original functions
-    getBusFactorDataMock.mockRestore()
-    roundMock.mockRestore()
   })
 })
 
@@ -115,7 +99,7 @@ describe('calculateCorrectness', () => {
 
     // Call calculateCorrectness
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateCorrectness(testUrl)
+    const result = metrics.calculateCorrectness(testUrl)
 
     // Assertions
     expect(getCorrectnessDataMock).toHaveBeenCalledWith(testUrl)
@@ -123,10 +107,6 @@ describe('calculateCorrectness', () => {
 
     // Expect result to be 0.5 based on the formula
     expect(result).toBe(0.5)
-
-    // restore original functions
-    getCorrectnessDataMock.mockRestore()
-    roundMock.mockRestore()
   })
 
   // Test case 2: Testing when only closed issues
@@ -144,7 +124,7 @@ describe('calculateCorrectness', () => {
 
     // Call calculateCorrectness
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateCorrectness(testUrl)
+    const result = metrics.calculateCorrectness(testUrl)
 
     // Assertions
     expect(getCorrectnessDataMock).toHaveBeenCalledWith(testUrl)
@@ -152,10 +132,6 @@ describe('calculateCorrectness', () => {
 
     // Expect result to be 1 based on the formula
     expect(result).toBe(1)
-
-    // restore original functions
-    getCorrectnessDataMock.mockRestore()
-    roundMock.mockRestore()
   })
 
   // Test case 3: Testing when only open issues
@@ -173,7 +149,7 @@ describe('calculateCorrectness', () => {
 
     // Call calculateCorrectness
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateCorrectness(testUrl)
+    const result = metrics.calculateCorrectness(testUrl)
 
     // Assertions
     expect(getCorrectnessDataMock).toHaveBeenCalledWith(testUrl)
@@ -181,10 +157,6 @@ describe('calculateCorrectness', () => {
 
     // Expect result to be 0 based on the formula
     expect(result).toBe(0)
-
-    // restore original functions
-    getCorrectnessDataMock.mockRestore()
-    roundMock.mockRestore()
   })
 })
 
@@ -207,9 +179,9 @@ describe('calculateResponsiveness', () => {
     const roundMock = jest.spyOn(utils, 'round')
     roundMock.mockReturnValue(1)
 
-    // Call calculateCorrectness
+    // Call calculateResponsiveness
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateResponsiveness(testUrl)
+    const result = metrics.calculateResponsiveness(testUrl)
 
     // Assertions
     expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
@@ -217,10 +189,6 @@ describe('calculateResponsiveness', () => {
 
     // Expect result to be 0.5 based on the formula
     expect(result).toBe(1)
-
-    // restore original functions
-    getResponsivenessDataMock.mockRestore()
-    roundMock.mockRestore()
   })
 
   it('should return 0 when the number of annual commits is 0', () => {
@@ -238,19 +206,15 @@ describe('calculateResponsiveness', () => {
     const roundMock = jest.spyOn(utils, 'round')
     roundMock.mockReturnValue(0)
 
-    // Call calculateCorrectness
+    // Call calculateResponsiveness
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateResponsiveness(testUrl)
+    const result = metrics.calculateResponsiveness(testUrl)
 
     // Assertions
     expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
 
     // Expect result to be 0.5 based on the formula
     expect(result).toBe(0)
-
-    // restore original functions
-    getResponsivenessDataMock.mockRestore()
-    roundMock.mockRestore()
   })
 
   it('should return 0.5 when monthly commit count is 5 and annual is 10', () => {
@@ -260,61 +224,114 @@ describe('calculateResponsiveness', () => {
       'getResponsivenessData',
     )
     getResponsivenessDataMock.mockReturnValue({
-      monthlyCommitCount: 5,
-      annualCommitCount: 10,
+      monthlyCommitCount: 10,
+      annualCommitCount: 100,
     })
 
     // mock round
     const roundMock = jest.spyOn(utils, 'round')
-    roundMock.mockReturnValue(0.5)
+    roundMock.mockReturnValue(0.1)
 
-    // Call calculateCorrectness
+    // Call calculateResponsiveness
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = calculateResponsiveness(testUrl)
+    const result = metrics.calculateResponsiveness(testUrl)
 
     // Assertions
     expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
 
     // Expect result to be 0.5 based on the formula
-    expect(result).toBe(0.5)
-    expect(roundMock).toHaveBeenCalledWith(0.5, 3)
-
-    // restore original functions
-    getResponsivenessDataMock.mockRestore()
-    roundMock.mockRestore()
+    expect(result).toBe(0.1)
+    expect(roundMock).toHaveBeenCalledWith(0.1, 3)
   })
-
-  // is this a possible test case?
-  // it('should return 0 when monthly commits is 0', () => {
-  //   // mock getResponsivenessData
-  //   const getResponsivenessDataMock = jest.spyOn(
-  //     ghservices,
-  //     'getResponsivenessData',
-  //   )
-  //   getResponsivenessDataMock.mockReturnValue({
-  //     monthlyCommitCount: 5,
-  //     annualCommitCount: 10,
-  //   })
-
-  //   // mock round
-  //   const roundMock = jest.spyOn(utils, 'round')
-  //   roundMock.mockReturnValue(0.5)
-
-  //   // Call calculateCorrectness
-  //   const testUrl = 'https://github.com/ayushuk/ece461-project'
-  //   const result = calculateResponsiveness(testUrl)
-
-  //   // Assertions
-  //   expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
-
-  //   // Expect result to be 0.5 based on the formula
-  //   expect(result).toBe(0.5)
-  //   expect(roundMock).toHaveBeenCalledWith(0.5, 3)
-
-  //   //restore original functions
-  //   getResponsivenessDataMock.mockRestore()
-  //   roundMock.mockRestore()
-  // })
 })
 
-// describe('calculateLicenseCompliance', () => {})
+describe('calculateLicenseCompliance', () => {
+  it('should return a 0 when a license is not found', () => {
+    // mock getLicenseComplianceData
+    const mockLicenseComplianceData = 0
+    const mockGetLicenseComplianceData = jest.spyOn(
+      ghservices,
+      'getLiscenseComplianceData',
+    )
+    mockGetLicenseComplianceData.mockReturnValue(mockLicenseComplianceData)
+
+    // Call calculatelicense
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = metrics.calculateLicenseCompliance(testUrl)
+
+    // Assertions
+    expect(ghservices.getLiscenseComplianceData).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0 when a license is not found
+    expect(result).toBe(0)
+  })
+
+  it('should return a 1 when a license is found', () => {
+    // mock getLicenseComplianceData
+    const mockLicenseComplianceData = 1
+    const mockGetLicenseComplianceData = jest.spyOn(
+      ghservices,
+      'getLiscenseComplianceData',
+    )
+    mockGetLicenseComplianceData.mockReturnValue(mockLicenseComplianceData)
+
+    // Call calculatelicense
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = metrics.calculateLicenseCompliance(testUrl)
+
+    // Assertions
+    expect(ghservices.getLiscenseComplianceData).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0 when a license is not found
+    expect(result).toBe(1)
+  })
+})
+
+// describe('calculateNetScore', () => {
+//   it('should return a 0 when repo does not have a valid license', () => {
+//     //mock calculateBusFactor
+//     const mockBusFactorScore = 0.5
+//     const mockCalculateBusFactor = jest.spyOn(metrics, 'calculateBusFactor')
+//     mockCalculateBusFactor.mockReturnValue(mockBusFactorScore)
+
+//     //mock calculateCorrectness
+//     const mockCorrectnessScore = 0.5
+//     const mockCalculateCorrectness = jest.spyOn(metrics, 'calculateCorrectness')
+//     mockCalculateCorrectness.mockReturnValue(mockCorrectnessScore)
+
+//     //mock calculateRampUpTime
+//     const mockRampUpScore = 0.5
+//     const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
+//     mockCalculateRampUp.mockReturnValue(mockRampUpScore)
+
+//     //mock calculateResponsiveness
+//     const mockResponsivenessScore = 0.5
+//     const mockCalculateResponsiveness = jest.spyOn(
+//       metrics,
+//       'calculateResponsiveness',
+//     )
+//     mockCalculateResponsiveness.mockReturnValue(mockResponsivenessScore)
+
+//     //mock calculateLicenseCompliance
+//     const mockLicenseScore = 0
+//     const mockCalculateLicenseCompliance = jest.spyOn(
+//       metrics,
+//       'calculateLicenseCompliance',
+//     )
+//     mockCalculateLicenseCompliance.mockReturnValue(mockLicenseScore)
+
+//     // Call calculateNetScore
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = metrics.calculateNetScore(testUrl)
+
+//     // Assertions
+//     expect(metrics.calculateBusFactor).toHaveBeenCalledWith(testUrl)
+//     expect(metrics.calculateCorrectness).toHaveBeenCalledWith(testUrl)
+//     expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
+//     expect(metrics.calculateResponsiveness).toHaveBeenCalledWith(testUrl)
+//     expect(metrics.calculateLicenseCompliance).toHaveBeenCalledWith(testUrl)
+
+//     // Expect result to be 0 when a license is not found
+//     expect(result).toBe(0)
+//   })
+// })
