@@ -38,11 +38,13 @@ describe('run', () => {
     await command
 
     const logCalls = consoleLogMock.mock.calls
-    // console.log(consoleLogMock.mock.calls)
+    console.log("1. " + consoleLogMock)
+    console.log("2. " +consoleLogMock.mock)
+    console.log("3. " + consoleLogMock.mock.calls)
     const expectedLogCalls = 'dependencies installed...'
 
     // Assert on the mock
-    expect(logCalls).toContain(expectedLogCalls)
+    expect(logCalls.toString()).toContain(expectedLogCalls)
 
     // Restore the original console.log
     consoleLogMock.mockRestore()
