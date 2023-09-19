@@ -26,7 +26,7 @@ describe('readFileAsync', () => {
     const result = JSON.parse(await readFileAsync(packagePath))
 
     // Assertions
-    expect(result).toEqual(fileContent)
+    expect(result).to.equal(fileContent)
 
     // Clean up: Delete the temporary file
     fs.unlink(packagePath, (err) => {
@@ -46,10 +46,10 @@ describe('readFileAsync', () => {
       readFileAsync(nonExistentFilePath)
     } catch (error_) {
       error = error_
+      expect(error).to.exist
     }
 
     // Assertions
-    expect(error).to.exist
     expect(loggerStub.calledOnce).to.be.true
     expect(loggerStub.calledWithMatch(sinon.match.instanceOf(Error))).to.be.true
 
