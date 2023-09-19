@@ -101,7 +101,7 @@ export function calculateLicenseCompliance(url: string) {
 export function calculateNetScore(url: string) {
   const busFactor = calculateBusFactor(url)
   const correctness = calculateCorrectness(url)
-  const rampUpTime = calculateRampUpTime(url)
+  const rampUpTime = calculateRampUpTime()
   const responsiveness = calculateResponsiveness(url)
   const licenseCompliance = calculateLicenseCompliance(url)
 
