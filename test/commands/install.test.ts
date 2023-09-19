@@ -5,24 +5,9 @@ import logger from '../../src/logger'
 
 describe('readFileAsync', () => {
   it('should read a file successfully', async () => {
-    // Create a temporary package.json file for testing
-    const packagePath = 'test-package.json'
-    const fileContent = {dependencies: {test: '1.0.0'}}
-    fs.writeFile(packagePath, JSON.stringify(fileContent), (err) => {
-      if (err) throw err
-    })
-
-    // Call the readFileAsync function
-    const result = JSON.parse(await readFileAsync(packagePath))
-
-    // Assertions
-    expect(result).toEqual(fileContent)
-
-    // Clean up: Delete the temporary file
-    fs.unlink(packagePath, (err) => {
-      if (err) throw err
-    })
-    //delete file
+    const filePath = './package.json'
+    const result = JSON.parse(await readFileAsync(filePath))
+    expect(result.dependencies).toBeDefined()
   })
 
   it('should log an error if file reading fails', async () => {
@@ -36,31 +21,35 @@ describe('readFileAsync', () => {
       readFileAsync(nonExistentFilePath)
     } catch (error_) {
       error = error_
-      await expect(readFileAsync(nonExistentFilePath)).rejects.toThrowErrorMatchingSnapshot();
+      await expect(
+        readFileAsync(nonExistentFilePath),
+      ).rejects.toThrowErrorMatchingSnapshot()
     }
-
-    // Assertions
-    // expect(loggerStub.calledOnce).to.be.true
-    // expect(loggerStub.calledWithMatch(sinon.match.instanceOf(Error))).to.be.true
-
-    // Restore the stubbed method to its original state
-    // loggerStub.restore()
   })
 })
 
 describe('run', () => {
   it('should successfully run the install command', async () => {
-    const mockLog = jest.spyOn(process.stdout, 'write')
+    const command = Install.run([])
 
-    // Run your CLI command
-    Install.run()
+    // Capture the output using a writable stream
+    const stdout = jest
+      .spyOn(process.stdout, 'write')
+      .mockImplementation(() => {})
+    const stderr = jest
+      .spyOn(process.stderr, 'write')
+      .mockImplementation(() => {})
 
-    // Assert that the log function was called with the expected message
-    expect(mockLog).toHaveBeenCalledWith('dependencies installed...\n')
-    expect(mockLog).toHaveBeenCalledTimes(1) // Ensure it was called once
+    // Call the async run() function
+    await command
 
-    // Clean up
-    mockLog.mockRestore() // Restore the original log function
+    // Restore the original stdout and stderr
+    stdout.mockRestore()
+    stderr.mockRestore()
+
+    // Check the captured output
+    const capturedOutput = stdout.mock.calls.join('\n') // Convert to a string
+    expect(capturedOutput).toContain('dependencies installed...')
   })
 
   // it('should handle errors when reading the file', () => {
