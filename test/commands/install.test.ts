@@ -35,8 +35,9 @@ describe('run', () => {
     const consoleLogMock = jest.spyOn(console, 'log').mockImplementation()
 
     // Call the async run() function
+    const installCommand = require('../../src/commands/install')
     const command = Install.run(['install'])
-    await command
+    await installCommand
 
     const logCalls = consoleLogMock.mock.calls
       .map((args) => args.join(' ')) // Convert arguments to a single string
