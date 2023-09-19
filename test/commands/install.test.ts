@@ -1,9 +1,11 @@
+'use strict'
 import {expect, test} from '@oclif/test'
 import fs from 'node:fs'
 import sinon from 'sinon'
 import {readFileAsync} from '../../src/commands/install'
 import logger from '../../src/logger'
 
+// jest.fn('fs')
 // describe('test', () => {
 //   test
 //     .stdout()
@@ -26,7 +28,7 @@ describe('readFileAsync', () => {
     const result = JSON.parse(await readFileAsync(packagePath))
 
     // Assertions
-    expect(result).to.equal(fileContent)
+    expect(result).toMatch(fileContent)
 
     // Clean up: Delete the temporary file
     fs.unlink(packagePath, (err) => {
@@ -71,7 +73,7 @@ describe('run', () => {
     const result = test.stdout().command(['install'])
 
     // Assertions
-    expect(result).to.contain('dependencies installed...')
+    expect(result.stdout).to.contain('dependencies installed...')
 
     // Clean up: Delete the temporary file
     fs.unlink(packagePath, (err) => {
