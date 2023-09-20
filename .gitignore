@@ -10,3 +10,5 @@
 /yarn.lock
 node_modules
 oclif.manifest.json
+coverage
+/.vscode
