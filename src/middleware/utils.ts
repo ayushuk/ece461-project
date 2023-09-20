@@ -1,50 +1,66 @@
-import * as fs from 'node:fs'
-import * as url from 'node:url'
+// import * as fs from 'node:fs'
+// import * as url from 'node:url'
 
 export function round(value: number, decimals: number): number {
   return Number(value.toFixed(decimals))
 }
 
-export function getLinesOfCode(filePath: string) {
-  return new Promise((resolve, reject) => {
-    let lineCount = 0
+export function identifyLink(url: string) {
+  const githubPattern = /^(https?:\/\/)?(www\.)?github\.com\/[\w.-]+\/[\w.-]+/
 
-    const stream = fs.createReadStream(filePath, {encoding: 'utf8'})
+  const npmPattern = /^(https?:\/\/)?(www\.)?npmjs\.com\/package\/[\w.-]+/
 
-    stream.on('data', (chunk: string) => {
-      lineCount += (chunk.match(/|n/g) || []).length
-    })
-
-    stream.on('end', () => {
-      resolve(lineCount + 1)
-    })
-
-    stream.on('error', (err: any) => {
-      reject(err)
-    })
-  })
-}
-
-export function parseGHRepoName(repoUrl: string): string | null {
-  // Parse the URL
-  const parsedUrl = url.parse(repoUrl)
-
-  // Check if the URL is from github.com and has a valid path
-  if (
-    parsedUrl.hostname === 'github.com' &&
-    parsedUrl.path &&
-    parsedUrl.path.length > 1 // Ensure there's a path after the hostname
-  ) {
-    // Extract the repository name (removing leading slash if present)
-
-    const pathComponents = parsedUrl.path.split('/')
-    const repoName = pathComponents.pop() // Get the last path component
-
-    return repoName || null
+  if (githubPattern.test(url)) {
+    return 'github'
   }
 
-  return null // Not a valid GitHub repository URL
+  if (npmPattern.test(url)) {
+    return 'npm'
+  }
+
+  return null
 }
+
+// export function getLinesOfCode(filePath: string) {
+//   return new Promise((resolve, reject) => {
+//     let lineCount = 0
+
+//     const stream = fs.createReadStream(filePath, {encoding: 'utf8'})
+
+//     stream.on('data', (chunk: string) => {
+//       lineCount += (chunk.match(/|n/g) || []).length
+//     })
+
+//     stream.on('end', () => {
+//       resolve(lineCount + 1)
+//     })
+
+//     stream.on('error', (err: any) => {
+//       reject(err)
+//     })
+//   })
+// }
+
+// export function parseGHRepoName(repoUrl: string): string | null {
+//   // Parse the URL
+//   const parsedUrl = url.parse(repoUrl)
+
+//   // Check if the URL is from github.com and has a valid path
+//   if (
+//     parsedUrl.hostname === 'github.com' &&
+//     parsedUrl.path &&
+//     parsedUrl.path.length > 1 // Ensure there's a path after the hostname
+//   ) {
+//     // Extract the repository name (removing leading slash if present)
+
+//     const pathComponents = parsedUrl.path.split('/')
+//     const repoName = pathComponents.pop() // Get the last path component
+
+//     return repoName || null
+//   }
+
+//   return null // Not a valid GitHub repository URL
+// }
 
 // export async function cloneRepo(GhUrl: string) {
 //   let repositoryUrl = GhUrl

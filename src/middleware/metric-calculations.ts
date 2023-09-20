@@ -96,27 +96,3 @@ export function calculateLicenseCompliance(url: string) {
 
   return licenseCompliantScore
 }
-
-// NetScore Calculations
-export function calculateNetScore(url: string) {
-  const busFactor = exports.calculateBusFactor(url)
-  const correctness = exports.calculateCorrectness(url)
-  const rampUpTime = exports.calculateRampUpTime(url)
-  const responsiveness = exports.calculateResponsiveness(url)
-  const licenseCompliance = exports.calculateLicenseCompliance(url)
-
-  // Score weights
-  const busFactorWeight = 0.4
-  const correctnessWeight = 0.15
-  const rampUpTimeWeight = 0.15
-  const responsivenessWeight = 0.3
-
-  const netScore =
-    licenseCompliance *
-    (busFactor * busFactorWeight +
-      correctness * correctnessWeight +
-      rampUpTime * rampUpTimeWeight +
-      responsiveness * responsivenessWeight)
-
-  return netScore
-}
