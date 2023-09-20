@@ -287,51 +287,98 @@ describe('calculateLicenseCompliance', () => {
   })
 })
 
-// describe('calculateNetScore', () => {
-//   it('should return a 0 when repo does not have a valid license', () => {
-//     //mock calculateBusFactor
-//     const mockBusFactorScore = 0.5
-//     const mockCalculateBusFactor = jest.spyOn(metrics, 'calculateBusFactor')
-//     mockCalculateBusFactor.mockReturnValue(mockBusFactorScore)
+describe('calculateNetScore', () => {
+  it('should return a 0 when repo does not have a valid license', () => {
+    // mock calculateBusFactor
+    const mockBusFactorScore = 0.5
+    const mockCalculateBusFactor = jest.spyOn(metrics, 'calculateBusFactor')
+    mockCalculateBusFactor.mockReturnValue(mockBusFactorScore)
 
-//     //mock calculateCorrectness
-//     const mockCorrectnessScore = 0.5
-//     const mockCalculateCorrectness = jest.spyOn(metrics, 'calculateCorrectness')
-//     mockCalculateCorrectness.mockReturnValue(mockCorrectnessScore)
+    // mock calculateCorrectness
+    const mockCorrectnessScore = 0.5
+    const mockCalculateCorrectness = jest.spyOn(metrics, 'calculateCorrectness')
+    mockCalculateCorrectness.mockReturnValue(mockCorrectnessScore)
 
-//     //mock calculateRampUpTime
-//     const mockRampUpScore = 0.5
-//     const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
-//     mockCalculateRampUp.mockReturnValue(mockRampUpScore)
+    // mock calculateRampUpTime
+    const mockRampUpScore = 0.5
+    const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
+    mockCalculateRampUp.mockReturnValue(mockRampUpScore)
 
-//     //mock calculateResponsiveness
-//     const mockResponsivenessScore = 0.5
-//     const mockCalculateResponsiveness = jest.spyOn(
-//       metrics,
-//       'calculateResponsiveness',
-//     )
-//     mockCalculateResponsiveness.mockReturnValue(mockResponsivenessScore)
+    // mock calculateResponsiveness
+    const mockResponsivenessScore = 0.5
+    const mockCalculateResponsiveness = jest.spyOn(
+      metrics,
+      'calculateResponsiveness',
+    )
+    mockCalculateResponsiveness.mockReturnValue(mockResponsivenessScore)
 
-//     //mock calculateLicenseCompliance
-//     const mockLicenseScore = 0
-//     const mockCalculateLicenseCompliance = jest.spyOn(
-//       metrics,
-//       'calculateLicenseCompliance',
-//     )
-//     mockCalculateLicenseCompliance.mockReturnValue(mockLicenseScore)
+    // mock calculateLicenseCompliance
+    const mockLicenseScore = 0
+    const mockCalculateLicenseCompliance = jest.spyOn(
+      metrics,
+      'calculateLicenseCompliance',
+    )
+    mockCalculateLicenseCompliance.mockReturnValue(mockLicenseScore)
 
-//     // Call calculateNetScore
-//     const testUrl = 'https://github.com/ayushuk/ece461-project'
-//     const result = metrics.calculateNetScore(testUrl)
+    // Call calculateNetScore
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = metrics.calculateNetScore(testUrl)
 
-//     // Assertions
-//     expect(metrics.calculateBusFactor).toHaveBeenCalledWith(testUrl)
-//     expect(metrics.calculateCorrectness).toHaveBeenCalledWith(testUrl)
-//     expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
-//     expect(metrics.calculateResponsiveness).toHaveBeenCalledWith(testUrl)
-//     expect(metrics.calculateLicenseCompliance).toHaveBeenCalledWith(testUrl)
+    // Assertions
+    expect(metrics.calculateBusFactor).toHaveBeenCalledWith(testUrl)
+    expect(metrics.calculateCorrectness).toHaveBeenCalledWith(testUrl)
+    expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
+    expect(metrics.calculateResponsiveness).toHaveBeenCalledWith(testUrl)
+    expect(metrics.calculateLicenseCompliance).toHaveBeenCalledWith(testUrl)
 
-//     // Expect result to be 0 when a license is not found
-//     expect(result).toBe(0)
-//   })
-// })
+    // Expect result to be 0 when a license is not found
+    expect(result).toBe(0)
+  })
+
+  it('should return a 0 when repo does not have a valid license', () => {
+    //mock calculateBusFactor
+    const mockBusFactorScore = 0.5
+    const mockCalculateBusFactor = jest.spyOn(metrics, 'calculateBusFactor')
+    mockCalculateBusFactor.mockReturnValue(mockBusFactorScore)
+
+    //mock calculateCorrectness
+    const mockCorrectnessScore = 0.5
+    const mockCalculateCorrectness = jest.spyOn(metrics, 'calculateCorrectness')
+    mockCalculateCorrectness.mockReturnValue(mockCorrectnessScore)
+
+    //mock calculateRampUpTime
+    const mockRampUpScore = 0.5
+    const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
+    mockCalculateRampUp.mockReturnValue(mockRampUpScore)
+
+    //mock calculateResponsiveness
+    const mockResponsivenessScore = 0.5
+    const mockCalculateResponsiveness = jest.spyOn(
+      metrics,
+      'calculateResponsiveness',
+    )
+    mockCalculateResponsiveness.mockReturnValue(mockResponsivenessScore)
+
+    //mock calculateLicenseCompliance
+    const mockLicenseScore = 1
+    const mockCalculateLicenseCompliance = jest.spyOn(
+      metrics,
+      'calculateLicenseCompliance',
+    )
+    mockCalculateLicenseCompliance.mockReturnValue(mockLicenseScore)
+
+    // Call calculateNetScore
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = metrics.calculateNetScore(testUrl)
+
+    // Assertions
+    expect(metrics.calculateBusFactor).toHaveBeenCalledWith(testUrl)
+    expect(metrics.calculateCorrectness).toHaveBeenCalledWith(testUrl)
+    expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
+    expect(metrics.calculateResponsiveness).toHaveBeenCalledWith(testUrl)
+    expect(metrics.calculateLicenseCompliance).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0 when a license is not found
+    expect(result).toBe(0.5)
+  })
+})
