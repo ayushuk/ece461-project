@@ -10,7 +10,7 @@ export default class Test extends Command {
     const fileContent = fs.readFileSync(hiddenPath, 'utf-8')
     if (fileContent == 'yes\n') {
       exec('npm test', (error: string, stdout: string) => {
-        console.log(stdout)
+        // console.log(stdout)
         const passRegex = /(\d+) passing/
         const failRegex = /(\d+) failing/
         const passMatch = passRegex.exec(stdout)
@@ -23,9 +23,9 @@ export default class Test extends Command {
         const covMatch = covRegex.exec(stdout)
         const coverage = covMatch ? Number.parseFloat(covMatch[4]) : 0
 
-        console.log(`Total: ${totalTests}`)
-        console.log(`Passed: ${passTests}`)
-        console.log(`Coverage: ${coverage}%`)
+        // console.log(`Total: ${totalTests}`)
+        // console.log(`Passed: ${passTests}`)
+        // console.log(`Coverage: ${coverage}%`)
         console.log(
           `${passTests}/${totalTests} test cases passed. ${coverage}% line coverage achieved.`,
         )
