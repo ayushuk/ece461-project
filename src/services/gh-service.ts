@@ -304,17 +304,17 @@ export async function getAnualCommitCount(repoUrl: string): Promise<number> {
  */
 export function getResponsivenessData(repoUrl: string): ResponsesivenessData {
   let monthlyCommitCount: number = -1
-  let anualCommitCount: number = -1
+  let annualCommitCount: number = -1
 
   getMonthlyCommitCount(repoUrl).then((data: number) => {
     monthlyCommitCount = data
   })
   getAnualCommitCount(repoUrl).then((data: number) => {
-    anualCommitCount = data
+    annualCommitCount = data
   })
 
   return <ResponsesivenessData>{
     monthlyCommitCount,
-    anualCommitCount,
+    annualCommitCount,
   }
 }

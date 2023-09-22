@@ -4,8 +4,8 @@ import {
   calculateRampUpTime,
   calculateResponsiveness,
   calculateLicenseCompliance,
-  calculateNetScore,
 } from './middleware/metric-calculations'
+import {calculateNetScore} from './middleware/net-score'
 import {Urlmetrics} from './url-models'
 
 // using imported class and functions to get scores and send to frontend
@@ -13,7 +13,7 @@ export function assignMetrics(data: string): Urlmetrics {
   const newURL = new Urlmetrics(data)
   newURL.BusFactor = calculateBusFactor(newURL.URL)
   newURL.Correctness = calculateCorrectness(newURL.URL)
-  newURL.RampUp = calculateRampUpTime(newURL.URL)
+  // newURL.RampUp = calculateRampUpTime(newURL.URL)
   newURL.Responsiveness = calculateResponsiveness(newURL.URL)
   newURL.License = calculateLicenseCompliance(newURL.URL)
   newURL.NetScore = calculateNetScore(newURL.URL)
@@ -27,5 +27,5 @@ export {
   calculateRampUpTime,
   calculateResponsiveness,
   calculateLicenseCompliance,
-  calculateNetScore, 
+  calculateNetScore,
 }

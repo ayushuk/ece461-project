@@ -1,6 +1,6 @@
 import {Args, Command, Flags} from '@oclif/core'
 import * as fs from 'fs'
-import { assignMetrics } from './src/fill-models';
+import { assignMetrics } from '../../src/fill-models';
 
 export default class CheckUrl extends Command {
   static description = 'describe the command here'
@@ -23,7 +23,7 @@ export default class CheckUrl extends Command {
         const Metrics = assignMetrics(url);
 
         console.log(
-          `{"URL": "${url}", "NET SCORE":${Metrics.netScore}, "RAMP_UP_SCORE":${Metrics.rampUp}, "CORRECTNESS_SCORE":${Metrics.correctness}, "BUS_FACTOR_SCORE":${Metrics.busFactor}, "RESPONSIVE_MAINTAINER_SCORE":${Metrics.respMaintain}, "LICENSE_SCORE":${Metrics.license}}`,
+          `{"URL": "${url}", "NET SCORE":${Metrics.NetScore}, "RAMP_UP_SCORE":${Metrics.RampUp}, "CORRECTNESS_SCORE":${Metrics.Correctness}, "BUS_FACTOR_SCORE":${Metrics.BusFactor}, "RESPONSIVE_MAINTAINER_SCORE":${Metrics.Responsiveness}, "LICENSE_SCORE":${Metrics.License}}`,
         )
       })
 
