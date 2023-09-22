@@ -263,6 +263,15 @@
     "@babel/template" "^7.22.15"
     "@babel/types" "^7.22.19"
 
+"@babel/helper-wrap-function@^7.22.17":
+  version "7.22.17"
+  resolved "https://registry.npmjs.org/@babel/helper-wrap-function/-/helper-wrap-function-7.22.17.tgz"
+  integrity sha512-nAhoheCMlrqU41tAojw9GpVEKDlTS8r3lzFmF0lP52LwblCPbuFSO7nGIZoIcoU5NIm1ABrna0cJExE4Ay6l2Q==
+  dependencies:
+    "@babel/helper-function-name" "^7.22.5"
+    "@babel/template" "^7.22.15"
+    "@babel/types" "^7.22.17"
+
 "@babel/helpers@^7.22.15":
   version "7.22.15"
   resolved "https://registry.npmjs.org/@babel/helpers/-/helpers-7.22.15.tgz"
@@ -6433,8 +6442,6 @@ libnpmdiff@^5.0.17:
 
 libnpmexec@^5.0.17:
   version "5.0.17"
-  resolved "https://registry.npmjs.org/libnpmexec/-/libnpmexec-5.0.17.tgz"
-  integrity sha512-HGO8XiNWojyxb//LHsXmYuDWehPi/NuGsrNTu9VeRp/WNT5ijq2p219nLRu8ZBxGlBFCkLj8AbVRj1lmIFPObA==
   dependencies:
     "@npmcli/arborist" "^6.2.9"
     "@npmcli/run-script" "^6.0.0"
@@ -7263,8 +7270,6 @@ normalize-url@^6.0.1:
 
 npm-audit-report@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.npmjs.org/npm-audit-report/-/npm-audit-report-4.0.0.tgz"
-  integrity sha512-k2o5476sLrp94b6Gl819YzlS7LAdb8lgE6yQCysBEji5E3WoUdRve6tiVMLKAPPdLfItU4kOSUycWS5HFTrbug==
   dependencies:
     chalk "^4.0.0"
 
