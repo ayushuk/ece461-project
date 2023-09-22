@@ -1,12 +1,18 @@
 // funciton imports
-import {BusFactorData, CorrectnessData} from '../models/middleware-inputs'
 import {round} from './utils'
+import {
+  getBusFactorData,
+  getCorrectnessData,
+  getResponsivenessData,
+  getLiscenseComplianceData,
+} from '../services/gh-service'
 
 // Bus Factor Calculations
-export function calculateBusFactor(data: BusFactorData) {
-  // assume this is going to be Github URL
+export function calculateBusFactor(url: string) {
+  // get data using ./services/gh-service.ts
+  const data = getBusFactorData(url)
 
-  // get data from object
+  // get data from returned object
   const {
     criticalContrubitorCommits,
     totalCommits,
@@ -35,73 +41,58 @@ export function calculateBusFactor(data: BusFactorData) {
 }
 
 // Correctness Calculations
-export function calculateCorrectness(data: CorrectnessData) {
-  // this is going to be Github URL
+export function calculateCorrectness(url: string) {
+  // get data using ./services/gh-service.ts
+  const data = getCorrectnessData(url)
+
+  // get data from returned object
   const {closedIssues, openIssues} = data
 
-  const correctnessScore = closedIssues / (closedIssues + openIssues)
+  // calculate correctness score
+  let correctnessScore = closedIssues / (closedIssues + openIssues)
+
+  // round to 3 decimal places
+  correctnessScore = round(correctnessScore, 3)
 
   return correctnessScore
 }
 
 // Ramp-up Time Calculations
-export function calculateRampUpTime(data: string) {
-  // this is going to be Github URL
-  const linesReadme = 0 // set to value in object
-  const linesCode = 0 // set to value in object
+export function calculateRampUpTime() {
+  // // this is going to be Github URL
+  // const linesReadme = 0 // set to value in object
+  // const linesCode = 0 // set to value in object
 
-  const rampUpTime = linesReadme / linesCode
+  // const rampUpTime = linesReadme / linesCode
 
-  return rampUpTime
+  // return rampUpTime
+
+  return 0
 }
 
 // Responsiveness Calculations
-export function calculateResponsiveness(data: string) {
-  // this is going to be Github URL
-  const monthlyCommits = 0 // set to value in object
-  const annualCommits = 0 // set to value in object
+export function calculateResponsiveness(url: string) {
+  // get data using ./services/gh-service.ts
+  const data = getResponsivenessData(url)
 
-  const responsivenessScore = monthlyCommits / annualCommits
+  const {monthlyCommitCount, annualCommitCount} = data
+
+  // calculate responsiveness score
+  if (annualCommitCount === 0) {
+    return 0
+  }
+
+  let responsivenessScore = monthlyCommitCount / annualCommitCount
+
+  // round to 3 decimal places
+  responsivenessScore = round(responsivenessScore, 3)
 
   return responsivenessScore
 }
 
 // License Compliance Calculations
-export function calculateLicenseCompliance(data: string) {
-  // this is going to be Github URL
-  const license = 'license' // set to value in object
-  const validLicense = 'temp'
-  const licenseCompliantScore = 0
-
-  // if (license === validLicense) {
-  //   licenseCompliantScore = 1
-  // }
+export function calculateLicenseCompliance(url: string) {
+  const licenseCompliantScore = getLiscenseComplianceData(url)
 
   return licenseCompliantScore
-}
-
-// NetScore Calculations
-export function calculateNetScore(data: string) {
-  // this is going to be Github URL
-  // calculate scores
-  const busFactor = 0 // calculateBusFactor(data)
-  const correctness = 0 // calculateCorrectness(data)
-  const rampUpTime = calculateRampUpTime(data)
-  const responsiveness = calculateResponsiveness(data)
-  const licenseCompliance = calculateLicenseCompliance(data)
-
-  // Score weights
-  const busFactorWeight = 0.4
-  const correctnessWeight = 0.15
-  const rampUpTimeWeight = 0.15
-  const responsivenessWeight = 0.3
-
-  const netScore =
-    licenseCompliance *
-    (busFactor * busFactorWeight +
-      correctness * correctnessWeight +
-      rampUpTime * rampUpTimeWeight +
-      responsiveness * responsivenessWeight)
-
-  return netScore
 }

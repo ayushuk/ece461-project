@@ -15,6 +15,6 @@ export interface CorrectnessData {
 }
 
 export interface ResponsesivenessData {
-  linesOfReadme: number
-  linesOfCode: number
+  monthlyCommitCount: number
+  annualCommitCount: number
 }
