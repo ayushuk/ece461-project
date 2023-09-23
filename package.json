@@ -23,7 +23,7 @@
     "@oclif/plugin-plugins": "^3.4.2"
   },
   "devDependencies": {
-    "@oclif/test": "^2.4.7",
+    "@oclif/test": "^2.5.5",
     "@types/chai": "^4",
     "@types/mocha": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
