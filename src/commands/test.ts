@@ -25,6 +25,7 @@ export default class Test extends Command {
           )
         }
       })
+      process.exit(0)
     } else {
       console.log(
         'Dependencies not yet installed. Please run the following command:\n./run install',
