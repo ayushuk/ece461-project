@@ -101,7 +101,7 @@ def run_urlfile() -> int:
         print(f"{RED}> URL_FILE command exited successfully when LOG_FILE is not set.{RESET}")
 
     os.environ["LOG_FILE"] = "/tmp/log"
-    os.environ["GITHUB_TOKEN"] = ""
+    os.environ["GITHUB_TOKEN"] = "reqQa6GMuwMVdgqJrJVFBgjIuIhakx46v5QO"
     url_file = CLI_CMD_WRAPPER("./run one-url.txt")
     url_file_rc, output = url_file.run()
     if url_file_rc is False:
