@@ -10,14 +10,11 @@ export default class Test extends Command {
     const fileContent = fs.readFileSync(hiddenPath, 'utf-8')
     if (fileContent == 'yes\n') {
       exec('npm test', (error: string, stdout: string, stderr: string) => {
-        console.log(stderr)
         const testRegex = /(\d+) failed, (\d+) passed, (\d+) total/
         const testMatch = testRegex.exec(stderr)
         if (testMatch) {
           const passTests = parseInt(testMatch[2], 10)
           const failTests = parseInt(testMatch[1], 10)
-          console.log(passTests)
-          console.log(failTests)
           const totalTests = passTests + failTests
           const coverage = passTests / totalTests * 100
           console.log(
