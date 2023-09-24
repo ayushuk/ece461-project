@@ -94,15 +94,11 @@ export async function calculateResponsiveness(url: string) {
 
   const {monthlyCommitCount, annualCommitCount} = data
 
-  // calculate responsiveness score
-  if (annualCommitCount === 0) {
-    return 0
-  }
-
   const maxMonthlyCommitCount = Math.max(...monthlyCommitCount)
   const minMonthlyCommitCount = Math.min(...monthlyCommitCount)
   const diffCommit = maxMonthlyCommitCount - minMonthlyCommitCount
-
+  /* eslint-disable no-implicit-coercion */
+  /* eslint-disable no-else-return */
   if (diffCommit < annualCommitCount * 0.1) {
     return 1
   } else if (diffCommit < annualCommitCount * 0.2) {
@@ -126,6 +122,8 @@ export async function calculateResponsiveness(url: string) {
   } else {
     return 0
   }
+  /* eslint-enable no-else-return */
+  /* eslint-enable no-implicit-coercion */
 }
 
 // License Compliance Calculations

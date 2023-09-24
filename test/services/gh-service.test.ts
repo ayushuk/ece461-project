@@ -87,7 +87,7 @@ describe('test getResponsivenessData', () => {
     const result: ResponsesivenessData = await getResponsivenessData('')
     const expected: ResponsesivenessData = {
       monthlyCommitCount: [100],
-      anualCommitCount: 200,
+      annualCommitCount: 200,
     }
 
     expect(result).toStrictEqual(expected)

@@ -97,13 +97,15 @@ export async function calcRepoLines(repoPath: string): Promise<number> {
       const filePath = path.join(directoryPath, file)
 
       if (file === '.git') {
-        continue // Skip the .git directory
+        // Skip the .git directory
+        continue // eslint-disable-line no-continue
       }
 
       if (fs.statSync(filePath).isDirectory()) {
-        await processDirectory(filePath) // Recursively process subdirectories
+        // Recursively process subdirectories
+        await processDirectory(filePath) // eslint-disable-line no-await-in-loop
       } else {
-        const lines = await getLinesOfCode(filePath)
+        const lines = await getLinesOfCode(filePath) // eslint-disable-line no-await-in-loop
         totalLines += lines
       }
     }
