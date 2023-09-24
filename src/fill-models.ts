@@ -19,13 +19,3 @@ export function assignMetrics(data: string): Urlmetrics {
   newURL.NetScore = calculateNetScore(newURL.URL)
   return newURL
 }
-
-// exporting for unit tests
-export {
-  calculateBusFactor,
-  calculateCorrectness,
-  calculateRampUpTime,
-  calculateResponsiveness,
-  calculateLicenseCompliance,
-  calculateNetScore, 
-}

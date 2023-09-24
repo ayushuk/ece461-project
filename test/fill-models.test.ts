@@ -1,39 +1,48 @@
-// import {expect, test} from '@oclif/test'
-import {expect, test} from '@jest/globals';
-import { 
-  assignMetrics,
-  calculateBusFactor,
-  calculateCorrectness,
-  calculateRampUpTime,
-  calculateResponsiveness,
-  calculateLicenseCompliance,
-  calculateNetScore, 
-} from '../src/fill-models';
-
-const mockBusFactor = jest.fn<() => number>() as jest.Mock<number>;
-
-jest.mock('../../src/fill-models', () => ({
-  calculateBusFactor: jest.fn(),
-  calculateCorrectness: jest.fn(),
-  calculateRampUpTime: jest.fn(),
-  calculateResponsiveness: jest.fn(),
-  calculateLicenseCompliance: jest.fn(),
-  calculateNetScore: jest.fn()
-}))
+import {jest, expect} from '@jest/globals'
+import {assignMetrics} from '../src/fill-models'
+import {Urlmetrics} from '../src/url-models'
+import * as fillModels from '../src/middleware/metric-calculations'
 
 describe('fill-models', () => {
-  test
-    calculateBusFactor.mockReturnValue(0.5);
-    calculateCorrectness.mockReturnValue(0.5);
-    calculateRampUpTime.mockReturnValue(0.5);
-    calculateResponsiveness.mockReturnValue(0.5);
-    calculateLicenseCompliance.mockReturnValue(0.5);
-    calculateNetScore.mockReturnValue(0.5);
-    
+  it('should return filled in Urlmetric class', () => {
+    const mockBusFactor = 0.5
+    const mockCalculateBusFactor = jest.spyOn(fillModels, 'calculateBusFactor')
+    mockCalculateBusFactor.mockReturnValue(mockBusFactor)
+    const mockCorrectness = 0.4
+    const mockCalculateCorrectness = jest.spyOn(
+      fillModels,
+      'calculateCorrectness',
+    )
+    mockCalculateCorrectness.mockReturnValue(mockCorrectness)
+    const mockRampUpTime = 0.3
+    const mockCalculateRampUpTime = jest.spyOn(
+      fillModels,
+      'calculateRampUpTime',
+    )
+    mockCalculateRampUpTime.mockReturnValue(mockRampUpTime)
+    const mockResponsiveness = 0.2
+    const mockCalculateResponsiveness = jest.spyOn(
+      fillModels,
+      'calculateResponsiveness',
+    )
+    mockCalculateResponsiveness.mockReturnValue(mockResponsiveness)
+    const mockLicenseCompliance = 1
+    const mockCalculateLicenseCompliance = jest.spyOn(
+      fillModels,
+      'calculateLicenseCompliance',
+    )
+    mockCalculateLicenseCompliance.mockReturnValue(mockLicenseCompliance)
+    const mockNetScore = 0.6
+    const mockCalculateNetScore = jest.spyOn(fillModels, 'calculateNetScore')
+    mockCalculateNetScore.mockReturnValue(mockNetScore)
 
-    const result = assignMetrics('https://github.com/XavierJCallait/test');
-
-    // .it('runs hello cmd', (ctx) => {
-    //   expect(ctx.stdout).toContain(JSON.stringify(assignMetrics('https://github.com/XavierJCallait/test')))
-    // })
+    const result = assignMetrics('https://github.com/XavierJCallait/test')
+    expect(result).toBeInstanceOf(Urlmetrics)
+    expect(result.BusFactor).toBe(0.5)
+    expect(result.Correctness).toBe(0.4)
+    expect(result.RampUp).toBe(0.3)
+    expect(result.Responsiveness).toBe(0.2)
+    expect(result.License).toBe(1)
+    expect(result.NetScore).toBe(0.6)
+  })
 })

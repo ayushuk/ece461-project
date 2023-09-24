@@ -13,9 +13,4 @@ export class Urlmetrics {
   constructor(URL: string) {
     this.URL = URL
   }
-
-  // make JSON format of class
-  makeNSON(): string {
-    return JSON.stringify(this)
-  }
 }
