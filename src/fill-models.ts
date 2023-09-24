@@ -9,14 +9,14 @@ import {calculateNetScore} from './middleware/net-score'
 import {Urlmetrics} from './url-models'
 
 // using imported class and functions to get scores and send to frontend
-export function assignMetrics(data: string): Urlmetrics {
+export async function assignMetrics(data: string): Promise<Urlmetrics> {
   const newURL = new Urlmetrics(data)
-  newURL.BusFactor = calculateBusFactor(newURL.URL)
-  newURL.Correctness = calculateCorrectness(newURL.URL)
-  // newURL.RampUp = calculateRampUpTime(newURL.URL)
-  newURL.Responsiveness = calculateResponsiveness(newURL.URL)
-  newURL.License = calculateLicenseCompliance(newURL.URL)
-  newURL.NetScore = calculateNetScore(newURL.URL)
+  newURL.BusFactor = await calculateBusFactor(newURL.URL)
+  newURL.Correctness = await calculateCorrectness(newURL.URL)
+  // newURL.RampUp = await calculateRampUpTime(newURL.URL)
+  newURL.Responsiveness = await calculateResponsiveness(newURL.URL)
+  newURL.License = await calculateLicenseCompliance(newURL.URL)
+  newURL.NetScore = await calculateNetScore(newURL.URL)
   return newURL
 }
 

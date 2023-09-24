@@ -8,9 +8,11 @@ import {
 } from '../services/gh-service'
 
 // Bus Factor Calculations
-export function calculateBusFactor(url: string) {
+export async function calculateBusFactor(url: string) {
   // get data using ./services/gh-service.ts
-  const data = getBusFactorData(url)
+  const data = await getBusFactorData(url)
+
+  console.log(data)
 
   // get data from returned object
   const {
@@ -41,9 +43,9 @@ export function calculateBusFactor(url: string) {
 }
 
 // Correctness Calculations
-export function calculateCorrectness(url: string) {
+export async function calculateCorrectness(url: string) {
   // get data using ./services/gh-service.ts
-  const data = getCorrectnessData(url)
+  const data = await getCorrectnessData(url)
 
   // get data from returned object
   const {closedIssues, openIssues} = data
@@ -58,7 +60,7 @@ export function calculateCorrectness(url: string) {
 }
 
 // Ramp-up Time Calculations
-export function calculateRampUpTime() {
+export async function calculateRampUpTime() {
   // // this is going to be Github URL
   // const linesReadme = 0 // set to value in object
   // const linesCode = 0 // set to value in object
@@ -71,9 +73,9 @@ export function calculateRampUpTime() {
 }
 
 // Responsiveness Calculations
-export function calculateResponsiveness(url: string) {
+export async function calculateResponsiveness(url: string) {
   // get data using ./services/gh-service.ts
-  const data = getResponsivenessData(url)
+  const data = await getResponsivenessData(url)
 
   const {monthlyCommitCount, annualCommitCount} = data
 
@@ -91,8 +93,8 @@ export function calculateResponsiveness(url: string) {
 }
 
 // License Compliance Calculations
-export function calculateLicenseCompliance(url: string) {
-  const licenseCompliantScore = getLiscenseComplianceData(url)
+export async function calculateLicenseCompliance(url: string) {
+  const licenseCompliantScore = await getLiscenseComplianceData(url)
 
   return licenseCompliantScore
 }
