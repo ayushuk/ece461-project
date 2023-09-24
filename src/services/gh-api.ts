@@ -19,7 +19,7 @@ export async function getCommitData(
 ): Promise<readonly [string, number, number]> {
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos/',
-    timeout: 1000,
+    timeout: 10000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -62,7 +62,7 @@ export async function getPullRequestData(
 ): Promise<readonly [number, number]> {
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos/',
-    timeout: 1000,
+    timeout: 10000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -73,7 +73,7 @@ export async function getPullRequestData(
   const repoName = repoUrl.split('/')[4]
   try {
     const response = await instance.get(
-      `${repoOwner}/${repoName}/search/issues`,
+      `${repoOwner}/${repoName}/search/pulls`,
       {
         params: {state: 'all', per_page: 100}, // eslint-disable-line camelcase
       },
@@ -108,7 +108,7 @@ export async function getIssues(
 ): Promise<number> {
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos/',
-    timeout: 1000,
+    timeout: 10000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -138,7 +138,7 @@ export async function getIssues(
 export async function getLicense(repoUrl: string): Promise<string> {
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos',
-    timeout: 1000,
+    timeout: 10000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -164,7 +164,7 @@ export async function getLicense(repoUrl: string): Promise<string> {
 export async function getMonthlyCommitCount(repoUrl: string): Promise<number> {
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos',
-    timeout: 1000,
+    timeout: 10000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -177,6 +177,7 @@ export async function getMonthlyCommitCount(repoUrl: string): Promise<number> {
     const response = await instance.get(
       `${repoOwner}/${repoName}/stats/participation`,
     )
+
     let count = 0
     for (let i = 0; i < 4; i += 1) {
       count += response.data.all.pop()
@@ -197,7 +198,7 @@ export async function getMonthlyCommitCount(repoUrl: string): Promise<number> {
 export async function getAnualCommitCount(repoUrl: string): Promise<number> {
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos',
-    timeout: 1000,
+    timeout: 10000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
