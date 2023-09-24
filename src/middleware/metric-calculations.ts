@@ -1,5 +1,5 @@
 // funciton imports
-import {round} from './utils'
+import * as utils from './utils'
 import {
   getBusFactorData,
   getCorrectnessData,
@@ -21,8 +21,8 @@ export async function calculateBusFactor(url: string) {
   } = data
 
   // variable weights
-  const commitWeight = 0.5
-  const prWeight = 0.5
+  const commitWeight = 0.4
+  const prWeight = 0.6
 
   // calculate bus factor score
   const critBusFactor =
@@ -35,7 +35,7 @@ export async function calculateBusFactor(url: string) {
   let busFactorScore = 1 - critBusFactor / totalBusFactor
 
   // round to 3 decimal places
-  busFactorScore = round(busFactorScore, 3)
+  busFactorScore = utils.round(busFactorScore, 3)
 
   return busFactorScore
 }
@@ -52,23 +52,39 @@ export async function calculateCorrectness(url: string) {
   let correctnessScore = closedIssues / (closedIssues + openIssues)
 
   // round to 3 decimal places
-  correctnessScore = round(correctnessScore, 3)
+  correctnessScore = utils.round(correctnessScore, 3)
 
   return correctnessScore
 }
 
 // Ramp-up Time Calculations
-export async function calculateRampUpTime() {
-  // // this is going to be Github URL
-  // const linesReadme = 0 // set to value in object
-  // const linesCode = 0 // set to value in object
+export async function calculateRampUpTime(url: string) {
+  utils.cloneRepo(url)
 
-  // const rampUpTime = linesReadme / linesCode
+  const linesOfCode = await utils.calcRepoLines(url)
+  let rampUpScore = 0
 
-  // return rampUpTime
-  const rampUpTime = 0
+  if (linesOfCode <= 500) {
+    rampUpScore = 1
+  } else if (linesOfCode <= 1000) {
+    rampUpScore = 0.9
+  } else if (linesOfCode <= 5000) {
+    rampUpScore = 0.8
+  } else if (linesOfCode <= 10_000) {
+    rampUpScore = 0.7
+  } else if (linesOfCode <= 50_000) {
+    rampUpScore = 0.6
+  } else if (linesOfCode <= 100_000) {
+    rampUpScore = 0.5
+  } else if (linesOfCode <= 500_000) {
+    rampUpScore = 0.4
+  } else if (linesOfCode <= 1_000_000) {
+    rampUpScore = 0.3
+  } else if (linesOfCode <= 5_000_000) {
+    rampUpScore = 0.2
+  }
 
-  return rampUpTime
+  return rampUpScore
 }
 
 // Responsiveness Calculations
@@ -83,10 +99,10 @@ export async function calculateResponsiveness(url: string) {
     return 0
   }
 
-  let responsivenessScore = monthlyCommitCount / annualCommitCount / 12
+  let responsivenessScore = monthlyCommitCount / annualCommitCount
 
   // round to 3 decimal places
-  responsivenessScore = round(responsivenessScore, 3)
+  responsivenessScore = utils.round(responsivenessScore, 3)
 
   return responsivenessScore
 }

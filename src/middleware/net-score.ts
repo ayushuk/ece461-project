@@ -8,12 +8,12 @@ import {
 } from './metric-calculations'
 
 // NetScore Calculations
-export function calculateNetScore(url: string) {
-  const busFactor = calculateBusFactor(url)
-  const correctness = calculateCorrectness(url)
-  const rampUpTime = calculateRampUpTime()
-  const responsiveness = calculateResponsiveness(url)
-  const licenseCompliance = calculateLicenseCompliance(url)
+export async function calculateNetScore(url: string): Promise<number> {
+  const busFactor = await calculateBusFactor(url)
+  const correctness = await calculateCorrectness(url)
+  const rampUpTime = await calculateRampUpTime(url)
+  const responsiveness = await calculateResponsiveness(url)
+  const licenseCompliance = await calculateLicenseCompliance(url)
 
   // Score weights
   const busFactorWeight = 0.4

@@ -1,4 +1,4 @@
-// import * as fs from 'node:fs'
+import * as fs from 'node:fs'
 import * as url from 'node:url'
 import {exec} from 'node:child_process'
 import * as path from 'node:path'
@@ -23,25 +23,26 @@ export function identifyLink(link: string) {
   return null
 }
 
-// export function getLinesOfCode(filePath: string) {
-//   return new Promise((resolve, reject) => {
-//     let lineCount = 0
+export async function getLinesOfCode(filePath: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    let lineCount = 0
 
-//     const stream = fs.createReadStream(filePath, {encoding: 'utf8'})
+    const stream = fs.createReadStream(filePath, {encoding: 'utf8'})
 
-//     stream.on('data', (chunk: string) => {
-//       lineCount += (chunk.match(/|n/g) || []).length
-//     })
+    stream.on('data', (chunk: string) => {
+      // Use the corrected regular expression to match newlines
+      lineCount += (chunk.match(/(\r\n|\n|\r)/g) || []).length
+    })
 
-//     stream.on('end', () => {
-//       resolve(lineCount + 1)
-//     })
+    stream.on('end', () => {
+      resolve(lineCount + 1) // Add 1 to account for the last line without a newline character
+    })
 
-//     stream.on('error', (err: any) => {
-//       reject(err)
-//     })
-//   })
-// }
+    stream.on('error', (err: any) => {
+      reject(err)
+    })
+  })
+}
 
 export function parseGHRepoName(repoUrl: string): string | null {
   // Parse the URL
@@ -68,7 +69,6 @@ export async function cloneRepo(ghUrl: string) {
   const repoName = parseGHRepoName(ghUrl)
   let localPath = '../ece461-project/src/middleware/cloned-repos'
   if (repoName) {
-    // Concatenate or use repoName here since it's a valid string
     localPath = path.join(localPath, repoName)
   }
   // TODO: else error return
@@ -85,4 +85,30 @@ export async function cloneRepo(ghUrl: string) {
       }
     })
   })
+}
+
+export async function calcRepoLines(repoPath: string): Promise<number> {
+  let totalLines = 0
+
+  async function processDirectory(directoryPath: string) {
+    const files = fs.readdirSync(directoryPath)
+
+    for (const file of files) {
+      const filePath = path.join(directoryPath, file)
+
+      if (file === '.git') {
+        continue // Skip the .git directory
+      }
+
+      if (fs.statSync(filePath).isDirectory()) {
+        await processDirectory(filePath) // Recursively process subdirectories
+      } else {
+        const lines = await getLinesOfCode(filePath)
+        totalLines += lines
+      }
+    }
+  }
+
+  await processDirectory(repoPath)
+  return totalLines
 }

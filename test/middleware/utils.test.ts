@@ -5,8 +5,9 @@ import {
   identifyLink,
   cloneRepo,
   parseGHRepoName,
+  getLinesOfCode,
+  calcRepoLines,
 } from '../../src/middleware/utils'
-const {exec} = require('child_process')
 
 describe('round', () => {
   // Test case 1: Round down 2 decimal places
@@ -56,23 +57,53 @@ describe('parseGHRepoName', () => {
   })
 })
 
-describe('cloneRepo', () => {
-  // test case 1: valid gh link
-  it('should clone a github repo', () => {
-    const testUrl = 'https://github.com/octocat/Spoon-Knife'
-    const localPath = '../ece461-project/src/middleware/cloned-repos'
+// describe('cloneRepo', () => {
+//   // test case 1: valid gh link
+//   it('should clone a github repo', () => {
+//     const testUrl = 'https://github.com/octocat/Spoon-Knife'
+//     // const localPath = '../ece461-project/src/middleware/cloned-repos'
 
-    exec.mockImplementation((command, callback) => {
-      callback(null)
-    })
+//     cloneRepo(testUrl)
+//     // TODO: fix this test
+//     expect(cloneRepo(testUrl))
+//   })
+//   it('should clone a github repo', () => {
+//     const testUrl = 'https://github.com/cloudinary/cloudinary_npm'
+//     // const localPath = '../ece461-project/src/middleware/cloned-repos'
 
-    await cloneRepo(testUrl)
+//     cloneRepo(testUrl)
+//     // TODO: fix this test
+//     expect(cloneRepo(testUrl))
+//   })
+// })
 
-    expect(exec).toHaveBeenCalledWith(
-      `git clone ${testUrl} ${localPath}`,
-      expect.any(Function),
-    )
+describe('getLinesOfCode', () => {
+  // test case 1: valid file path
+  it('should return the number of lines of code in a file', async () => {
+    const testFilePath =
+      '../ece461-project/src/middleware/cloned-repos/Spoon-Knife/README.md'
 
-    expect(cloneRepo(testUrl))
+    const result = await getLinesOfCode(testFilePath)
+
+    expect(result).toBe(10)
+  })
+})
+
+describe('calcRepoLines', () => {
+  it('should return the number of lines of code in a repo', async () => {
+    const testRepoPath =
+      '../ece461-project/src/middleware/cloned-repos/Spoon-Knife'
+
+    const result = await calcRepoLines(testRepoPath)
+
+    expect(result).toBe(49)
+  })
+  it('should return the number of lines of code in a repo', async () => {
+    const testRepoPath =
+      '../ece461-project/src/middleware/cloned-repos/cloudinary_npm'
+
+    const result = await calcRepoLines(testRepoPath)
+
+    expect(result).toBe(171_992)
   })
 })

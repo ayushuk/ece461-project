@@ -70,10 +70,10 @@ export async function getResponsivenessData(
   repoUrl: string,
 ): Promise<ResponsesivenessData> {
   const monthlyCommitCount = await ghApi.getMonthlyCommitCount(repoUrl)
-  const anualCommitCount: number = await ghApi.getAnualCommitCount(repoUrl)
+  const annualCommitCount: number = await ghApi.getAnualCommitCount(repoUrl)
 
   return <ResponsesivenessData>{
     monthlyCommitCount,
-    anualCommitCount,
+    annualCommitCount,
   }
 }

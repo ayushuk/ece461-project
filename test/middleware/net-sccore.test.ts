@@ -3,21 +3,23 @@ import * as utils from '../../src/middleware/utils'
 import * as netscore from '../../src/middleware/net-score'
 
 describe('calculateNetScore', () => {
-  it('should return a 0 when repo does not have a valid license', () => {
+  it('should return a 0 when repo does not have a valid license', async () => {
     // mock calculateBusFactor
     const mockBusFactorScore = 0.5
     const mockCalculateBusFactor = jest.spyOn(metrics, 'calculateBusFactor')
-    mockCalculateBusFactor.mockReturnValue(mockBusFactorScore)
+    mockCalculateBusFactor.mockReturnValue(Promise.resolve(mockBusFactorScore))
 
     // mock calculateCorrectness
     const mockCorrectnessScore = 0.5
     const mockCalculateCorrectness = jest.spyOn(metrics, 'calculateCorrectness')
-    mockCalculateCorrectness.mockReturnValue(mockCorrectnessScore)
+    mockCalculateCorrectness.mockReturnValue(
+      Promise.resolve(mockCorrectnessScore),
+    )
 
     // mock calculateRampUpTime
     const mockRampUpScore = 0.5
     const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
-    mockCalculateRampUp.mockReturnValue(mockRampUpScore)
+    mockCalculateRampUp.mockReturnValue(Promise.resolve(mockRampUpScore))
 
     // mock calculateResponsiveness
     const mockResponsivenessScore = 0.5
@@ -25,7 +27,9 @@ describe('calculateNetScore', () => {
       metrics,
       'calculateResponsiveness',
     )
-    mockCalculateResponsiveness.mockReturnValue(mockResponsivenessScore)
+    mockCalculateResponsiveness.mockReturnValue(
+      Promise.resolve(mockResponsivenessScore),
+    )
 
     // mock calculateLicenseCompliance
     const mockLicenseScore = 0
@@ -33,7 +37,9 @@ describe('calculateNetScore', () => {
       metrics,
       'calculateLicenseCompliance',
     )
-    mockCalculateLicenseCompliance.mockReturnValue(mockLicenseScore)
+    mockCalculateLicenseCompliance.mockReturnValue(
+      Promise.resolve(mockLicenseScore),
+    )
 
     // mock round
     const roundMock = jest.spyOn(utils, 'round')
@@ -41,12 +47,12 @@ describe('calculateNetScore', () => {
 
     // Call calculateNetScore
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = netscore.calculateNetScore(testUrl)
+    const result = await netscore.calculateNetScore(testUrl)
 
     // Assertions
     expect(metrics.calculateBusFactor).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateCorrectness).toHaveBeenCalledWith(testUrl)
-    expect(metrics.calculateRampUpTime).toHaveBeenCalledWith()
+    expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateResponsiveness).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateLicenseCompliance).toHaveBeenCalledWith(testUrl)
     expect(roundMock).toHaveBeenCalledWith(0, 3)
@@ -55,21 +61,23 @@ describe('calculateNetScore', () => {
     expect(result).toBe(0)
   })
 
-  it('should return a 0 when repo does not have a valid license', () => {
+  it('should return a 0 when repo does not have a valid license', async () => {
     // mock calculateBusFactor
     const mockBusFactorScore = 0.5
     const mockCalculateBusFactor = jest.spyOn(metrics, 'calculateBusFactor')
-    mockCalculateBusFactor.mockReturnValue(mockBusFactorScore)
+    mockCalculateBusFactor.mockReturnValue(Promise.resolve(mockBusFactorScore))
 
     // mock calculateCorrectness
     const mockCorrectnessScore = 0.5
     const mockCalculateCorrectness = jest.spyOn(metrics, 'calculateCorrectness')
-    mockCalculateCorrectness.mockReturnValue(mockCorrectnessScore)
+    mockCalculateCorrectness.mockReturnValue(
+      Promise.resolve(mockCorrectnessScore),
+    )
 
     // mock calculateRampUpTime
     const mockRampUpScore = 0.5
     const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
-    mockCalculateRampUp.mockReturnValue(mockRampUpScore)
+    mockCalculateRampUp.mockReturnValue(Promise.resolve(mockRampUpScore))
 
     // mock calculateResponsiveness
     const mockResponsivenessScore = 0.5
@@ -77,7 +85,9 @@ describe('calculateNetScore', () => {
       metrics,
       'calculateResponsiveness',
     )
-    mockCalculateResponsiveness.mockReturnValue(mockResponsivenessScore)
+    mockCalculateResponsiveness.mockReturnValue(
+      Promise.resolve(mockResponsivenessScore),
+    )
 
     // mock calculateLicenseCompliance
     const mockLicenseScore = 1
@@ -85,7 +95,9 @@ describe('calculateNetScore', () => {
       metrics,
       'calculateLicenseCompliance',
     )
-    mockCalculateLicenseCompliance.mockReturnValue(mockLicenseScore)
+    mockCalculateLicenseCompliance.mockReturnValue(
+      Promise.resolve(mockLicenseScore),
+    )
 
     // mock round
     const roundMock = jest.spyOn(utils, 'round')
@@ -93,12 +105,12 @@ describe('calculateNetScore', () => {
 
     // Call calculateNetScore
     const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = netscore.calculateNetScore(testUrl)
+    const result = await netscore.calculateNetScore(testUrl)
 
     // Assertions
     expect(metrics.calculateBusFactor).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateCorrectness).toHaveBeenCalledWith(testUrl)
-    expect(metrics.calculateRampUpTime).toHaveBeenCalledWith()
+    expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateResponsiveness).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateLicenseCompliance).toHaveBeenCalledWith(testUrl)
     expect(roundMock).toHaveBeenCalledWith(0.5, 3)
