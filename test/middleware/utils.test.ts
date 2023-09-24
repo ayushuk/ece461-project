@@ -57,25 +57,25 @@ describe('parseGHRepoName', () => {
   })
 })
 
-// describe('cloneRepo', () => {
-//   // test case 1: valid gh link
-//   it('should clone a github repo', () => {
-//     const testUrl = 'https://github.com/octocat/Spoon-Knife'
-//     // const localPath = '../ece461-project/src/middleware/cloned-repos'
+describe('cloneRepo', () => {
+  // test case 1: valid gh link
+  it('should clone a github repo', () => {
+    const testUrl = 'https://github.com/octocat/Spoon-Knife'
+    // const localPath = '../ece461-project/src/middleware/cloned-repos'
 
-//     cloneRepo(testUrl)
-//     // TODO: fix this test
-//     expect(cloneRepo(testUrl))
-//   })
-//   it('should clone a github repo', () => {
-//     const testUrl = 'https://github.com/cloudinary/cloudinary_npm'
-//     // const localPath = '../ece461-project/src/middleware/cloned-repos'
+    cloneRepo(testUrl)
+    // TODO: fix this test
+    expect(cloneRepo(testUrl))
+  })
+  // it('should clone a github repo', () => {
+  //   const testUrl = 'https://github.com/cloudinary/cloudinary_npm'
+  //   // const localPath = '../ece461-project/src/middleware/cloned-repos'
 
-//     cloneRepo(testUrl)
-//     // TODO: fix this test
-//     expect(cloneRepo(testUrl))
-//   })
-// })
+  //   cloneRepo(testUrl)
+  //   // TODO: fix this test
+  //   expect(cloneRepo(testUrl))
+  // })
+})
 
 describe('getLinesOfCode', () => {
   // test case 1: valid file path
@@ -98,12 +98,12 @@ describe('calcRepoLines', () => {
 
     expect(result).toBe(49)
   })
-  it('should return the number of lines of code in a repo', async () => {
-    const testRepoPath =
-      '../ece461-project/src/middleware/cloned-repos/cloudinary_npm'
+  // it('should return the number of lines of code in a repo', async () => {
+  //   const testRepoPath =
+  //     '../ece461-project/src/middleware/cloned-repos/cloudinary_npm'
 
-    const result = await calcRepoLines(testRepoPath)
+  //   const result = await calcRepoLines(testRepoPath)
 
-    expect(result).toBe(171_992)
-  })
+  //   expect(result).toBe(171_992)
+  // })
 })

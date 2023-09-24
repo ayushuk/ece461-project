@@ -1,3 +1,4 @@
+import axios from 'axios'
 import {
   BusFactorData,
   CorrectnessData,
@@ -75,5 +76,24 @@ export async function getResponsivenessData(
   return <ResponsesivenessData>{
     monthlyCommitCount,
     annualCommitCount,
+  }
+}
+
+export async function getGithubLinkFromNpm(npmUrl: string): Promise<string> {
+  const instance = axios.create({
+    baseURL: 'https://registry.npmjs.org/',
+    timeout: 10_000,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+    },
+  }) // create axios instance
+
+  const npmName = npmUrl.split('/')[4]
+  try {
+    const response = await instance.get(`${npmName}`)
+    return response.data.repository.url
+  } catch {
+    return 'error'
   }
 }

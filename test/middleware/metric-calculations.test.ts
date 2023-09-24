@@ -335,8 +335,7 @@ describe('RampUpTime', () => {
 })
 
 describe('calculateResponsiveness', () => {
-  // Test case 1: when monthly commit count is 10 and annual commit count is 10
-  it('should return 1 when the number of monthly commits equals the annual commits ', async () => {
+  it('should return 0 when no commits have been made in last year ', async () => {
     // mock getResponsivenessData
     const getResponsivenessDataMock = jest.spyOn(
       ghservices,
@@ -344,43 +343,10 @@ describe('calculateResponsiveness', () => {
     )
     getResponsivenessDataMock.mockReturnValue(
       Promise.resolve({
-        monthlyCommitCount: 10,
-        annualCommitCount: 10,
-      }),
-    )
-
-    // mock round
-    const roundMock = jest.spyOn(utils, 'round')
-    roundMock.mockReturnValue(1)
-
-    // Call calculateResponsiveness
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateResponsiveness(testUrl)
-
-    // Assertions
-    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
-    expect(roundMock).toHaveBeenCalledWith(1, 3)
-
-    // Expect result to be 0.5 based on the formula
-    expect(result).toBe(1)
-  })
-
-  it('should return 0 when the number of annual commits is 0', async () => {
-    // mock getResponsivenessData
-    const getResponsivenessDataMock = jest.spyOn(
-      ghservices,
-      'getResponsivenessData',
-    )
-    getResponsivenessDataMock.mockReturnValue(
-      Promise.resolve({
-        monthlyCommitCount: 0,
+        monthlyCommitCount: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         annualCommitCount: 0,
       }),
     )
-
-    // mock round
-    const roundMock = jest.spyOn(utils, 'round')
-    roundMock.mockReturnValue(0)
 
     // Call calculateResponsiveness
     const testUrl = 'https://github.com/ayushuk/ece461-project'
@@ -393,7 +359,7 @@ describe('calculateResponsiveness', () => {
     expect(result).toBe(0)
   })
 
-  it('should return 0.5 when monthly commit count is 5 and annual is 10', async () => {
+  it('should return 1 when the difference is less than 10% of annual commits ', async () => {
     // mock getResponsivenessData
     const getResponsivenessDataMock = jest.spyOn(
       ghservices,
@@ -401,14 +367,226 @@ describe('calculateResponsiveness', () => {
     )
     getResponsivenessDataMock.mockReturnValue(
       Promise.resolve({
-        monthlyCommitCount: 10,
-        annualCommitCount: 100,
+        monthlyCommitCount: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+        annualCommitCount: 120,
       }),
     )
 
-    // mock round
-    const roundMock = jest.spyOn(utils, 'round')
-    roundMock.mockReturnValue(0.1)
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(1)
+  })
+
+  it('should return 0.9 when the difference is less than 20% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 10, 10, 10, 10, 10, 10, 10, 20, 10, 0, 10],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0.9)
+  })
+
+  it('should return 0.8 when the difference is less than 30% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 10, 10, 10, 10, 10, 10, 10, 30, 0, 0, 10],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0.8)
+  })
+
+  it('should return 0.7 when the difference is less than 40% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 10, 10, 10, 10, 10, 10, 0, 40, 0, 0, 10],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0.7)
+  })
+
+  it('should return 0.6 when the difference is less than 50% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 10, 10, 10, 10, 10, 0, 0, 50, 0, 0, 10],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0.6)
+  })
+
+  it('should return 0.5 when the difference is less than 60% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 10, 10, 10, 10, 0, 0, 0, 60, 0, 0, 10],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0.5)
+  })
+
+  it('should return 0.4 when the difference is less than 70% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 10, 10, 0, 0, 0, 0, 0, 80, 0, 0, 10],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0.4)
+  })
+
+  it('should return 0.3 when the difference is less than 80% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 10, 10, 0, 0, 0, 0, 0, 90, 0, 0, 0],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0.3)
+  })
+
+  it('should return 0.2 when the difference is less than 90% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 10, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0.2)
+  })
+
+  it('should return 0.1 when the difference is less than 100% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [10, 0, 0, 0, 0, 0, 0, 0, 110, 0, 0, 0],
+        annualCommitCount: 120,
+      }),
+    )
 
     // Call calculateResponsiveness
     const testUrl = 'https://github.com/ayushuk/ece461-project'
@@ -419,7 +597,30 @@ describe('calculateResponsiveness', () => {
 
     // Expect result to be 0.5 based on the formula
     expect(result).toBe(0.1)
-    expect(roundMock).toHaveBeenCalledWith(0.1, 3)
+  })
+
+  it('should return 0 when the difference is 100% of annual commits ', async () => {
+    // mock getResponsivenessData
+    const getResponsivenessDataMock = jest.spyOn(
+      ghservices,
+      'getResponsivenessData',
+    )
+    getResponsivenessDataMock.mockReturnValue(
+      Promise.resolve({
+        monthlyCommitCount: [0, 0, 0, 0, 0, 0, 0, 0, 120, 0, 0, 0],
+        annualCommitCount: 120,
+      }),
+    )
+
+    // Call calculateResponsiveness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateResponsiveness(testUrl)
+
+    // Assertions
+    expect(getResponsivenessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0.5 based on the formula
+    expect(result).toBe(0)
   })
 })
 

@@ -99,12 +99,33 @@ export async function calculateResponsiveness(url: string) {
     return 0
   }
 
-  let responsivenessScore = monthlyCommitCount / annualCommitCount
+  const maxMonthlyCommitCount = Math.max(...monthlyCommitCount)
+  const minMonthlyCommitCount = Math.min(...monthlyCommitCount)
+  const diffCommit = maxMonthlyCommitCount - minMonthlyCommitCount
 
-  // round to 3 decimal places
-  responsivenessScore = utils.round(responsivenessScore, 3)
-
-  return responsivenessScore
+  if (diffCommit < annualCommitCount * 0.1) {
+    return 1
+  } else if (diffCommit < annualCommitCount * 0.2) {
+    return 0.9
+  } else if (diffCommit < annualCommitCount * 0.3) {
+    return 0.8
+  } else if (diffCommit < annualCommitCount * 0.4) {
+    return 0.7
+  } else if (diffCommit < annualCommitCount * 0.5) {
+    return 0.6
+  } else if (diffCommit < annualCommitCount * 0.6) {
+    return 0.5
+  } else if (diffCommit < annualCommitCount * 0.7) {
+    return 0.4
+  } else if (diffCommit < annualCommitCount * 0.8) {
+    return 0.3
+  } else if (diffCommit < annualCommitCount * 0.9) {
+    return 0.2
+  } else if (diffCommit < annualCommitCount * 1) {
+    return 0.1
+  } else {
+    return 0
+  }
 }
 
 // License Compliance Calculations

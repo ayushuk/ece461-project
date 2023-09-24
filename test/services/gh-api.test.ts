@@ -106,16 +106,16 @@ describe('test getLicense', () => {
 describe('test getMonthlyCommitCount', () => {
   it('get monthly commit count successfully', async () => {
     const data = {
-      all: [2, 4, 6, 8], // 20 commits in total
+      all: [2, 4, 6, 8, 2, 4, 6, 8, 2, 4, 6, 8, 2, 4, 6, 8], // 4 monhts
     }
     mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
     const result = await getMonthlyCommitCount('')
-    expect(result).toStrictEqual(20)
+    expect(result).toStrictEqual([20, 20, 20, 20])
   })
   it('get monthly commit count failure', async () => {
     mockedAxios.get.mockRejectedValue(new Error('error'))
     const result = await getMonthlyCommitCount('')
-    expect(result).toStrictEqual(-1)
+    expect(result).toStrictEqual([-1])
   })
 })
 

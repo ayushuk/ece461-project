@@ -15,6 +15,6 @@ export interface CorrectnessData {
 }
 
 export interface ResponsesivenessData {
-  monthlyCommitCount: number
+  monthlyCommitCount: Array<number>
   annualCommitCount: number
 }
