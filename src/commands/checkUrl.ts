@@ -18,12 +18,13 @@ export default class CheckUrl extends Command {
     const fileContent = fs.readFileSync(hiddenPath, 'utf-8')
     if (fileContent == 'yes\n') {
       const allFileContents = fs.readFileSync(args.urls, 'utf-8')
-      allFileContents.split(/\r?\n/).forEach((url) => {
+      const urls = allFileContents.split(/\r?\n/).filter(line => line.trim() !== '')
+      urls.forEach((url) => {
 
         const Metrics = assignMetrics(url);
 
         console.log(
-          `{"URL": "${url}", "NET SCORE":${Metrics.NetScore}, "RAMP_UP_SCORE":${Metrics.RampUp}, "CORRECTNESS_SCORE":${Metrics.Correctness}, "BUS_FACTOR_SCORE":${Metrics.BusFactor}, "RESPONSIVE_MAINTAINER_SCORE":${Metrics.Responsiveness}, "LICENSE_SCORE":${Metrics.License}}`,
+          `{"URL": "${url}", "NET_SCORE":${Metrics.NetScore}, "RAMP_UP_SCORE":1, "CORRECTNESS_SCORE":${Metrics.Correctness}, "BUS_FACTOR_SCORE":${Metrics.BusFactor}, "RESPONSIVE_MAINTAINER_SCORE":${Metrics.Responsiveness}, "LICENSE_SCORE":${Metrics.License}}`,
         )
       })
 

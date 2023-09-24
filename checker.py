@@ -75,6 +75,7 @@ def run_urlfile() -> int:
         else:
             is_valid_output = False
     except Exception as e:
+        print(e)
         is_valid_output = False
 
     if is_valid_output is True:
