@@ -1,7 +1,9 @@
-// import {expect, test} from '@oclif/test'
+import {command, test} from '@oclif/test'
 import fs from 'node:fs'
 import {readFileAsync, Install} from '../../src/commands/install'
 import logger from '../../src/logger'
+import { exec } from 'node:child_process'
+
 
 describe('readFileAsync', () => {
   it('should read a file successfully', async () => {
@@ -9,36 +11,34 @@ describe('readFileAsync', () => {
     const result = JSON.parse(await readFileAsync(filePath))
     expect(result.dependencies).toBeDefined()
   })
-
+  
   it('should log an error if file reading fails', async () => {
-    // Create a stub for the logger's error method
-    // const loggerStub = sinon.stub(logger, 'error')
-
-    // Call the readFileAsync function with a non-existent file path
+    const loggerSpy = jest.spyOn(logger, 'info').mockImplementation();
     const nonExistentFilePath = 'non-existent-file.json'
     let error: any
     try {
       readFileAsync(nonExistentFilePath)
     } catch (error_) {
       error = error_
+      expect(loggerSpy).toHaveBeenCalled()
       await expect(
         readFileAsync(nonExistentFilePath),
-      ).rejects.toThrowErrorMatchingSnapshot()
-    }
+        ).rejects.toThrowErrorMatchingSnapshot()
+      }
+      loggerSpy.mockRestore()
+    })
   })
-})
-
-describe('run', () => {
+  
+describe('Install', () => {
   it('should successfully run the install command', async () => {
-    // Mock console.log
-
+    const packagePath = "./package.json"
+    
     const consoleLogMock = jest
-      .spyOn(process.stdout, 'write')
-      .mockImplementation()
+    .spyOn(process.stdout, 'write')
+    .mockImplementation()
 
-    // Call the async run() function
-    const command = Install.run(['install'])
-    await command
+  // Call the async run() function
+    await Install.run(['install'])
 
     const logCalls = consoleLogMock.mock.calls
       .map((args) => args.join(' ')) // Convert arguments to a single string
@@ -51,42 +51,13 @@ describe('run', () => {
     // Restore the original console.log
     consoleLogMock.mockRestore()
   })
+})
 
-  // it('should handle errors when reading the file', () => {
-  //   // Create a stub for the logger's error method
-  //   const loggerStub = sinon.stub(logger, 'error')
-
-  //   const result = test.stdout().command(['install'])
-
-  //   // Assertions
-  //   expect(result.stderr).to.contain('Error reading file')
-  //   expect(loggerStub.calledOnce).to.be.true
-  //   expect(loggerStub.calledWithMatch(sinon.match.instanceOf(Error))).to.be.true
-
-  //   // Restore the stubbed method to its original state
-  //   loggerStub.restore()
-  // })
-
-  // it('should handle errors when parsing package.json', () => {
-  //   // Create a temporary package.json file with invalid JSON for testing
-  //   const packagePath = 'test-package.json'
-  //   const fileContent = 'invalid-json'
-
-  //   // Write the invalid JSON to the file
-  //   fs.writeFile(packagePath, fileContent, (err) => {
-  //     if (err) throw err
-  //   })
-
-  //   const result:string = test.stdout().command(['install'])
-
-  //   // Assertions
-  //   expect(result).to.contain('Error parsing package.json')
-  //   expect(result).to.contain('SyntaxError')
-  //   expect(result).to.contain('invalid-json')
-
-  //   // Clean up: Delete the temporary file
-  //   fs.unlink(packagePath, (err) => {
-  //     if (err) throw err
-  //   })
-  // })
+describe('install', () => {
+  test
+    .stdout()
+    .command(['install'])
+    .it('runs Install', (ctx) => {
+      expect(ctx.stdout).toContain('dependencies installed...')
+    })
 })
