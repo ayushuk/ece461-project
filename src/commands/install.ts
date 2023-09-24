@@ -10,10 +10,11 @@ dotenv.config()
 export async function readFileAsync(packagePath: string): Promise<string> {
   try {
     const data: string = await fs.promises.readFile(packagePath, 'utf8')
+    logger.info("readFileAsync successful")
     return data
   } catch (error) {
     if (error instanceof Error) {
-      logger.error(`Error reading file: ${error.message}`)
+      logger.debug(`Error reading file: ${error.message}`)
     }
 
     throw error // Re-throw the error if needed
