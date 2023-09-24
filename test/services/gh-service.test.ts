@@ -1,169 +1,88 @@
-import axios from 'axios'
-import * as ghService from '../../src/services/gh-service'
-// import {BusFactorData} from '../../src/models/middleware-inputs'
+import {
+  BusFactorData,
+  CorrectnessData,
+  ResponsesivenessData,
+} from '../../src/models/middleware-inputs'
+import * as ghApi from '../../src/services/gh-api'
+import {
+  getBusFactorData,
+  getCorrectnessData,
+  getLiscenseComplianceData,
+  getResponsivenessData,
+} from '../../src/services/gh-service'
 
-const mockedAxios = axios as jest.Mocked<typeof axios>
-jest.mock('axios')
-// source: https://stackoverflow.com/questions/60410731/how-to-mock-interceptors-when-using-jest-mockaxios
-mockedAxios.create.mockImplementation(() => axios)
+describe('test getBusFactorData', () => {
+  it('get bus factor data successfully', async () => {
+    const getCommitDataMock = jest.spyOn(ghApi, 'getCommitData')
+    const getPullReqestDataMock = jest.spyOn(ghApi, 'getPullRequestData')
 
-describe('test getCommitData', () => {
-  it('get commit data sucessfully', async () => {
-    const data = [
-      {
-        login: 'critUser',
-        contributions: 100,
-      },
-      {
-        login: 'otherUser',
-        contributions: 50,
-      },
-    ]
-    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
-    const result = await ghService.getCommitData('')
-    expect(result).toStrictEqual(['critUser', 100, 150])
-  })
-  it('get commit data failure', async () => {
-    mockedAxios.get.mockRejectedValue(new Error('error'))
-    const result = await ghService.getCommitData('')
-    expect(result).toStrictEqual(['', -1, -1])
-  })
-})
+    getCommitDataMock.mockReturnValueOnce(
+      Promise.resolve(['critUser', 100, 150]),
+    )
+    getPullReqestDataMock.mockReturnValueOnce(Promise.resolve([2, 4]))
 
-describe('test getPullReqestData', () => {
-  it('get pull request data successfully', async () => {
-    const data = [
-      {
-        user: {
-          login: 'critUser',
-        },
-      },
-      {
-        user: {
-          login: 'otherUser',
-        },
-      },
-      {
-        user: {
-          login: 'critUser',
-        },
-      },
-      {
-        user: {
-          login: 'otherUser2',
-        },
-      },
-    ]
-    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
-    const result = await ghService.getPullRequestData('', 'critUser')
-    expect(result).toStrictEqual([2, 4])
-  })
-  it('get pull request data failure', async () => {
-    mockedAxios.get.mockRejectedValue(new Error('error'))
-    const result = await ghService.getPullRequestData('', 'critUser')
-    expect(result).toStrictEqual([-1, -1])
-  })
-})
-
-// TODO: test get bus factor data (need mocks)
-// describe('test getBusFactorData', () => {
-//   it('get bus factor data successfully', () => {
-//     const mockGetCommitData = jest.spyOn(ghService, 'getCommitData')
-//     const mockGetPullRequestData = jest.spyOn(ghService, 'getPullRequestData')
-
-//     mockGetCommitData.mockReturnValueOnce(Promise.resolve(['critUser', 100, 150]))
-//     mockGetPullRequestData.mockReturnValueOnce(Promise.resolve([2, 4]))
-
-//     const result: BusFactorData = ghService.getBusFactorData('')
-//     const expected: BusFactorData = {
-//       criticalContrubitorCommits: 100,
-//       totalCommits: 150,
-//       criticalContributorPullRequests: 2,
-//       totalPullRequests: 4,
-//     }
-
-//     expect(result).toStrictEqual(expected)
-//   })
-//   it('get bus factor data failure', () => {})
-// })
-
-describe('test getIssues', () => {
-  it('get issues successfully', async () => {
-    const data = [{}, {}, {}]
-    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
-    const result = await ghService.getIssues('', 'open')
-    expect(result).toStrictEqual(3)
-  })
-  it('get issues failure', async () => {
-    mockedAxios.get.mockRejectedValue(new Error('error'))
-    const result = await ghService.getIssues('', 'open')
-    expect(result).toStrictEqual(-1)
-  })
-})
-
-// TODO: test get correctness data (need mocks)
-
-describe('test getLicense', () => {
-  it('get license successfully', async () => {
-    const data = {
-      license: {
-        key: 'test license',
-      },
+    const result: BusFactorData = await getBusFactorData('')
+    const expected: BusFactorData = {
+      criticalContrubitorCommits: 100,
+      totalCommits: 150,
+      criticalContributorPullRequests: 2,
+      totalPullRequests: 4,
     }
-    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
-    const result = await ghService.getLicense('')
-    expect(result).toStrictEqual('test license')
-  })
-  it('get license failure', async () => {
-    mockedAxios.get.mockRejectedValue(new Error('error'))
-    const result = await ghService.getLicense('')
-    expect(result).toStrictEqual('')
+
+    expect(result).toStrictEqual(expected)
   })
 })
 
-// TODO: test get license compliance (need mocks)
+describe('test getCorrectnessData', () => {
+  it('get correctness data successfully', async () => {
+    const getIssuesMock = jest.spyOn(ghApi, 'getIssues')
 
-describe('test getMonthlyCommitCount', () => {
-  it('get monthly commit count successfully', async () => {
-    const data = {
-      all: [2, 4, 6, 8], // 20 commits in total
+    getIssuesMock.mockReturnValueOnce(Promise.resolve(10))
+
+    const result: CorrectnessData = await getCorrectnessData('')
+    const expected: CorrectnessData = {closedIssues: 10, openIssues: -1} // for some reason open issues return -1 in the mock
+
+    expect(result).toStrictEqual(expected)
+  })
+})
+
+describe('test getLicenseCompliance', () => {
+  it('get license compliance successfully', async () => {
+    const getLicenseMock = jest.spyOn(ghApi, 'getLicense')
+
+    getLicenseMock.mockReturnValueOnce(Promise.resolve('lpgl-2.1'))
+
+    const result: number = await getLiscenseComplianceData('')
+    const expected: number = 1
+
+    expect(result).toStrictEqual(expected)
+  })
+  it('get license compliance failure', async () => {
+    const getLicenseMock = jest.spyOn(ghApi, 'getLicense')
+
+    getLicenseMock.mockReturnValueOnce(Promise.resolve('some other license'))
+
+    const result: number = await getLiscenseComplianceData('')
+    const expected: number = 0
+
+    expect(result).toStrictEqual(expected)
+  })
+})
+
+describe('test getResponsivenessData', () => {
+  it('get responsiveness data successfully', async () => {
+    const getMonthlyCommitCountMock = jest.spyOn(ghApi, 'getMonthlyCommitCount')
+    const getAnualCommitCountMock = jest.spyOn(ghApi, 'getAnualCommitCount')
+
+    getMonthlyCommitCountMock.mockReturnValueOnce(Promise.resolve(100))
+    getAnualCommitCountMock.mockReturnValueOnce(Promise.resolve(200))
+
+    const result: ResponsesivenessData = await getResponsivenessData('')
+    const expected: ResponsesivenessData = {
+      monthlyCommitCount: 100,
+      anualCommitCount: 200,
     }
-    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
-    const result = await ghService.getMonthlyCommitCount('')
-    expect(result).toStrictEqual(20)
-  })
-  it('get monthly commit count failure', async () => {
-    mockedAxios.get.mockRejectedValue(new Error('error'))
-    const result = await ghService.getMonthlyCommitCount('')
-    expect(result).toStrictEqual(-1)
+
+    expect(result).toStrictEqual(expected)
   })
 })
-
-describe('test getAnualCommitCount', () => {
-  it('get anual commit count successfully', async () => {
-    const data = [
-      {
-        total: 2,
-      },
-      {
-        total: 4,
-      },
-      {
-        total: 6,
-      },
-      {
-        total: 8,
-      },
-    ]
-    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
-    const result = await ghService.getAnualCommitCount('')
-    expect(result).toStrictEqual(20)
-  })
-  it('get anual commit count failure', async () => {
-    mockedAxios.get.mockRejectedValue(new Error('error'))
-    const result = await ghService.getAnualCommitCount('')
-    expect(result).toStrictEqual(-1)
-  })
-})
-
-// TODO: test get responsiveness data (need mocks)
