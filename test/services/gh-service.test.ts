@@ -53,7 +53,17 @@ describe('test getLicenseCompliance', () => {
     getLicenseMock.mockReturnValueOnce(Promise.resolve('lpgl-2.1'))
 
     const result: number = await getLiscenseComplianceData('')
-    const expected: number = 1 // for some reason open issues return -1 in the mock
+    const expected: number = 1
+
+    expect(result).toStrictEqual(expected)
+  })
+  it('get license compliance failure', async () => {
+    const getLicenseMock = jest.spyOn(ghApi, 'getLicense')
+
+    getLicenseMock.mockReturnValueOnce(Promise.resolve('some other license'))
+
+    const result: number = await getLiscenseComplianceData('')
+    const expected: number = 0
 
     expect(result).toStrictEqual(expected)
   })
