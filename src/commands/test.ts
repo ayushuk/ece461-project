@@ -12,7 +12,7 @@ export default class Test extends Command {
       exec('npx jest --config ./jest.config.ts', (error: string, stdout: string, stderr: string) => {
         const testRegex = /Tests:\s+(\d+) failed,\s+(\d+) passed,\s+(\d+) total/
         const testMatch = testRegex.exec(stderr)
-        /All files\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})/
+        const covRegex = /All files\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})/
         const covMatch = covRegex.exec(stdout)
         const coverage = covMatch ? Number.parseInt(covMatch[4], 10) : 0
         if (testMatch) {
