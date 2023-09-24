@@ -15,7 +15,6 @@ export async function readFileAsync(packagePath: string): Promise<string> {
     if (error instanceof Error) {
       logger.error(`Error reading file: ${error.message}`)
     }
-
     throw error // Re-throw the error if needed
   }
 }
@@ -42,8 +41,6 @@ export class Install extends Command {
       if (error instanceof Error) {
         this.error(`Error reading file: ${error.message}`)
       }
-
-      throw error
     }
   }
 }
