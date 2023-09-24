@@ -1,6 +1,12 @@
 // import {parse} from 'path'
 // import * as utils from '../../src/middleware/utils'
-import {round, identifyLink} from '../../src/middleware/utils'
+import {
+  round,
+  identifyLink,
+  cloneRepo,
+  parseGHRepoName,
+} from '../../src/middleware/utils'
+const {exec} = require('child_process')
 
 describe('round', () => {
   // Test case 1: Round down 2 decimal places
@@ -39,5 +45,34 @@ describe('identifyLink', () => {
     const testUrl = 'https://google.com'
 
     expect(identifyLink(testUrl)).toBe(null)
+  })
+})
+
+describe('parseGHRepoName', () => {
+  it('should return the repo name when given a valid github link', () => {
+    const testUrl = 'https://github.com/octocat/Spoon-Knife'
+
+    expect(parseGHRepoName(testUrl)).toBe('Spoon-Knife')
+  })
+})
+
+describe('cloneRepo', () => {
+  // test case 1: valid gh link
+  it('should clone a github repo', () => {
+    const testUrl = 'https://github.com/octocat/Spoon-Knife'
+    const localPath = '../ece461-project/src/middleware/cloned-repos'
+
+    exec.mockImplementation((command, callback) => {
+      callback(null)
+    })
+
+    await cloneRepo(testUrl)
+
+    expect(exec).toHaveBeenCalledWith(
+      `git clone ${testUrl} ${localPath}`,
+      expect.any(Function),
+    )
+
+    expect(cloneRepo(testUrl))
   })
 })

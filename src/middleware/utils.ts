@@ -1,20 +1,22 @@
 // import * as fs from 'node:fs'
-// import * as url from 'node:url'
+import * as url from 'node:url'
+import {exec} from 'node:child_process'
+import * as path from 'node:path'
 
 export function round(value: number, decimals: number): number {
   return Number(value.toFixed(decimals))
 }
 
-export function identifyLink(url: string) {
+export function identifyLink(link: string) {
   const githubPattern = /^(https?:\/\/)?(www\.)?github\.com\/[\w.-]+\/[\w.-]+/
 
   const npmPattern = /^(https?:\/\/)?(www\.)?npmjs\.com\/package\/[\w.-]+/
 
-  if (githubPattern.test(url)) {
+  if (githubPattern.test(link)) {
     return 'github'
   }
 
-  if (npmPattern.test(url)) {
+  if (npmPattern.test(link)) {
     return 'npm'
   }
 
@@ -41,45 +43,46 @@ export function identifyLink(url: string) {
 //   })
 // }
 
-// export function parseGHRepoName(repoUrl: string): string | null {
-//   // Parse the URL
-//   const parsedUrl = url.parse(repoUrl)
+export function parseGHRepoName(repoUrl: string): string | null {
+  // Parse the URL
+  const parsedUrl = url.parse(repoUrl)
 
-//   // Check if the URL is from github.com and has a valid path
-//   if (
-//     parsedUrl.hostname === 'github.com' &&
-//     parsedUrl.path &&
-//     parsedUrl.path.length > 1 // Ensure there's a path after the hostname
-//   ) {
-//     // Extract the repository name (removing leading slash if present)
+  // Check if the URL is from github.com and has a valid path
+  if (
+    parsedUrl.hostname === 'github.com' &&
+    parsedUrl.path &&
+    parsedUrl.path.length > 1 // Ensure there's a path after the hostname
+  ) {
+    // Extract the repository name (removing leading slash if present)
 
-//     const pathComponents = parsedUrl.path.split('/')
-//     const repoName = pathComponents.pop() // Get the last path component
+    const pathComponents = parsedUrl.path.split('/')
+    const repoName = pathComponents.pop() // Get the last path component
 
-//     return repoName || null
-//   }
+    return repoName || null
+  }
 
-//   return null // Not a valid GitHub repository URL
-// }
+  return null // Not a valid GitHub repository URL
+}
 
-// export async function cloneRepo(GhUrl: string) {
-//   let repositoryUrl = GhUrl
-//   const repoName = parseGHRepoName(repositoryUrl)
-//   repositoryUrl = GhUrl + '.git'
-//   console.log(repositoryUrl)
-//   console.log(repoName)
-//   const localPath = ``
-//   // ./cloned-repos/${repoName}
+export async function cloneRepo(ghUrl: string) {
+  const repoName = parseGHRepoName(ghUrl)
+  let localPath = '../ece461-project/src/middleware/cloned-repos'
+  if (repoName) {
+    // Concatenate or use repoName here since it's a valid string
+    localPath = path.join(localPath, repoName)
+  }
+  // TODO: else error return
 
-//   try {
-//     // Clone the repository
-//     await nodegit.Clone(repositoryUrl, localPath)
-//     console.log('Cloned')
-//   } catch (error) {
-//     //error = null
-//     console.error('Error', error)
-//     return error
-//   }
+  const repoUrl = `${ghUrl}.git`
 
-//   return localPath
-// }
+  return new Promise<void>((resolve, reject) => {
+    exec(`git clone ${repoUrl} ${localPath}`, (error) => {
+      if (error) {
+        reject(error)
+        // TODO logging and error handling
+      } else {
+        resolve()
+      }
+    })
+  })
+}

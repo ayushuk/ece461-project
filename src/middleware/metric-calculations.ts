@@ -66,8 +66,9 @@ export function calculateRampUpTime() {
   // const rampUpTime = linesReadme / linesCode
 
   // return rampUpTime
+  const rampUpTime = 0
 
-  return 0
+  return rampUpTime
 }
 
 // Responsiveness Calculations
@@ -82,7 +83,7 @@ export function calculateResponsiveness(url: string) {
     return 0
   }
 
-  let responsivenessScore = monthlyCommitCount / annualCommitCount
+  let responsivenessScore = monthlyCommitCount / annualCommitCount / 12
 
   // round to 3 decimal places
   responsivenessScore = round(responsivenessScore, 3)
