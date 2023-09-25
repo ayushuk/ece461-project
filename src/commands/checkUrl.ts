@@ -1,6 +1,6 @@
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Command, Flags, run} from '@oclif/core'
 import * as fs from 'fs'
-import { assignMetrics } from './src/fill-models';
+import {assignMetrics} from '../middleware/fill-models';
 
 export default class CheckUrl extends Command {
   static description = 'describe the command here'
@@ -19,12 +19,12 @@ export default class CheckUrl extends Command {
     if (fileContent == 'yes\n') {
       const allFileContents = fs.readFileSync(args.urls, 'utf-8')
       allFileContents.split(/\r?\n/).forEach((url) => {
-
+/*
         const Metrics = assignMetrics(url);
 
         console.log(
-          `{"URL": "${url}", "NET SCORE":${Metrics.netScore}, "RAMP_UP_SCORE":${Metrics.rampUp}, "CORRECTNESS_SCORE":${Metrics.correctness}, "BUS_FACTOR_SCORE":${Metrics.busFactor}, "RESPONSIVE_MAINTAINER_SCORE":${Metrics.respMaintain}, "LICENSE_SCORE":${Metrics.license}}`,
-        )
+          `{"URL": "${url}", "NET_SCORE":${Metrics.NetScore}, "RAMP_UP_SCORE":${Metrics.RampUp}, "CORRECTNESS_SCORE":${Metrics.Correctness}, "BUS_FACTOR_SCORE":${Metrics.BusFactor}, "RESPONSIVE_MAINTAINER_SCORE":${Metrics.Responsiveness}, "LICENSE_SCORE":${Metrics.License}}`,
+          ) */
       })
 
       process.exit(0)
