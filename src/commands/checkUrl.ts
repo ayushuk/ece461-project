@@ -25,15 +25,19 @@ export default class CheckUrl extends Command {
       const urls = allFileContents
         .split(/\r?\n/)
         .filter((line) => line.trim() !== '')
+      let count = 0
       urls.forEach((url) => {
-        const Metrics = assignMetrics(url).then((Metrics) => {
+        assignMetrics(url).then((Metrics) => {
           console.log(
-            `{"URL": "${url}", "NET_SCORE":${Metrics.NetScore}, "RAMP_UP_SCORE":1, "CORRECTNESS_SCORE":${Metrics.Correctness}, "BUS_FACTOR_SCORE":${Metrics.BusFactor}, "RESPONSIVE_MAINTAINER_SCORE":${Metrics.Responsiveness}, "LICENSE_SCORE":${Metrics.License}}`,
+            `{"URL": "${url}", "NET_SCORE":${Metrics.NetScore}, "RAMP_UP_SCORE":${Metrics.RampUp}, "CORRECTNESS_SCORE":${Metrics.Correctness}, "BUS_FACTOR_SCORE":${Metrics.BusFactor}, "RESPONSIVE_MAINTAINER_SCORE":${Metrics.Responsiveness}, "LICENSE_SCORE":${Metrics.License}}`,
           )
-
-          process.exit(0)
+          count += 1
         })
       })
+
+      if (count == urls.length) {
+        process.exit(0)
+      }
     } else {
       console.log(
         'Dependencies not yet installed. Please run the following command:\n./run install',

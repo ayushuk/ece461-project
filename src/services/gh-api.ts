@@ -29,9 +29,7 @@ export async function getCommitData(
   const repoOwner = repoUrl.split('/')[3]
   const repoName = repoUrl.split('/')[4]
   try {
-    console.log('before')
     const response = await instance.get(`${repoOwner}/${repoName}/contributors`)
-    console.log('after')
     const {login} = response.data[0]
     const {contributions} = response.data[0]
 

@@ -7,13 +7,18 @@ import {
   getLiscenseComplianceData,
 } from '../services/gh-service'
 import logger from '../logger'
+import * as path from 'node:path'
 
 // Bus Factor Calculations
 export async function calculateBusFactor(url: string) {
   logger.info('Calculating Bus Factor')
 
   // checks to see if link is a npm link and if so, converts it to a github link
-  const link = await utils.evaluateLink(url)
+  let link = await utils.evaluateLink(url)
+  if (link) {
+    link = link?.split('github.com').pop() ?? null
+    link = 'https://github.com' + link
+  }
   let data = null
 
   // get data using ./services/gh-service.ts
@@ -60,12 +65,16 @@ export async function calculateCorrectness(url: string) {
   logger.info('Calculating Correctness')
 
   // checks to see if link is a npm link and if so, converts it to a github link
-  const link = await utils.evaluateLink(url)
+  let link = await utils.evaluateLink(url)
+  if (link) {
+    link = link?.split('github.com').pop() ?? null
+    link = 'https://github.com' + link
+  }
   let data = null
 
   // get data using ./services/gh-service.ts
   if (link) {
-    data = await getCorrectnessData(url)
+    data = await getCorrectnessData(link)
   } else {
     return 0
   }
@@ -95,44 +104,62 @@ export async function calculateRampUpTime(url: string) {
   logger.info('Calculating Ramp Up Time')
 
   // checks to see if link is a npm link and if so, converts it to a github link
-  const link = await utils.evaluateLink(url)
+  let link = await utils.evaluateLink(url)
+  if (link) {
+    link = link?.split('github.com').pop() ?? null
+    link = 'https://github.com' + link
+  }
   let linesOfCode = 0
 
   // get data using ./services/gh-service.ts
   if (link) {
     // clones the repo into ./cloned-repos
-    utils.cloneRepo(url)
+    const repoName = utils.parseGHRepoName(link)
+    let localPath = '../ece461-project/src/middleware/cloned-repos'
+    // format local path name
+    if (repoName) {
+      localPath = path.join(localPath, repoName)
+    }
+    // add .git to end of url
+    let repoUrl = link
+    if (!link.includes('.git')) {
+      repoUrl = `${link}.git`
+    }
 
-    linesOfCode = await utils.calcRepoLines(url)
+    await utils.cloneRepo(link, localPath, repoUrl)
+
+    utils.calcRepoLines(localPath, (totalLines) => {
+      linesOfCode = totalLines
+      console.log(totalLines)
+      logger.debug(`linesOfCode: ${linesOfCode}`)
+
+      let rampUpScore = 0
+      console.log(linesOfCode)
+      if (linesOfCode <= 500) {
+        rampUpScore = 1
+      } else if (linesOfCode <= 1000) {
+        rampUpScore = 0.9
+      } else if (linesOfCode <= 5000) {
+        rampUpScore = 0.8
+      } else if (linesOfCode <= 10_000) {
+        rampUpScore = 0.7
+      } else if (linesOfCode <= 50_000) {
+        rampUpScore = 0.6
+      } else if (linesOfCode <= 100_000) {
+        rampUpScore = 0.5
+      } else if (linesOfCode <= 500_000) {
+        rampUpScore = 0.4
+      } else if (linesOfCode <= 1_000_000) {
+        rampUpScore = 0.3
+      } else if (linesOfCode <= 5_000_000) {
+        rampUpScore = 0.2
+      }
+
+      return rampUpScore
+    })
   } else {
-    return 0
+    return () => 0
   }
-
-  logger.debug(`linesOfCode: ${linesOfCode}`)
-
-  let rampUpScore = 0
-
-  if (linesOfCode <= 500) {
-    rampUpScore = 1
-  } else if (linesOfCode <= 1000) {
-    rampUpScore = 0.9
-  } else if (linesOfCode <= 5000) {
-    rampUpScore = 0.8
-  } else if (linesOfCode <= 10_000) {
-    rampUpScore = 0.7
-  } else if (linesOfCode <= 50_000) {
-    rampUpScore = 0.6
-  } else if (linesOfCode <= 100_000) {
-    rampUpScore = 0.5
-  } else if (linesOfCode <= 500_000) {
-    rampUpScore = 0.4
-  } else if (linesOfCode <= 1_000_000) {
-    rampUpScore = 0.3
-  } else if (linesOfCode <= 5_000_000) {
-    rampUpScore = 0.2
-  }
-
-  return rampUpScore
 }
 
 // Responsiveness Calculations
@@ -140,12 +167,16 @@ export async function calculateResponsiveness(url: string) {
   logger.info('Calculating Responsiveness')
 
   // checks to see if link is a npm link and if so, converts it to a github link
-  const link = await utils.evaluateLink(url)
+  let link = await utils.evaluateLink(url)
+  if (link) {
+    link = link?.split('github.com').pop() ?? null
+    link = 'https://github.com' + link
+  }
   let data = null
 
   // get data using ./services/gh-service.ts
   if (link) {
-    data = await getResponsivenessData(url)
+    data = await getResponsivenessData(link)
   } else {
     return 0
   }
@@ -196,12 +227,16 @@ export async function calculateResponsiveness(url: string) {
 export async function calculateLicenseCompliance(url: string) {
   logger.info('Calculating License Compliance')
   // checks to see if link is a npm link and if so, converts it to a github link
-  const link = await utils.evaluateLink(url)
+  let link = await utils.evaluateLink(url)
+  if (link) {
+    link = link?.split('github.com').pop() ?? null
+    link = 'https://github.com' + link
+  }
   let licenseCompliantScore = 0
 
   // get data using ./services/gh-service.ts
   if (link) {
-    licenseCompliantScore = await getLiscenseComplianceData(url)
+    licenseCompliantScore = await getLiscenseComplianceData(link)
 
     logger.debug(`licenseCompliantScore: ${licenseCompliantScore}`)
   } else {

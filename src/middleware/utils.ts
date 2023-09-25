@@ -81,19 +81,8 @@ export function parseGHRepoName(repoUrl: string): string | null {
   return null // Not a valid GitHub repository URL
 }
 
-export async function cloneRepo(ghUrl: string) {
+export function cloneRepo(ghUrl: string, localPath: string, repoUrl: string) {
   logger.info(`Cloning GitHub repository from ${ghUrl}`)
-
-  const repoName = parseGHRepoName(ghUrl)
-  let localPath = '../ece461-project/src/middleware/cloned-repos'
-
-  // format local path name
-  if (repoName) {
-    localPath = path.join(localPath, repoName)
-  }
-
-  // add .git to end of url
-  const repoUrl = `${ghUrl}.git`
 
   // clone repo
   return new Promise<void>((resolve, reject) => {
@@ -109,39 +98,42 @@ export async function cloneRepo(ghUrl: string) {
   })
 }
 
-export async function calcRepoLines(repoPath: string): Promise<number> {
+export function calcRepoLines(repoPath: string, callback: (totalLines: number) => void) {
   logger.info(`Calculating lines of code for ${repoPath}`)
-
+  const excludePatterns = [
+    'node_modules',    // Exclude the node_modules directory
+    'dist',            // Exclude the dist directory
+    '.*\\.spec\\.ts',  // Exclude TypeScript test files with .spec.ts extension
+  ];
+  // Construct the exclude arguments for cloc
+  const excludeArgs = excludePatterns.map(pattern => `--exclude-dir=${pattern}`).join(' ');
+  // Define the cloc command with the exclude arguments
+  const clocCommand = `cloc ${repoPath} ${excludeArgs}`;
   let totalLines = 0
 
-  // go through all files in the given directory
-  async function processDirectory(directoryPath: string) {
-    const files = fs.readdirSync(directoryPath)
+  // Execute the cloc command
+  exec(clocCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`Error: ${stderr}`);
+      return;
+    }
 
-    for (const file of files) {
-      const filePath = path.join(directoryPath, file)
-
-      if (file === '.git') {
-        // Skip the .git directory
-        continue // eslint-disable-line no-continue
-      }
-
-      // if the file is a directory, recursively process it to count all files lines of code
-      if (fs.statSync(filePath).isDirectory()) {
-        // Recursively process subdirectories
-        await processDirectory(filePath) // eslint-disable-line no-await-in-loop
-      } else {
-        const lines = await getLinesOfCode(filePath) // eslint-disable-line no-await-in-loop
-        totalLines += lines
+    const lines = stdout.split('\n');
+    for (const line of lines) {
+      if (line.startsWith('SUM:')) {
+        const parts = line.trim().split(/\s+/);
+        totalLines = parseInt(parts[parts.length - 1], 10);
+        callback(totalLines)
+        return;
       }
     }
-  }
+  });
 
-  await processDirectory(repoPath)
-
-  logger.debug(`Total lines of code: ${totalLines}`)
-
-  return totalLines
+  return () => totalLines
 }
 
 export async function evaluateLink(link: string) {

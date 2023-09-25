@@ -22,6 +22,7 @@
     "@oclif/plugin-plugins": "^3.4.2",
     "@oclif/test": "^2.4.7",
     "axios": "^1.5.0",
+    "cloc": "^1.98.0-cloc",
     "dotenv": "^16.3.1",
     "eslint-config-airbnb": "^19.0.4",
     "sinon": "^16.0.0",

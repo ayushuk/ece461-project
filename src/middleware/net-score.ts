@@ -9,14 +9,14 @@ import {
 import logger from '../logger'
 
 // NetScore sub-category Calculations
-export async function calculateNetScore(url: string): Promise<number> {
+export async function calculateNetScore(
+  busFactor: number,
+  correctness: number,
+  rampUpTime: number,
+  responsiveness: number,
+  licenseCompliance: number,
+): Promise<number> {
   logger.info('Calculating Net Score')
-
-  const busFactor = await calculateBusFactor(url)
-  const correctness = await calculateCorrectness(url)
-  const rampUpTime = await calculateRampUpTime(url)
-  const responsiveness = await calculateResponsiveness(url)
-  const licenseCompliance = await calculateLicenseCompliance(url)
 
   /* eslint-disable no-template-curly-in-string */
   logger.debug(
