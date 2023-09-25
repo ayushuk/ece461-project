@@ -41,13 +41,14 @@ describe('fill-models', () => {
     mockCalculateNetScore.mockReturnValue(Promise.resolve(mockNetScore))
 
     // call function and expect outputs
-    const result = assignMetrics('https://github.com/XavierJCallait/test')
+    const result = await assignMetrics('https://github.com/XavierJCallait/test')
+
     expect(result).toBeInstanceOf(Promise)
-    expect((await result).BusFactor).toBe(0.5)
-    expect((await result).Correctness).toBe(0.4)
-    expect((await result).RampUp).toBe(0.3)
-    expect((await result).Responsiveness).toBe(0.2)
-    expect((await result).License).toBe(1)
-    expect((await result).NetScore).toBe(0.6)
+    expect(result.BusFactor).toBe(0.5)
+    expect(result.Correctness).toBe(0.4)
+    expect(result.RampUp).toBe(0.3)
+    expect(result.Responsiveness).toBe(0.2)
+    expect(result.License).toBe(1)
+    expect(result.NetScore).toBe(0.6)
   })
 })
