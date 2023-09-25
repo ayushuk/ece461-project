@@ -21,9 +21,9 @@ else
   then
   echo "Please run this script with ./run install"
   else
-    if [ $1 == "tester" ]
+    if [ $1 == "test" ]
     then
-      ./bin/dev tester
+      ./bin/dev test
     else
       ./bin/dev checkUrl $1
     fi
