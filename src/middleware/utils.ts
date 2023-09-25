@@ -1,7 +1,7 @@
+/* eslint-disable no-console */
 import * as fs from 'node:fs'
 import * as url from 'node:url'
 import {exec} from 'node:child_process'
-import * as path from 'node:path'
 import {getGithubLinkFromNpm} from '../services/gh-service'
 import logger from '../logger'
 
@@ -98,40 +98,46 @@ export function cloneRepo(ghUrl: string, localPath: string, repoUrl: string) {
   })
 }
 
-export function calcRepoLines(repoPath: string, callback: (totalLines: number) => void) {
+export function calcRepoLines(
+  repoPath: string,
+  callback: (totalLines: number) => void,
+) {
   logger.info(`Calculating lines of code for ${repoPath}`)
   const excludePatterns = [
-    'node_modules',    // Exclude the node_modules directory
-    'dist',            // Exclude the dist directory
-    '.*\\.spec\\.ts',  // Exclude TypeScript test files with .spec.ts extension
-  ];
+    'node_modules', // Exclude the node_modules directory
+    'dist', // Exclude the dist directory
+    '.*\\.spec\\.ts', // Exclude TypeScript test files with .spec.ts extension
+  ]
   // Construct the exclude arguments for cloc
-  const excludeArgs = excludePatterns.map(pattern => `--exclude-dir=${pattern}`).join(' ');
+  const excludeArgs = excludePatterns
+    .map((pattern) => `--exclude-dir=${pattern}`)
+    .join(' ')
   // Define the cloc command with the exclude arguments
-  const clocCommand = `cloc ${repoPath} ${excludeArgs}`;
+  const clocCommand = `cloc ${repoPath} ${excludeArgs}`
   let totalLines = 0
 
   // Execute the cloc command
   exec(clocCommand, (error, stdout, stderr) => {
     if (error) {
-      console.error(`Error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`Error: ${stderr}`);
-      return;
+      console.error(`Error: ${error.message}`)
+      return
     }
 
-    const lines = stdout.split('\n');
+    if (stderr) {
+      console.error(`Error: ${stderr}`)
+      return
+    }
+
+    const lines = stdout.split('\n')
     for (const line of lines) {
       if (line.startsWith('SUM:')) {
-        const parts = line.trim().split(/\s+/);
-        totalLines = parseInt(parts[parts.length - 1], 10);
+        const parts = line.trim().split(/\s+/)
+        totalLines = Number.parseInt(parts.at(-1)!, 10)
         callback(totalLines)
-        return;
+        return
       }
     }
-  });
+  })
 
   return () => totalLines
 }

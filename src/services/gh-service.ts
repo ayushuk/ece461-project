@@ -86,7 +86,7 @@ export async function getResponsivenessData(
 
 /**
  * Converts a NPM link into a Github repository url.
- * 
+ *
  * @param npmUrl Link to npm package
  * @returns Github repository url
  */
