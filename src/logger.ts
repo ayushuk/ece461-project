@@ -26,5 +26,4 @@ if (process.env.LOG_LEVEL != 0) {
 // if debug message:
     logger.debug(message)
 }
-
 */

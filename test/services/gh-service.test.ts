@@ -1,3 +1,4 @@
+import axios from 'axios'
 import {
   BusFactorData,
   CorrectnessData,
@@ -9,7 +10,13 @@ import {
   getCorrectnessData,
   getLiscenseComplianceData,
   getResponsivenessData,
+  getGithubLinkFromNpm,
 } from '../../src/services/gh-service'
+
+const mockedAxios = axios as jest.Mocked<typeof axios>
+jest.mock('axios')
+// source: https://stackoverflow.com/questions/60410731/how-to-mock-interceptors-when-using-jest-mockaxios
+mockedAxios.create.mockImplementation(() => axios)
 
 describe('test getBusFactorData', () => {
   it('get bus factor data successfully', async () => {
@@ -74,15 +81,29 @@ describe('test getResponsivenessData', () => {
     const getMonthlyCommitCountMock = jest.spyOn(ghApi, 'getMonthlyCommitCount')
     const getAnualCommitCountMock = jest.spyOn(ghApi, 'getAnualCommitCount')
 
-    getMonthlyCommitCountMock.mockReturnValueOnce(Promise.resolve(100))
+    getMonthlyCommitCountMock.mockReturnValueOnce(Promise.resolve([100]))
     getAnualCommitCountMock.mockReturnValueOnce(Promise.resolve(200))
 
     const result: ResponsesivenessData = await getResponsivenessData('')
     const expected: ResponsesivenessData = {
-      monthlyCommitCount: 100,
+      monthlyCommitCount: [100],
       anualCommitCount: 200,
     }
 
     expect(result).toStrictEqual(expected)
+  })
+})
+
+describe('test getGithubLinkFromNpm', () => {
+  it('get github link from npm successfully', async () => {
+    const data = {
+      repository: {url: 'git+https://github.com/facebook/react.git'},
+    }
+    mockedAxios.get.mockReturnValueOnce(Promise.resolve({data}))
+    const expected = 'git+https://github.com/facebook/react.git'
+    const received = await getGithubLinkFromNpm(
+      'https://www.npmjs.com/package/react',
+    )
+    expect(received).toBe(expected)
   })
 })

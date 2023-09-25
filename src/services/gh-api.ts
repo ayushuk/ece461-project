@@ -1,13 +1,12 @@
 import * as dotenv from 'dotenv'
 import axios from 'axios'
+import logger from '../logger'
 
 dotenv.config() // load enviroment variables
 
 /**
  * Get the commits made by the top contributor and the total contributions across
  * the top 10 contributors including the top contributor.
- *
- * // TODO handle failure with logging
  *
  * @param repoUrl Github repository url
  * @returns Name of the most critical contributor, contributions by the critical
@@ -17,9 +16,10 @@ dotenv.config() // load enviroment variables
 export async function getCommitData(
   repoUrl: string,
 ): Promise<readonly [string, number, number]> {
+  logger.info('GH_API: running getCommitData')
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos/',
-    timeout: 1000,
+    timeout: 10_000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -41,11 +41,16 @@ export async function getCommitData(
       totalContributions += response.data[i].contributions
     }
 
-    console.log(contributions)
-
+    logger.debug(
+      'GH_API: getCommitData {',
+      login,
+      contributions,
+      totalContributions,
+      '}',
+    )
     return [login, contributions, totalContributions] as const
   } catch {
-    console.log("couldn't get commit data")
+    logger.info('GH_API: getCommitData failed')
     return ['', -1, -1]
   }
 }
@@ -53,8 +58,6 @@ export async function getCommitData(
 /**
  * Get the number of pull requests made by the critical contributor and the total number of pull requests.
  * (might always return 100 pull requests because of github api pagination)
- *
- * // TODO handle failure logging
  *
  * @param repoUrl Github repository url
  * @param critUser The username of the critical contributor.
@@ -65,9 +68,10 @@ export async function getPullRequestData(
   repoUrl: string,
   critUser: string,
 ): Promise<readonly [number, number]> {
+  logger.info('GH_API: running getPullRequestData')
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos/',
-    timeout: 1000,
+    timeout: 10_000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -78,7 +82,7 @@ export async function getPullRequestData(
   const repoName = repoUrl.split('/')[4]
   try {
     const response = await instance.get(
-      `${repoOwner}/${repoName}/search/issues`,
+      `${repoOwner}/${repoName}/search/pulls`,
       {
         params: {state: 'all', per_page: 100}, // eslint-disable-line camelcase
       },
@@ -92,16 +96,21 @@ export async function getPullRequestData(
       }
     }
 
+    logger.debug(
+      'GH_API: getPullRequestData {',
+      crituserpullrequests,
+      totalpullrequests,
+      '}',
+    )
     return [crituserpullrequests, totalpullrequests] as const
   } catch {
+    logger.info('GH_API: getPullRequestData failed')
     return [-1, -1] as const
   }
 }
 
 /**
  * Gets the number of issues in a given state.
- *
- * // TODO handle failure logging
  *
  * @param repoUrl Gihub repository url
  * @param state State of the issue
@@ -111,9 +120,10 @@ export async function getIssues(
   repoUrl: string,
   state: 'open' | 'closed',
 ): Promise<number> {
+  logger.info('GH_API: running getIssues')
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos/',
-    timeout: 1000,
+    timeout: 10_000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -126,8 +136,10 @@ export async function getIssues(
     const response = await instance.get(`${repoOwner}/${repoName}/issues`, {
       params: {state, per_page: 100}, // eslint-disable-line camelcase
     })
+    logger.debug('GH_API: getIssues {', response.data.length, '}')
     return response.data.length
   } catch {
+    logger.info('GH_API: getIssues failed')
     return -1
   }
 }
@@ -135,15 +147,14 @@ export async function getIssues(
 /**
  * Gets the license of the repository.
  *
- * TODO: handle failure logging
- *
  * @param repoUrl Github repository url
  * @returns The license of the repository.
  */
 export async function getLicense(repoUrl: string): Promise<string> {
+  logger.info('GH_API: running getLicense')
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos',
-    timeout: 1000,
+    timeout: 10_000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -154,8 +165,10 @@ export async function getLicense(repoUrl: string): Promise<string> {
   const repoName = repoUrl.split('/')[4]
   try {
     const response = await instance.get(`${repoOwner}/${repoName}/license`)
+    logger.debug('GH_API: getLicense {', response.data.license.key, '}')
     return response.data.license.key
   } catch {
+    logger.info('GH_API: getLicense failed')
     return ''
   }
 }
@@ -166,10 +179,13 @@ export async function getLicense(repoUrl: string): Promise<string> {
  * @param repoUrl  Github repository url
  * @returns The number of commits in the last 4 weeks
  */
-export async function getMonthlyCommitCount(repoUrl: string): Promise<number> {
+export async function getMonthlyCommitCount(
+  repoUrl: string,
+): Promise<Array<number>> {
+  logger.info('GH_API: running getMonthlyCommitCount')
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos',
-    timeout: 1000,
+    timeout: 10_000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -182,14 +198,29 @@ export async function getMonthlyCommitCount(repoUrl: string): Promise<number> {
     const response = await instance.get(
       `${repoOwner}/${repoName}/stats/participation`,
     )
-    let count = 0
-    for (let i = 0; i < 4; i += 1) {
-      count += response.data.all.pop()
+
+    // get commit counts for each month of the year
+    const months =
+      response.data.all.length >= 52 ? 12 : response.data.all.length / 4
+    const count = []
+    const result = []
+    for (let i = 0; i < response.data.all.length; i += 1) {
+      count[i] = response.data.all[i]
     }
 
-    return count
+    for (let i = 0; i < months; i += 1) {
+      result[i] = 0
+    }
+
+    for (let i = 0; i < response.data.all.length; i += 1) {
+      result[Math.trunc(i / months)] += response.data.all[i]
+    }
+
+    logger.debug('GH_API: getMonthlyCommitCount {', result, '}')
+    return result
   } catch {
-    return -1
+    logger.info('GH_API: getMonthlyCommitCount failed')
+    return [-1]
   }
 }
 
@@ -200,9 +231,10 @@ export async function getMonthlyCommitCount(repoUrl: string): Promise<number> {
  * @returns The number of commits in the last year.
  */
 export async function getAnualCommitCount(repoUrl: string): Promise<number> {
+  logger.info('GH_API: running getAnualCommitCount')
   const instance = axios.create({
     baseURL: 'https://api.github.com/repos',
-    timeout: 1000,
+    timeout: 10_000,
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -220,8 +252,10 @@ export async function getAnualCommitCount(repoUrl: string): Promise<number> {
       count += response.data[i].total
     }
 
+    logger.debug('GH_API: getAnualCommitCount {', count, '}')
     return count
   } catch {
+    logger.info('GH_API: getAnualCommitCount failed')
     return -1
   }
 }
