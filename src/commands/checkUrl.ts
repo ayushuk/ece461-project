@@ -1,6 +1,10 @@
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Command, Flags, run} from '@oclif/core'
 import * as fs from 'fs'
+<<<<<<< HEAD
 import {assignMetrics} from '../../src/fill-models'
+=======
+import {assignMetrics} from '../middleware/fill-models';
+>>>>>>> create-run
 
 export default class CheckUrl extends Command {
   static description = 'describe the command here'

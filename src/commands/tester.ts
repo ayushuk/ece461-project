@@ -7,11 +7,13 @@ export default class Test extends Command {
   public async run() {
     const hiddenPath = './check_install'
     const fs = require('fs')
-    const fileContent = fs.readFileSync(hiddenPath, 'utf-8')
+    const fileContent = await fs.readFileSync(hiddenPath, 'utf-8')
     if (fileContent == 'yes\n') {
       exec('npx jest --config ./jest.config.ts', (error: string, stdout: string, stderr: string) => {
         const testRegex = /Tests:\s+(\d+) failed,\s+(\d+) passed,\s+(\d+) total/
+        const testCompleteRegex = /Tests:\s+(\d+) passed,\s+(\d+) total/
         const testMatch = testRegex.exec(stderr)
+        const testCompleteMatch = testCompleteRegex.exec(stderr)
         const covRegex = /All files\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})/
         const covMatch = covRegex.exec(stdout)
         const coverage = covMatch ? Number.parseInt(covMatch[4], 10) : 0
@@ -19,15 +21,21 @@ export default class Test extends Command {
           const passTests = parseInt(testMatch[2], 10)
           const failTests = parseInt(testMatch[1], 10)
           const totalTests = passTests + failTests
-          console.log(
+          this.log(
             `${passTests}/${totalTests} test cases passed. ${coverage.toFixed(0)}% line coverage achieved.`
           )
+        } else if (testCompleteMatch) {
+          const passTests = parseInt(testCompleteMatch[1], 10)
+          this.log(
+            `${passTests}/${passTests} test cases passed. ${coverage.toFixed(0)}% line coverage achieved.`
+          )
         } else {
-          console.log(
+          this.log(
             `0/0 test cases passed. 0% line coverage achieved.`,
           )
         }
       })
+      // process.exit(0)
     } else {
       console.log(
         'Dependencies not yet installed. Please run the following command:\n./run install',

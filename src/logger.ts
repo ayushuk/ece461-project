@@ -4,16 +4,22 @@ import * as dotenv from 'dotenv'
 const {combine, timestamp, json, prettyPrint} = format
 dotenv.config()
 
+const logLevel: {[key: string]: string} = {
+  1: 'info',
+  2: 'debug',
+}
+
 const logger = createLogger({
+  silent: process.env.LOG_LEVEL === '0',
   format: combine(timestamp(), json(), prettyPrint()),
   transports: [
     new transports.File({
       filename: `${process.env.LOG_FILE}`,
-      level: `${process.env.LOG_LEVEL}`,
+      level: logLevel[process.env.LOG_LEVEL || '0'],
     }),
   ],
 })
-
+logger.info('logger initialized')
 export default logger
 
 /*
@@ -26,5 +32,4 @@ if (process.env.LOG_LEVEL != 0) {
 // if debug message:
     logger.debug(message)
 }
-
 */

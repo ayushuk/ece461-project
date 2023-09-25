@@ -23,7 +23,7 @@ else
   else
     if [ $1 == "test" ]
     then
-      ./bin/dev test
+      ./bin/dev tester
     else
       ./bin/dev checkUrl $1
     fi
