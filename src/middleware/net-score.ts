@@ -2,6 +2,7 @@ import {round} from './utils'
 import logger from '../logger'
 
 // NetScore sub-category Calculations
+/* eslint-disable max-params */
 export async function calculateNetScore(
   busFactor: number,
   correctness: number,
