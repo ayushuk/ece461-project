@@ -1,8 +1,6 @@
 import {assignMetrics} from '../../src/middleware/fill-models'
-import {Urlmetrics} from '../../src/models/url-models'
 import * as fillModels from '../../src/middleware/metric-calculations'
 import * as NetScore from '../../src/middleware/net-score'
-import axios from 'axios'
 
 describe('fill-models', () => {
   it('should return filled in Urlmetric class', async () => {
@@ -16,24 +14,28 @@ describe('fill-models', () => {
       'calculateCorrectness',
     )
     mockCalculateCorrectness.mockReturnValue(Promise.resolve(mockCorrectness))
-    const mockRampUpTime = 0.3
-    const mockCalculateRampUpTime = jest.spyOn(
-      fillModels,
-      'calculateRampUpTime',
-    )
-    mockCalculateRampUpTime.mockReturnValue(Promise.resolve(mockRampUpTime))
+    // const mockRampUpTime = 0.3
+    // const mockCalculateRampUpTime = jest.spyOn(
+    //   fillModels,
+    //   'calculateRampUpTime',
+    // )
+    // mockCalculateRampUpTime.mockReturnValue(Promise.resolve(mockRampUpTime))
     const mockResponsiveness = 0.2
     const mockCalculateResponsiveness = jest.spyOn(
       fillModels,
       'calculateResponsiveness',
     )
-    mockCalculateResponsiveness.mockReturnValue(Promise.resolve(mockResponsiveness))
+    mockCalculateResponsiveness.mockReturnValue(
+      Promise.resolve(mockResponsiveness),
+    )
     const mockLicenseCompliance = 1
     const mockCalculateLicenseCompliance = jest.spyOn(
       fillModels,
       'calculateLicenseCompliance',
     )
-    mockCalculateLicenseCompliance.mockReturnValue(Promise.resolve(mockLicenseCompliance))
+    mockCalculateLicenseCompliance.mockReturnValue(
+      Promise.resolve(mockLicenseCompliance),
+    )
     const mockNetScore = 0.6
     const mockCalculateNetScore = jest.spyOn(NetScore, 'calculateNetScore')
     mockCalculateNetScore.mockReturnValue(Promise.resolve(mockNetScore))
