@@ -170,6 +170,27 @@ describe('calculateCorrectness', () => {
     // Expect result to be 0 based on the formula
     expect(result).toBe(0)
   })
+
+  it('should return 0 when closed issues is 0 and open issues is 0', async () => {
+    // mock getBusFactorData
+    const getCorrectnessDataMock = jest.spyOn(ghservices, 'getCorrectnessData')
+    getCorrectnessDataMock.mockReturnValue(
+      Promise.resolve({
+        closedIssues: 0,
+        openIssues: 0,
+      }),
+    )
+
+    // Call calculateCorrectness
+    const testUrl = 'https://github.com/ayushuk/ece461-project'
+    const result = await metrics.calculateCorrectness(testUrl)
+
+    // Assertions
+    expect(getCorrectnessDataMock).toHaveBeenCalledWith(testUrl)
+
+    // Expect result to be 0 based on the formula
+    expect(result).toBe(0)
+  })
 })
 
 describe('RampUpTime', () => {

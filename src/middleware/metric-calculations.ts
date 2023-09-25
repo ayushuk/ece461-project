@@ -48,8 +48,14 @@ export async function calculateCorrectness(url: string) {
   // get data from returned object
   const {closedIssues, openIssues} = data
 
+  const totalIssues = closedIssues + openIssues
+
+  if (totalIssues === 0) {
+    return 0
+  }
+
   // calculate correctness score
-  let correctnessScore = closedIssues / (closedIssues + openIssues)
+  let correctnessScore = closedIssues / totalIssues
 
   // round to 3 decimal places
   correctnessScore = utils.round(correctnessScore, 3)
