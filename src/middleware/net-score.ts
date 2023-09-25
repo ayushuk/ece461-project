@@ -1,16 +1,22 @@
 import {round} from './utils'
+import {
+  calculateBusFactor,
+  calculateCorrectness,
+  //calculateRampUpTime,
+  calculateResponsiveness,
+  calculateLicenseCompliance,
+} from './metric-calculations'
 import logger from '../logger'
 
 // NetScore sub-category Calculations
-/* eslint-disable max-params */
-export async function calculateNetScore(
-  busFactor: number,
-  correctness: number,
-  rampUpTime: number,
-  responsiveness: number,
-  licenseCompliance: number,
-): Promise<number> {
+export async function calculateNetScore(url: string): Promise<number> {
   logger.info('Calculating Net Score')
+
+  const busFactor = await calculateBusFactor(url)
+  const correctness = await calculateCorrectness(url)
+  //const rampUpTime = await calculateRampUpTime(url)
+  const responsiveness = await calculateResponsiveness(url)
+  const licenseCompliance = await calculateLicenseCompliance(url)
 
   /* eslint-disable no-template-curly-in-string */
   logger.debug(
@@ -29,7 +35,7 @@ export async function calculateNetScore(
     licenseCompliance *
     (busFactor * busFactorWeight +
       correctness * correctnessWeight +
-      rampUpTime * rampUpTimeWeight +
+      //rampUpTime * rampUpTimeWeight +
       responsiveness * responsivenessWeight)
 
   netScore = round(netScore, 3)
