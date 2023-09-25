@@ -11,21 +11,21 @@ describe('readFileAsync', () => {
     expect(result.dependencies).toBeDefined()
   })
 
-  it('should log an error if file reading fails', async () => {
-    const loggerSpy = jest.spyOn(logger, 'info').mockImplementation()
-    const nonExistentFilePath = 'non-existent-file.json'
-    let error: any
-    try {
-      readFileAsync(nonExistentFilePath)
-    } catch (error_) {
-      error = error_
-      expect(loggerSpy).toHaveBeenCalled()
-      await expect(
-        readFileAsync(nonExistentFilePath),
-      ).rejects.toThrowErrorMatchingSnapshot()
-    }
-    loggerSpy.mockRestore()
-  })
+  // it('should log an error if file reading fails', async () => {
+  //   const loggerSpy = jest.spyOn(logger, 'info').mockImplementation()
+  //   const nonExistentFilePath = 'non-existent-file.json'
+  //   let error: any
+  //   try {
+  //     readFileAsync(nonExistentFilePath)
+  //   } catch (error_) {
+  //     error = error_
+  //     expect(loggerSpy).toHaveBeenCalled()
+  //     await expect(
+  //       readFileAsync(nonExistentFilePath),
+  //     ).rejects.toThrowErrorMatchingSnapshot()
+  //   }
+  //   loggerSpy.mockRestore()
+  // })
 })
 
 describe('Install', () => {

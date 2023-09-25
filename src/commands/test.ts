@@ -7,7 +7,7 @@ export default class Test extends Command {
   public async run() {
     const hiddenPath = './check_install'
     const fs = require('fs')
-    const fileContent = fs.readFileSync(hiddenPath, 'utf-8')
+    const fileContent = await fs.readFileSync(hiddenPath, 'utf-8')
     if (fileContent == 'yes\n') {
       exec('npx jest --config ./jest.config.ts', (error: string, stdout: string, stderr: string) => {
         const testRegex = /Tests:\s+(\d+) failed,\s+(\d+) passed,\s+(\d+) total/
@@ -28,6 +28,7 @@ export default class Test extends Command {
           )
         }
       })
+      // process.exit(0)
     } else {
       console.log(
         'Dependencies not yet installed. Please run the following command:\n./run install',

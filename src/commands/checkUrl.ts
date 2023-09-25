@@ -27,7 +27,7 @@ export default class CheckUrl extends Command {
           ) */
       })
 
-      process.exit(0)
+      // process.exit(0)
     } else {
       console.log(
         'Dependencies not yet installed. Please run the following command:\n./run install',
