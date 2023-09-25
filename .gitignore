@@ -11,5 +11,5 @@
 node_modules
 oclif.manifest.json
 /.env
-coverage
+/coverage
 /.vscode
