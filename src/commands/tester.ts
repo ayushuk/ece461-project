@@ -11,7 +11,9 @@ export default class Test extends Command {
     if (fileContent == 'yes\n') {
       exec('npx jest --config ./jest.config.ts', (error: string, stdout: string, stderr: string) => {
         const testRegex = /Tests:\s+(\d+) failed,\s+(\d+) passed,\s+(\d+) total/
+        const testCompleteRegex = /Tests:\s+(\d+) passed,\s+(\d+) total/
         const testMatch = testRegex.exec(stderr)
+        const testCompleteMatch = testCompleteRegex.exec(stderr)
         const covRegex = /All files\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})\s+\|\s+(\d+(?:\.\d+)?|\d{2,3})/
         const covMatch = covRegex.exec(stdout)
         const coverage = covMatch ? Number.parseInt(covMatch[4], 10) : 0
@@ -21,6 +23,11 @@ export default class Test extends Command {
           const totalTests = passTests + failTests
           this.log(
             `${passTests}/${totalTests} test cases passed. ${coverage.toFixed(0)}% line coverage achieved.`
+          )
+        } else if (testCompleteMatch) {
+          const passTests = parseInt(testCompleteMatch[1], 10)
+          this.log(
+            `${passTests}/${passTests} test cases passed. ${coverage.toFixed(0)}% line coverage achieved.`
           )
         } else {
           this.log(
