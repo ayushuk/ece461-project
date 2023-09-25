@@ -1,11 +1,4 @@
 import {round} from './utils'
-import {
-  calculateBusFactor,
-  calculateCorrectness,
-  calculateRampUpTime,
-  calculateResponsiveness,
-  calculateLicenseCompliance,
-} from './metric-calculations'
 import logger from '../logger'
 
 // NetScore sub-category Calculations
