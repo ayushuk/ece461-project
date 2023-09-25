@@ -1,4 +1,4 @@
-import CheckUrl from '../../src/commands/checkUrl'
+import CheckUrl from '../../src/commands/check-url'
 
 describe('CheckUrl Command', () => {
   it('runs without dependencies', async () => {

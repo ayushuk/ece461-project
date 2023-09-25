@@ -1,10 +1,6 @@
-import {Args, Command, Flags, run} from '@oclif/core'
-import * as fs from 'fs'
-<<<<<<< HEAD
-import {assignMetrics} from '../../src/fill-models'
-=======
-import {assignMetrics} from '../middleware/fill-models';
->>>>>>> create-run
+import {Args, Command} from '@oclif/core'
+import * as fs from 'node:fs'
+import {assignMetrics} from '../middleware/fill-models'
 
 export default class CheckUrl extends Command {
   static description = 'describe the command here'
@@ -19,9 +15,9 @@ export default class CheckUrl extends Command {
   public async run(): Promise<void> {
     const {args} = await this.parse(CheckUrl)
     const hiddenPath = './check_install'
-    const fileContent = fs.readFileSync(hiddenPath, 'utf-8')
-    if (fileContent == 'yes\n') {
-      const allFileContents = fs.readFileSync(args.urls, 'utf-8')
+    const fileContent = fs.readFileSync(hiddenPath, 'utf8')
+    if (fileContent === 'yes\n') {
+      const allFileContents = fs.readFileSync(args.urls, 'utf8')
       const urls = allFileContents
         .split(/\r?\n/)
         .filter((line) => line.trim() !== '')

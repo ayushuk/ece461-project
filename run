@@ -25,7 +25,7 @@ else
     then
       ./bin/dev tester
     else
-      ./bin/dev checkUrl $1
+      ./bin/dev check-url $1
     fi
   fi
 fi
