@@ -10,12 +10,13 @@ dotenv.config()
 export async function readFileAsync(packagePath: string): Promise<string> {
   try {
     const data: string = await fs.promises.readFile(packagePath, 'utf8')
-    logger.info("readFileAsync successful")
+    logger.info('readFileAsync successful')
     return data
   } catch (error) {
     if (error instanceof Error) {
       logger.debug(`Error reading file: ${error.message}`)
     }
+
     throw error // Re-throw the error if needed
   }
 }
@@ -30,7 +31,7 @@ export class Install extends Command {
         // Parse the JSON data
         const packageJson = JSON.parse(fileContent)
         // Access the dependencies object
-        const dependencies = packageJson.dependencies
+        const {dependencies} = packageJson
 
         // Get the number of dependencies
         const numDependencies = Object.keys(dependencies).length
