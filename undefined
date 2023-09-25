@@ -1,0 +1,30 @@
+{
+  message: 'logger initialized',
+  level: 'info',
+  timestamp: '2023-09-25T03:39:33.081Z'
+}
+{
+  message: 'logger initialized',
+  level: 'info',
+  timestamp: '2023-09-25T03:39:32.880Z'
+}
+{
+  message: 'readFileAsync successful',
+  level: 'info',
+  timestamp: '2023-09-25T03:39:32.894Z'
+}
+{
+  message: 'readFileAsync successful',
+  level: 'info',
+  timestamp: '2023-09-25T03:39:33.144Z'
+}
+{
+  message: 'readFileAsync successful',
+  level: 'info',
+  timestamp: '2023-09-25T03:39:33.152Z'
+}
+{
+  message: 'logger initialized',
+  level: 'info',
+  timestamp: '2023-09-25T03:39:33.180Z'
+}

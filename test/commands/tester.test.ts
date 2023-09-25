@@ -6,7 +6,7 @@ describe('Test', () => {
 
   test
     .stdout()
-    .command(['test'])
+    .command(['tester'])
     .it('runs Test', (ctx) => {
       expect(ctx.stdout).toContain('')
     })
