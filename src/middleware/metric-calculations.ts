@@ -7,7 +7,6 @@ import {
   getLiscenseComplianceData,
 } from '../services/gh-service'
 import logger from '../logger'
-import * as path from 'node:path'
 
 // Bus Factor Calculations
 export async function calculateBusFactor(url: string) {
@@ -17,8 +16,9 @@ export async function calculateBusFactor(url: string) {
   let link = await utils.evaluateLink(url)
   if (link) {
     link = link?.split('github.com').pop() ?? null
-    link = 'https://github.com' + link
+    link = 'https://github.com' + link // eslint-disable-line prefer-template
   }
+
   let data = null
 
   // get data using ./services/gh-service.ts
@@ -68,8 +68,9 @@ export async function calculateCorrectness(url: string) {
   let link = await utils.evaluateLink(url)
   if (link) {
     link = link?.split('github.com').pop() ?? null
-    link = 'https://github.com' + link
+    link = 'https://github.com' + link // eslint-disable-line prefer-template
   }
+
   let data = null
 
   // get data using ./services/gh-service.ts
@@ -99,68 +100,70 @@ export async function calculateCorrectness(url: string) {
   return correctnessScore
 }
 
-// Ramp-up Time Calculations
-export async function calculateRampUpTime(url: string) {
-  logger.info('Calculating Ramp Up Time')
+// // Ramp-up Time Calculations
+// export async function calculateRampUpTime(url: string) {
+//   logger.info('Calculating Ramp Up Time')
 
-  // checks to see if link is a npm link and if so, converts it to a github link
-  let link = await utils.evaluateLink(url)
-  if (link) {
-    link = link?.split('github.com').pop() ?? null
-    link = 'https://github.com' + link
-  }
-  let linesOfCode = 0
+//   // checks to see if link is a npm link and if so, converts it to a github link
+//   let link = await utils.evaluateLink(url)
+//   if (link) {
+//     link = link?.split('github.com').pop() ?? null
+//     link = 'https://github.com' + link // eslint-disable-line prefer-template
+//   }
 
-  // get data using ./services/gh-service.ts
-  if (link) {
-    // clones the repo into ./cloned-repos
-    const repoName = utils.parseGHRepoName(link)
-    let localPath = '../ece461-project/src/middleware/cloned-repos'
-    // format local path name
-    if (repoName) {
-      localPath = path.join(localPath, repoName)
-    }
-    // add .git to end of url
-    let repoUrl = link
-    if (!link.includes('.git')) {
-      repoUrl = `${link}.git`
-    }
+//   let linesOfCode = 0
 
-    await utils.cloneRepo(link, localPath, repoUrl)
+//   // get data using ./services/gh-service.ts
+//   if (link) {
+//     // clones the repo into ./cloned-repos
+//     const repoName = utils.parseGHRepoName(link)
+//     let localPath = '../ece461-project/src/middleware/cloned-repos'
+//     // format local path name
+//     if (repoName) {
+//       localPath = path.join(localPath, repoName)
+//     }
 
-    utils.calcRepoLines(localPath, (totalLines) => {
-      linesOfCode = totalLines
-      console.log(totalLines)
-      logger.debug(`linesOfCode: ${linesOfCode}`)
+//     // add .git to end of url
+//     let repoUrl = link
+//     if (!link.includes('.git')) {
+//       repoUrl = `${link}.git`
+//     }
 
-      let rampUpScore = 0
-      console.log(linesOfCode)
-      if (linesOfCode <= 500) {
-        rampUpScore = 1
-      } else if (linesOfCode <= 1000) {
-        rampUpScore = 0.9
-      } else if (linesOfCode <= 5000) {
-        rampUpScore = 0.8
-      } else if (linesOfCode <= 10_000) {
-        rampUpScore = 0.7
-      } else if (linesOfCode <= 50_000) {
-        rampUpScore = 0.6
-      } else if (linesOfCode <= 100_000) {
-        rampUpScore = 0.5
-      } else if (linesOfCode <= 500_000) {
-        rampUpScore = 0.4
-      } else if (linesOfCode <= 1_000_000) {
-        rampUpScore = 0.3
-      } else if (linesOfCode <= 5_000_000) {
-        rampUpScore = 0.2
-      }
+//     await utils.cloneRepo(link, localPath, repoUrl)
 
-      return rampUpScore
-    })
-  } else {
-    return () => 0
-  }
-}
+//     utils.calcRepoLines(localPath, (totalLines) => {
+//       linesOfCode = totalLines
+//       // console.log(totalLines)
+//       logger.debug(`linesOfCode: ${linesOfCode}`)
+
+//       let rampUpScore = 0
+//       // console.log(linesOfCode)
+//       if (linesOfCode <= 500) {
+//         rampUpScore = 1
+//       } else if (linesOfCode <= 1000) {
+//         rampUpScore = 0.9
+//       } else if (linesOfCode <= 5000) {
+//         rampUpScore = 0.8
+//       } else if (linesOfCode <= 10_000) {
+//         rampUpScore = 0.7
+//       } else if (linesOfCode <= 50_000) {
+//         rampUpScore = 0.6
+//       } else if (linesOfCode <= 100_000) {
+//         rampUpScore = 0.5
+//       } else if (linesOfCode <= 500_000) {
+//         rampUpScore = 0.4
+//       } else if (linesOfCode <= 1_000_000) {
+//         rampUpScore = 0.3
+//       } else if (linesOfCode <= 5_000_000) {
+//         rampUpScore = 0.2
+//       }
+
+//       return rampUpScore
+//     })
+//   } else {
+//     return () => 0
+//   }
+// }
 
 // Responsiveness Calculations
 export async function calculateResponsiveness(url: string) {
@@ -170,8 +173,9 @@ export async function calculateResponsiveness(url: string) {
   let link = await utils.evaluateLink(url)
   if (link) {
     link = link?.split('github.com').pop() ?? null
-    link = 'https://github.com' + link
+    link = 'https://github.com' + link // eslint-disable-line prefer-template
   }
+
   let data = null
 
   // get data using ./services/gh-service.ts
@@ -230,8 +234,9 @@ export async function calculateLicenseCompliance(url: string) {
   let link = await utils.evaluateLink(url)
   if (link) {
     link = link?.split('github.com').pop() ?? null
-    link = 'https://github.com' + link
+    link = 'https://github.com' + link // eslint-disable-line prefer-template
   }
+
   let licenseCompliantScore = 0
 
   // get data using ./services/gh-service.ts
