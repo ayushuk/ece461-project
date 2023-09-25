@@ -1,8 +1,5 @@
-import {command, test} from '@oclif/test'
-import fs from 'node:fs'
+import {test} from '@oclif/test'
 import {readFileAsync, Install} from '../../src/commands/install'
-import logger from '../../src/logger'
-import {exec} from 'node:child_process'
 
 describe('readFileAsync', () => {
   it('should read a file successfully', async () => {
@@ -30,8 +27,6 @@ describe('readFileAsync', () => {
 
 describe('Install', () => {
   it('should successfully run the install command', async () => {
-    const packagePath = './package.json'
-
     const consoleLogMock = jest
       .spyOn(process.stdout, 'write')
       .mockImplementation()
