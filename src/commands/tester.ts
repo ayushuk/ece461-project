@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable no-process-exit */
+/* eslint-disable unicorn/no-process-exit */
 import {Command} from '@oclif/core'
 import {exec} from 'node:child_process'
 import * as fs from 'node:fs'
