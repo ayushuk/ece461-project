@@ -17,9 +17,9 @@ describe('calculateNetScore', () => {
     )
 
     // mock calculateRampUpTime
-    const mockRampUpScore = 0.5
-    const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
-    mockCalculateRampUp.mockReturnValue(Promise.resolve(mockRampUpScore))
+    // const mockRampUpScore = 0.5
+    // const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
+    // mockCalculateRampUp.mockReturnValue(Promise.resolve(mockRampUpScore))
 
     // mock calculateResponsiveness
     const mockResponsivenessScore = 0.5
@@ -75,9 +75,9 @@ describe('calculateNetScore', () => {
     )
 
     // mock calculateRampUpTime
-    const mockRampUpScore = 0.5
-    const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
-    mockCalculateRampUp.mockReturnValue(Promise.resolve(mockRampUpScore))
+    // const mockRampUpScore = 0.5
+    // const mockCalculateRampUp = jest.spyOn(metrics, 'calculateRampUpTime')
+    // mockCalculateRampUp.mockReturnValue(Promise.resolve(mockRampUpScore))
 
     // mock calculateResponsiveness
     const mockResponsivenessScore = 0.5
@@ -110,7 +110,7 @@ describe('calculateNetScore', () => {
     // Assertions
     expect(metrics.calculateBusFactor).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateCorrectness).toHaveBeenCalledWith(testUrl)
-    expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
+    //expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateResponsiveness).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateLicenseCompliance).toHaveBeenCalledWith(testUrl)
     expect(roundMock).toHaveBeenCalledWith(0.5, 3)

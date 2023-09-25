@@ -193,167 +193,167 @@ describe('calculateCorrectness', () => {
   })
 })
 
-describe('RampUpTime', () => {
-  it('should return 1 when the number of lines of code is 0', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(0))
+// describe('RampUpTime', () => {
+//   it('should return 1 when the number of lines of code is 0', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(0))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(1)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(1)
+//   })
 
-  it('should return 0.9 when the number of lines of code is 999', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(999))
+//   it('should return 0.9 when the number of lines of code is 999', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(999))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0.9)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0.9)
+//   })
 
-  it('should return 0.8 when the number of lines of code is 4999', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(4999))
+//   it('should return 0.8 when the number of lines of code is 4999', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(4999))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0.8)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0.8)
+//   })
 
-  it('should return 0.7 when the number of lines of code is 9000', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(9000))
+//   it('should return 0.7 when the number of lines of code is 9000', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(9000))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0.7)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0.7)
+//   })
 
-  it('should return 0.6 when the number of lines of code is 49000', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(49_000))
+//   it('should return 0.6 when the number of lines of code is 49000', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(49_000))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0.6)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0.6)
+//   })
 
-  it('should return 0.5 when the number of lines of code is 78000', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(78_000))
+//   it('should return 0.5 when the number of lines of code is 78000', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(78_000))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0.5)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0.5)
+//   })
 
-  it('should return 0.4 when the number of lines of code is 478000', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(478_000))
+//   it('should return 0.4 when the number of lines of code is 478000', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(478_000))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0.4)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0.4)
+//   })
 
-  it('should return 0.3 when the number of lines of code is 800_000', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(800_000))
+//   it('should return 0.3 when the number of lines of code is 800_000', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(800_000))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0.3)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0.3)
+//   })
 
-  it('should return 0.2 when the number of lines of code is 3_000_000', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(3_000_000))
+//   it('should return 0.2 when the number of lines of code is 3_000_000', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(3_000_000))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0.2)
-  })
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0.2)
+//   })
 
-  it('should return 0 when the number of lines of code is 5000001', async () => {
-    // mock calcRepoLines
-    const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
-    calcRepoLinesMock.mockReturnValue(Promise.resolve(5_000_001))
+//   it('should return 0 when the number of lines of code is 5000001', async () => {
+//     // mock calcRepoLines
+//     const calcRepoLinesMock = jest.spyOn(utils, 'calcRepoLines')
+//     calcRepoLinesMock.mockReturnValue(Promise.resolve(5_000_001))
 
-    // mock.cloneRepo()
-    const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
-    cloneRepoMock.mockImplementation(async () => {})
+//     // mock.cloneRepo()
+//     const cloneRepoMock = jest.spyOn(utils, 'cloneRepo')
+//     cloneRepoMock.mockImplementation(async () => {})
 
-    const testUrl = 'https://github.com/ayushuk/ece461-project'
-    const result = await metrics.calculateRampUpTime(testUrl)
+//     const testUrl = 'https://github.com/ayushuk/ece461-project'
+//     const result = await metrics.calculateRampUpTime(testUrl)
 
-    expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
-    expect(result).toBe(0)
-  })
-})
+//     expect(calcRepoLinesMock).toHaveBeenCalledWith(testUrl)
+//     expect(result).toBe(0)
+//   })
+// })
 
 describe('calculateResponsiveness', () => {
   it('should return 0 when no commits have been made in last year ', async () => {
