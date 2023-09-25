@@ -40,7 +40,7 @@ describe('fill-models', () => {
 
     // call function and expect outputs
     const result = assignMetrics('https://github.com/XavierJCallait/test')
-    expect(result).toBeInstanceOf(Urlmetrics)
+    expect(result).toBeInstanceOf(Promise)
     expect((await result).BusFactor).toBe(0.5)
     expect((await result).Correctness).toBe(0.4)
     expect((await result).RampUp).toBe(0.3)

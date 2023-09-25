@@ -19,11 +19,11 @@ export default class Test extends Command {
           const passTests = parseInt(testMatch[2], 10)
           const failTests = parseInt(testMatch[1], 10)
           const totalTests = passTests + failTests
-          console.log(
+          this.log(
             `${passTests}/${totalTests} test cases passed. ${coverage.toFixed(0)}% line coverage achieved.`
           )
         } else {
-          console.log(
+          this.log(
             `0/0 test cases passed. 0% line coverage achieved.`,
           )
         }
