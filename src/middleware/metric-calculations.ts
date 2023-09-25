@@ -3,7 +3,7 @@ import {BusFactorData, CorrectnessData} from '../models/middleware-inputs'
 import {round} from './utils'
 
 // Bus Factor Calculations
-export function calculateBusFactor(data: BusFactorData) {
+export function calculateBusFactor(data: string) {
   // assume this is going to be Github URL
 
   // get data from object
@@ -35,7 +35,7 @@ export function calculateBusFactor(data: BusFactorData) {
 }
 
 // Correctness Calculations
-export function calculateCorrectness(data: CorrectnessData) {
+export function calculateCorrectness(data: string) {
   // this is going to be Github URL
   const {closedIssues, openIssues} = data
 
