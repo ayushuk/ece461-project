@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "importHelpers": true,
-    "module": "commonjs",
+    "module": "nodenext",
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
@@ -13,4 +13,8 @@
     "src/**/*",
     ".eslintrc.js"
   ],
+  "baseUrl": "./src",
+  "paths": {
+    "@/*": ["*"]
+  }
 }

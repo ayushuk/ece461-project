@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+if [ $0 != "./run" ]
+then
+  echo "Please run this script with ./run"
+fi
+
+if [ $1 == "install" ]
+then
+  if ! npm install --silent; then
+    echo "Error installing dependencies"
+    echo $"no" > "./check_install"
+    exit 1
+  else
+    ./bin/dev install
+  fi
+  echo $"yes" > "./check_install"
+else
+  name=$(<"./check_install") 
+  if [ name == 1 ]
+  then
+  echo "Please run this script with ./run install"
+  else
+    if [ $1 == "test" ]
+    then
+      ./bin/dev tester
+    else
+      ./bin/dev check-url $1
+    fi
+  fi
+fi
