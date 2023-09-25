@@ -2,14 +2,23 @@ import * as fs from 'node:fs'
 import * as url from 'node:url'
 import {exec} from 'node:child_process'
 import * as path from 'node:path'
+import {getGithubLinkFromNpm} from '../services/gh-service'
+import logger from '../logger'
 
 export function round(value: number, decimals: number): number {
+  logger.info(`Rounding ${value} to ${decimals} decimal places`)
+
+  // rounds number to specified decimal places
   return Number(value.toFixed(decimals))
 }
 
 export function identifyLink(link: string) {
+  logger.info(`Identifying link type for ${link}`)
+
+  // link pattern for github
   const githubPattern = /^(https?:\/\/)?(www\.)?github\.com\/[\w.-]+\/[\w.-]+/
 
+  // link pattern for npm
   const npmPattern = /^(https?:\/\/)?(www\.)?npmjs\.com\/package\/[\w.-]+/
 
   if (githubPattern.test(link)) {
@@ -24,11 +33,15 @@ export function identifyLink(link: string) {
 }
 
 export async function getLinesOfCode(filePath: string): Promise<number> {
+  logger.info(`Getting lines of code for ${filePath}`)
+
   return new Promise((resolve, reject) => {
     let lineCount = 0
 
+    // open file stream
     const stream = fs.createReadStream(filePath, {encoding: 'utf8'})
 
+    // count the lines of code in file stream
     stream.on('data', (chunk: string) => {
       // Use the corrected regular expression to match newlines
       lineCount += (chunk.match(/(\r\n|\n|\r)/g) || []).length
@@ -36,6 +49,7 @@ export async function getLinesOfCode(filePath: string): Promise<number> {
 
     stream.on('end', () => {
       resolve(lineCount + 1) // Add 1 to account for the last line without a newline character
+      logger.debug(`Lines of code: ${lineCount}`)
     })
 
     stream.on('error', (err: any) => {
@@ -45,6 +59,8 @@ export async function getLinesOfCode(filePath: string): Promise<number> {
 }
 
 export function parseGHRepoName(repoUrl: string): string | null {
+  logger.info(`Parsing GitHub repository name from ${repoUrl}`)
+
   // Parse the URL
   const parsedUrl = url.parse(repoUrl)
 
@@ -66,21 +82,27 @@ export function parseGHRepoName(repoUrl: string): string | null {
 }
 
 export async function cloneRepo(ghUrl: string) {
+  logger.info(`Cloning GitHub repository from ${ghUrl}`)
+
   const repoName = parseGHRepoName(ghUrl)
   let localPath = '../ece461-project/src/middleware/cloned-repos'
+
+  // format local path name
   if (repoName) {
     localPath = path.join(localPath, repoName)
   }
-  // TODO: else error return
 
+  // add .git to end of url
   const repoUrl = `${ghUrl}.git`
 
+  // clone repo
   return new Promise<void>((resolve, reject) => {
     exec(`git clone ${repoUrl} ${localPath}`, (error) => {
       if (error) {
+        logger.error(`Error cloning repo: ${error}`)
         reject(error)
-        // TODO logging and error handling
       } else {
+        logger.debug(`Cloned repo to ${localPath}`)
         resolve()
       }
     })
@@ -88,8 +110,11 @@ export async function cloneRepo(ghUrl: string) {
 }
 
 export async function calcRepoLines(repoPath: string): Promise<number> {
+  logger.info(`Calculating lines of code for ${repoPath}`)
+
   let totalLines = 0
 
+  // go through all files in the given directory
   async function processDirectory(directoryPath: string) {
     const files = fs.readdirSync(directoryPath)
 
@@ -101,6 +126,7 @@ export async function calcRepoLines(repoPath: string): Promise<number> {
         continue // eslint-disable-line no-continue
       }
 
+      // if the file is a directory, recursively process it to count all files lines of code
       if (fs.statSync(filePath).isDirectory()) {
         // Recursively process subdirectories
         await processDirectory(filePath) // eslint-disable-line no-await-in-loop
@@ -112,5 +138,24 @@ export async function calcRepoLines(repoPath: string): Promise<number> {
   }
 
   await processDirectory(repoPath)
+
+  logger.debug(`Total lines of code: ${totalLines}`)
+
   return totalLines
+}
+
+export async function evaluateLink(link: string) {
+  logger.info(`Evaluating link ${link}`)
+
+  // checks whether the link is a github link or npm link
+  const linkType = identifyLink(link)
+  if (linkType === 'github') {
+    return link
+  }
+
+  if (linkType === 'npm') {
+    return getGithubLinkFromNpm(link)
+  }
+
+  return null
 }

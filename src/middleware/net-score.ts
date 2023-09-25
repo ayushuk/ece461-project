@@ -6,14 +6,23 @@ import {
   calculateResponsiveness,
   calculateLicenseCompliance,
 } from './metric-calculations'
+import logger from '../logger'
 
-// NetScore Calculations
+// NetScore sub-category Calculations
 export async function calculateNetScore(url: string): Promise<number> {
+  logger.info('Calculating Net Score')
+
   const busFactor = await calculateBusFactor(url)
   const correctness = await calculateCorrectness(url)
   const rampUpTime = await calculateRampUpTime(url)
   const responsiveness = await calculateResponsiveness(url)
   const licenseCompliance = await calculateLicenseCompliance(url)
+
+  /* eslint-disable no-template-curly-in-string */
+  logger.debug(
+    'busFactor: ${busFactor}, correctness: ${correctness}, rampUpTime: ${rampUpTime}, responsiveness: ${responsiveness}, licenseCompliance: ${licenseCompliance}',
+  )
+  /* eslint-enable no-template-curly-in-string */
 
   // Score weights
   const busFactorWeight = 0.4
@@ -21,6 +30,7 @@ export async function calculateNetScore(url: string): Promise<number> {
   const rampUpTimeWeight = 0.15
   const responsivenessWeight = 0.3
 
+  // Calculate net score with weightings
   let netScore =
     licenseCompliance *
     (busFactor * busFactorWeight +

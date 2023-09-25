@@ -6,11 +6,22 @@ import {
   getResponsivenessData,
   getLiscenseComplianceData,
 } from '../services/gh-service'
+import logger from '../logger'
 
 // Bus Factor Calculations
 export async function calculateBusFactor(url: string) {
+  logger.info('Calculating Bus Factor')
+
+  // checks to see if link is a npm link and if so, converts it to a github link
+  const link = await utils.evaluateLink(url)
+  let data = null
+
   // get data using ./services/gh-service.ts
-  const data = await getBusFactorData(url)
+  if (link) {
+    data = await getBusFactorData(link)
+  } else {
+    return 0
+  }
 
   // get data from returned object
   const {
@@ -19,6 +30,10 @@ export async function calculateBusFactor(url: string) {
     criticalContributorPullRequests,
     totalPullRequests,
   } = data
+
+  logger.debug(
+    `criticalContrubitorCommits: ${criticalContrubitorCommits}, totalCommits: ${totalCommits}, criticalContributorPullRequests: ${criticalContributorPullRequests}, totalPullRequests: ${totalPullRequests}`,
+  )
 
   // variable weights
   const commitWeight = 0.4
@@ -42,11 +57,23 @@ export async function calculateBusFactor(url: string) {
 
 // Correctness Calculations
 export async function calculateCorrectness(url: string) {
+  logger.info('Calculating Correctness')
+
+  // checks to see if link is a npm link and if so, converts it to a github link
+  const link = await utils.evaluateLink(url)
+  let data = null
+
   // get data using ./services/gh-service.ts
-  const data = await getCorrectnessData(url)
+  if (link) {
+    data = await getCorrectnessData(url)
+  } else {
+    return 0
+  }
 
   // get data from returned object
   const {closedIssues, openIssues} = data
+
+  logger.debug(`closedIssues: ${closedIssues}, openIssues: ${openIssues}`)
 
   const totalIssues = closedIssues + openIssues
 
@@ -65,9 +92,24 @@ export async function calculateCorrectness(url: string) {
 
 // Ramp-up Time Calculations
 export async function calculateRampUpTime(url: string) {
-  utils.cloneRepo(url)
+  logger.info('Calculating Ramp Up Time')
 
-  const linesOfCode = await utils.calcRepoLines(url)
+  // checks to see if link is a npm link and if so, converts it to a github link
+  const link = await utils.evaluateLink(url)
+  let linesOfCode = 0
+
+  // get data using ./services/gh-service.ts
+  if (link) {
+    // clones the repo into ./cloned-repos
+    utils.cloneRepo(url)
+
+    linesOfCode = await utils.calcRepoLines(url)
+  } else {
+    return 0
+  }
+
+  logger.debug(`linesOfCode: ${linesOfCode}`)
+
   let rampUpScore = 0
 
   if (linesOfCode <= 500) {
@@ -95,16 +137,34 @@ export async function calculateRampUpTime(url: string) {
 
 // Responsiveness Calculations
 export async function calculateResponsiveness(url: string) {
+  logger.info('Calculating Responsiveness')
+
+  // checks to see if link is a npm link and if so, converts it to a github link
+  const link = await utils.evaluateLink(url)
+  let data = null
+
   // get data using ./services/gh-service.ts
-  const data = await getResponsivenessData(url)
+  if (link) {
+    data = await getResponsivenessData(url)
+  } else {
+    return 0
+  }
 
   const {monthlyCommitCount, annualCommitCount} = data
 
+  // calculate difference between the max and min monthly commits
   const maxMonthlyCommitCount = Math.max(...monthlyCommitCount)
   const minMonthlyCommitCount = Math.min(...monthlyCommitCount)
   const diffCommit = maxMonthlyCommitCount - minMonthlyCommitCount
+
+  logger.debug(
+    `maxMonthlyCommitCount: ${maxMonthlyCommitCount}, minMonthlyCommitCount: ${minMonthlyCommitCount}, diffCommit: ${diffCommit}`,
+  )
+
   /* eslint-disable no-implicit-coercion */
   /* eslint-disable no-else-return */
+
+  // assign score based oon difference between max and min monthly commits
   if (diffCommit < annualCommitCount * 0.1) {
     return 1
   } else if (diffCommit < annualCommitCount * 0.2) {
@@ -134,7 +194,19 @@ export async function calculateResponsiveness(url: string) {
 
 // License Compliance Calculations
 export async function calculateLicenseCompliance(url: string) {
-  const licenseCompliantScore = await getLiscenseComplianceData(url)
+  logger.info('Calculating License Compliance')
+  // checks to see if link is a npm link and if so, converts it to a github link
+  const link = await utils.evaluateLink(url)
+  let licenseCompliantScore = 0
+
+  // get data using ./services/gh-service.ts
+  if (link) {
+    licenseCompliantScore = await getLiscenseComplianceData(url)
+
+    logger.debug(`licenseCompliantScore: ${licenseCompliantScore}`)
+  } else {
+    return 0
+  }
 
   return licenseCompliantScore
 }
