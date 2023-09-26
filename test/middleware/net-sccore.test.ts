@@ -52,7 +52,7 @@ describe('calculateNetScore', () => {
     // Assertions
     expect(metrics.calculateBusFactor).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateCorrectness).toHaveBeenCalledWith(testUrl)
-    //expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
+    // expect(metrics.calculateRampUpTime).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateResponsiveness).toHaveBeenCalledWith(testUrl)
     expect(metrics.calculateLicenseCompliance).toHaveBeenCalledWith(testUrl)
     expect(roundMock).toHaveBeenCalledWith(0, 3)

@@ -2,7 +2,7 @@ import {round} from './utils'
 import {
   calculateBusFactor,
   calculateCorrectness,
-  //calculateRampUpTime,
+  // calculateRampUpTime,
   calculateResponsiveness,
   calculateLicenseCompliance,
 } from './metric-calculations'
@@ -14,7 +14,7 @@ export async function calculateNetScore(url: string): Promise<number> {
 
   const busFactor = await calculateBusFactor(url)
   const correctness = await calculateCorrectness(url)
-  //const rampUpTime = await calculateRampUpTime(url)
+  // const rampUpTime = await calculateRampUpTime(url)
   const responsiveness = await calculateResponsiveness(url)
   const licenseCompliance = await calculateLicenseCompliance(url)
 
@@ -27,7 +27,7 @@ export async function calculateNetScore(url: string): Promise<number> {
   // Score weights
   const busFactorWeight = 0.4
   const correctnessWeight = 0.15
-  const rampUpTimeWeight = 0.15
+  // const rampUpTimeWeight = 0.15
   const responsivenessWeight = 0.3
 
   // Calculate net score with weightings
@@ -35,7 +35,7 @@ export async function calculateNetScore(url: string): Promise<number> {
     licenseCompliance *
     (busFactor * busFactorWeight +
       correctness * correctnessWeight +
-      //rampUpTime * rampUpTimeWeight +
+      // rampUpTime * rampUpTimeWeight +
       responsiveness * responsivenessWeight)
 
   netScore = round(netScore, 3)
