@@ -15,12 +15,6 @@ export async function assignMetrics(data: string): Promise<Urlmetrics> {
   newURL.RampUp = /* await calculateRampUpTime(newURL.URL) */ -1
   newURL.Responsiveness = await calculateResponsiveness(newURL.URL)
   newURL.License = await calculateLicenseCompliance(newURL.URL)
-  newURL.NetScore = await calculateNetScore(
-    newURL.BusFactor,
-    newURL.Correctness,
-    newURL.RampUp,
-    newURL.Responsiveness,
-    newURL.License,
-  )
+  newURL.NetScore = await calculateNetScore(newURL.URL)
   return newURL
 }
